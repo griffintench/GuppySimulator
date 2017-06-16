@@ -1,0 +1,2 @@
+When you're writing a getter for an ArrayList/other object, is it better to return a clone?
+Should pH and temperature even be stored in Stream? Just use Pool's instead?

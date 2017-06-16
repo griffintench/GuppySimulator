@@ -113,6 +113,16 @@ public class Pool {
     private Random randomNumberGenerator;
 
     /**
+     * An ArrayList of all Streams leading to this Pool.
+     */
+    private ArrayList<Stream> streamsTo;
+
+    /**
+     * An ArrayList of all Streams leading away from this Pool.
+     */
+    private ArrayList<Stream> streamsFrom;
+
+    /**
      * Instantiates a Pool with default parameters.
      */
     public Pool() {
@@ -239,6 +249,9 @@ public class Pool {
         if (newTemperatureCelsius >= MINIMUM_POOL_TEMP_CELSIUS
                 && newTemperatureCelsius <= MAXIMUM_POOL_TEMP_CELSIUS) {
             temperatureCelsius = newTemperatureCelsius;
+            for (Stream stream : streamsFrom) {
+                stream.setTemperatureCelsius(newTemperatureCelsius);
+            }
         }
     }
 
@@ -253,7 +266,8 @@ public class Pool {
 
     /**
      * Sets the pH level of the Pool. The pH level must be between 0 and 14.0,
-     * inclusive.
+     * inclusive. Also sets the pH level of all Streams leading away from the
+     * Pool.
      * 
      * @param newPH
      *            the pH level of the Pool
@@ -261,11 +275,17 @@ public class Pool {
     public void setPH(double newPH) {
         final double minimumPH = 0.0;
         final double maximumPH = 14.0;
+        double pHToSet;
 
         if (newPH >= minimumPH && newPH <= maximumPH) {
-            pH = newPH;
+            pHToSet = newPH;
         } else {
-            pH = NEUTRAL_PH;
+            pHToSet = NEUTRAL_PH;
+        }
+
+        pH = pHToSet;
+        for (Stream stream : streamsFrom) {
+            stream.setPH(pHToSet);
         }
     }
 
@@ -311,7 +331,7 @@ public class Pool {
     }
 
     /**
-     * Sets the Array object holding the Guppies in the Pool.
+     * Sets the ArrayList object holding the Guppies in the Pool.
      * 
      * @param newGuppiesInPool
      *            an ArrayList object holding the Guppies in the Pool
@@ -319,6 +339,96 @@ public class Pool {
     public void setGuppiesInPool(ArrayList<Guppy> newGuppiesInPool) {
         if (newGuppiesInPool != null) {
             guppiesInPool = newGuppiesInPool;
+        }
+    }
+
+    /**
+     * Returns an ArrayList object holding all Streams to this Pool.
+     * 
+     * @return an ArrayList object holding all Streams to this Pool
+     */
+    public ArrayList<Stream> getStreamsTo() {
+        return streamsTo;
+    }
+
+    /**
+     * Sets the ArrayList object holding all Streams to this Pool.
+     * 
+     * @param newStreamsTo
+     *            an ArrayList object holding all Streams to this Pool
+     */
+    public void setStreamsTo(ArrayList<Stream> newStreamsTo) {
+        streamsTo = newStreamsTo;
+    }
+
+    /**
+     * Adds a Stream that leads to this Pool; no duplicates allowed.
+     * 
+     * @param stream
+     *            a Stream that leads to this Pool
+     */
+    public void addStreamTo(Stream stream) {
+        if (!streamsTo.contains(stream)) {
+            streamsTo.add(stream);
+        }
+    }
+
+    /**
+     * Adds multiple Streams that lead to this Pool; no duplicates allowed.
+     * 
+     * @param streams
+     *            an ArrayList object holding Streams that lead to this Pool
+     */
+    public void addStreamsTo(ArrayList<Stream> streams) {
+        for (Stream stream : streams) {
+            if (!streamsTo.contains(stream)) {
+                streamsTo.add(stream);
+            }
+        }
+    }
+
+    /**
+     * Returns an ArrayList object holding all Streams from this Pool.
+     * 
+     * @return an ArrayList object holding all Streams from this Pool
+     */
+    public ArrayList<Stream> getStreamsFrom() {
+        return streamsFrom;
+    }
+
+    /**
+     * Sets the ArrayList object holding all Streams from this Pool.
+     * 
+     * @param newStreamsFrom
+     *            an ArrayList object holding all Streams from this Pool
+     */
+    public void setStreamsFrom(ArrayList<Stream> newStreamsFrom) {
+        streamsFrom = newStreamsFrom;
+    }
+
+    /**
+     * Adds a Stream that leads from this Pool; no duplicates allowed.
+     * 
+     * @param stream
+     *            a Stream that leads from this Pool
+     */
+    public void addStreamFrom(Stream stream) {
+        if (!streamsFrom.contains(stream)) {
+            streamsFrom.add(stream);
+        }
+    }
+
+    /**
+     * Adds multiple Streams that lead from this Pool; no duplicates allowed.
+     * 
+     * @param streams
+     *            an ArrayList object holding Streams that lead from this Pool
+     */
+    public void addStreamsFrom(ArrayList<Stream> streams) {
+        for (Stream stream : streams) {
+            if (!streamsFrom.contains(stream)) {
+                streamsFrom.add(stream);
+            }
         }
     }
 
@@ -396,16 +506,17 @@ public class Pool {
 
         return population;
     }
-    
+
     public int getLivingPopulation() {
         int population = 0;
-        
+
         for (int i = 0; i < guppiesInPool.size(); i++) {
-            if (guppiesInPool.get(i) != null && guppiesInPool.get(i).getIsAlive()) {
-                population ++;
+            if (guppiesInPool.get(i) != null
+                    && guppiesInPool.get(i).getIsAlive()) {
+                population++;
             }
         }
-        
+
         return population;
     }
 
@@ -449,19 +560,19 @@ public class Pool {
         boolean isAlive;
         int removedGuppies = 0;
 
-//        for (int i = 0; i < guppiesInPool.size(); i++) {
-//            currentGuppy = guppiesInPool.get(i);
-//
-//            if (currentGuppy != null) {
-//                isAlive = currentGuppy.getIsAlive();
-//
-//                if (!isAlive) {
-//                    guppiesInPool.remove(i);
-//                    removedGuppies++;
-//                    i--;
-//                }
-//            }
-//        }
+        // for (int i = 0; i < guppiesInPool.size(); i++) {
+        // currentGuppy = guppiesInPool.get(i);
+        //
+        // if (currentGuppy != null) {
+        // isAlive = currentGuppy.getIsAlive();
+        //
+        // if (!isAlive) {
+        // guppiesInPool.remove(i);
+        // removedGuppies++;
+        // i--;
+        // }
+        // }
+        // }
         Iterator<Guppy> iterator = guppiesInPool.iterator();
         while (iterator.hasNext()) {
             if (!iterator.next().getIsAlive()) {
@@ -469,7 +580,6 @@ public class Pool {
                 removedGuppies++;
             }
         }
-        
 
         // for (Guppy guppy : guppiesInPool) {
         // if (!guppy.getIsAlive()) {
@@ -701,7 +811,7 @@ public class Pool {
      */
     public int adjustForCrowding() {
         int crowdedOut = 0;
-        
+
         Collections.sort(guppiesInPool);
         while (getGuppyVolumeRequirementInLitres() > volumeLitres) {
             Guppy weakestGuppy = guppiesInPool.get(crowdedOut);
