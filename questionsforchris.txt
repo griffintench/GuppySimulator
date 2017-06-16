@@ -1,2 +1,16 @@
 When you're writing a getter for an ArrayList/other object, is it better to return a clone?
+
+This is a great question and observation.
+
+Strictly speaking if we want to preserve the encapsulation
+of the object that contains the ArrayList/other object, we should
+return a clone so that the instance variable cannot be changed directly by
+some other object.  We call this making defensive copies.
+
+Refer to section # 39 in Effective Java (2e) by Joshua Bloch
+Also see http://www.informit.com/articles/article.aspx?p=31551&seqNum=2
+
 Should pH and temperature even be stored in Stream? Just use Pool's instead?
+If we assume that the stream emptying from the Pool is short enough that probably makes
+sense.  if however a Stream could ever have 2 or more sources, or if a Stream is long
+enough for its pH or temp to change, then we might want to assign its own.
