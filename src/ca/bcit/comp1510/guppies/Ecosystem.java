@@ -17,10 +17,16 @@ public class Ecosystem {
     private ArrayList<Pool> pools;
 
     /**
+     * The Streams in the Ecosystem.
+     */
+    private ArrayList<Stream> streams;
+
+    /**
      * Creates an Ecosystem without any Pools.
      */
     public Ecosystem() {
         pools = new ArrayList<Pool>();
+        streams = new ArrayList<Stream>();
     }
 
     /**
@@ -30,7 +36,7 @@ public class Ecosystem {
      *            command line arguments
      */
     public static void main(String[] args) {
-        final int numberOfWeeks = 35;
+        final int numberOfWeeks = 20;
         Ecosystem ecosystem = new Ecosystem();
         ecosystem.setUpSimulation();
         ecosystem.simulate(numberOfWeeks);
@@ -54,6 +60,39 @@ public class Ecosystem {
     public void setPools(ArrayList<Pool> pools) {
         if (pools != null) {
             this.pools = pools;
+        }
+    }
+
+    /**
+     * Returns the Ecosystem's Streams.
+     * 
+     * @return the Ecosystem's Streams
+     */
+    public ArrayList<Stream> getStreams() {
+        return streams;
+    }
+
+    /**
+     * Sets the Ecosystem's Streams; ignores null values.
+     * 
+     * @param streams
+     *            the Ecosystem's Streams
+     */
+    public void setStreams(ArrayList<Stream> streams) {
+        if (streams != null) {
+            this.streams = streams;
+        }
+    }
+
+    /**
+     * Adds a single Stream to the Ecosystem. No duplicates allowed
+     * 
+     * @param stream
+     *            the Stream to add
+     */
+    public void addStream(Stream stream) {
+        if (!streams.contains(stream)) {
+            streams.add(stream);
         }
     }
 
@@ -96,9 +135,16 @@ public class Ecosystem {
      * Gamelin.
      */
     public void setUpSimulation() {
-        addPool(skookumchuk());
-        addPool(rutherford());
-        addPool(gamelin());
+        Pool skookumchuk = skookumchuk();
+        Pool rutherford = rutherford();
+        Pool gamelin = gamelin();
+        
+        addPool(skookumchuk);
+        addPool(rutherford);
+        addPool(gamelin);
+        
+        addStream(new Stream(skookumchuk, rutherford));
+        addStream(new Stream(rutherford, gamelin));
     }
 
     /**

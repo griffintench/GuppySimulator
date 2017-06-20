@@ -127,6 +127,8 @@ public class Pool {
      */
     public Pool() {
 
+        streamsTo = new ArrayList<Stream>();
+        streamsFrom = new ArrayList<Stream>();
         setVolumeLitres(0.0);
         setName(DEFAULT_POOL_NAME);
         setTemperatureCelsius(DEFAULT_POOL_TEMP_CELSIUS);
@@ -158,6 +160,8 @@ public class Pool {
             double newTemperatureCelsius, double newPH,
             double newNutrientCoefficient) {
 
+        streamsTo = new ArrayList<Stream>();
+        streamsFrom = new ArrayList<Stream>();
         setVolumeLitres(0.0);
         setName(DEFAULT_POOL_NAME);
         setTemperatureCelsius(DEFAULT_POOL_TEMP_CELSIUS);
@@ -249,8 +253,10 @@ public class Pool {
         if (newTemperatureCelsius >= MINIMUM_POOL_TEMP_CELSIUS
                 && newTemperatureCelsius <= MAXIMUM_POOL_TEMP_CELSIUS) {
             temperatureCelsius = newTemperatureCelsius;
-            for (Stream stream : streamsFrom) {
-                stream.setTemperatureCelsius(newTemperatureCelsius);
+            if (!streamsFrom.isEmpty()) {
+                for (Stream stream : streamsFrom) {
+                    stream.setTemperatureCelsius(newTemperatureCelsius);
+                }
             }
         }
     }
@@ -467,20 +473,6 @@ public class Pool {
      */
     public boolean addGuppy(Guppy guppy) {
         boolean result = false;
-        // boolean added = false;
-
-        // obsolete now that guppiesInPool is an ArrayList
-        // if (guppy != null) {
-        // int i = 0;
-        // while (i < guppiesInPool.size() && !added) {
-        // if (guppiesInPool.get(i) == null) {
-        // guppiesInPool.add(guppy);
-        // result = true;
-        // added = true;
-        // }
-        // i++;
-        // }
-        // }
 
         if (guppy != null) {
             guppiesInPool.add(guppy);
@@ -507,6 +499,11 @@ public class Pool {
         return population;
     }
 
+    /**
+     * Counts and returns the number of living Guppies in the Pool.
+     * 
+     * @return the number of living Guppies in the Pool
+     */
     public int getLivingPopulation() {
         int population = 0;
 
@@ -556,23 +553,7 @@ public class Pool {
      */
     public int removeDeadGuppies() {
 
-        Guppy currentGuppy;
-        boolean isAlive;
         int removedGuppies = 0;
-
-        // for (int i = 0; i < guppiesInPool.size(); i++) {
-        // currentGuppy = guppiesInPool.get(i);
-        //
-        // if (currentGuppy != null) {
-        // isAlive = currentGuppy.getIsAlive();
-        //
-        // if (!isAlive) {
-        // guppiesInPool.remove(i);
-        // removedGuppies++;
-        // i--;
-        // }
-        // }
-        // }
         Iterator<Guppy> iterator = guppiesInPool.iterator();
         while (iterator.hasNext()) {
             if (!iterator.next().getIsAlive()) {
@@ -580,12 +561,6 @@ public class Pool {
                 removedGuppies++;
             }
         }
-
-        // for (Guppy guppy : guppiesInPool) {
-        // if (!guppy.getIsAlive()) {
-        // guppiesInPool.remove(guppiesInPool.indexOf(guppy));
-        // }
-        // }
 
         return removedGuppies;
 
@@ -810,15 +785,60 @@ public class Pool {
      * @return the number of Guppies killed off
      */
     public int adjustForCrowding() {
-        int crowdedOut = 0;
+        int killed = 0;
 
         Collections.sort(guppiesInPool);
         while (getGuppyVolumeRequirementInLitres() > volumeLitres) {
-            Guppy weakestGuppy = guppiesInPool.get(crowdedOut);
-            weakestGuppy.setIsAlive(false);
-            crowdedOut++;
+            Guppy weakestGuppy = guppiesInPool.get(killed);
+            // weakestGuppy.setIsAlive(false);
+            crowdOut(weakestGuppy);
+            if (!weakestGuppy.getIsAlive()) {
+                killed++;
+            }
         }
-        return crowdedOut;
+        return killed;
+    }
+
+    /**
+     * Crowds out a Guppy by either killing it or sending it downstream.
+     * 
+     * @param guppy
+     *            the Guppy to crowd out. Must be in this Pool.
+     */
+    private void crowdOut(Guppy guppy) {
+        if (!guppiesInPool.contains(guppy)) {
+            throw new IllegalArgumentException();
+        }
+        if (streamsFrom.isEmpty()) {
+            guppy.setIsAlive(false);
+        } else {
+            double healthCoefficient = guppy.getHealthCoefficient();
+            Random generator = new Random();
+            double healthRoll = generator.nextDouble();
+            if (healthRoll < healthCoefficient) {
+                sendDownstream(guppy);
+            } else {
+                guppy.setIsAlive(false);
+            }
+        }
+    }
+
+    /**
+     * Sends a Guppy downstream. Chooses a random Stream away from this Pool and
+     * sends the Guppy to the right destination Pool.
+     * 
+     * @param guppy
+     *            the Guppy to send downstream. Must be in this Pool.
+     */
+    private void sendDownstream(Guppy guppy) {
+        if (!guppiesInPool.contains(guppy)) {
+            throw new IllegalArgumentException();
+        }
+        guppiesInPool.remove(guppiesInPool.indexOf(guppy));
+        int streams = streamsFrom.size();
+        Random generator = new Random();
+        int streamNumber = generator.nextInt(streams);
+        streamsFrom.get(streamNumber).getDestination().addGuppy(guppy);
     }
 
     @Override
