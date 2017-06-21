@@ -6,7 +6,7 @@ package ca.bcit.comp1510.guppies;
  * @author griffin
  * @version 1.0
  */
-public abstract class Fish {
+public abstract class Fish implements Comparable {
 
     /**
      * The minimum health coefficient.
