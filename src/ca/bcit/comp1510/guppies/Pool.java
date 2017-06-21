@@ -6,13 +6,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Random;
 
-/*
- * printDetails?
- * applyNutrientCoefficient() - can you declare a variable more than once
- *  (nested for loops do this right?)
- * the last four methods - necessary to check if Guppy is alive or should that
- *  be given? (esp the last one)
-*/
 /**
  * A Pool class with some Guppies in it.
  * 
@@ -784,6 +777,7 @@ public class Pool {
      * 
      * @return the number of Guppies killed off
      */
+    @SuppressWarnings("unchecked")
     public int adjustForCrowding() {
         int killed = 0;
 

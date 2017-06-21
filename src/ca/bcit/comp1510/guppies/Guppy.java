@@ -2,7 +2,7 @@ package ca.bcit.comp1510.guppies;
 
 import java.util.ArrayList;
 import java.util.Random;
-// test comment
+
 /**
  * A class representing a Guppy.
  * 
@@ -175,19 +175,19 @@ public class Guppy implements Comparable {
     }
 
     /**
-     * Accessor method for genus.
+     * Returns the genus of the fish.
      * 
-     * @return the genus of the fish.
+     * @return the genus of the fish
      */
     public String getGenus() {
         return genus;
     }
 
     /**
-     * Mutator method for genus.
+     * Sets the genus of the fish.
      * 
      * @param newGenus
-     *            the new genus for the fish.
+     *            the new genus for the fish
      */
     public final void setGenus(String newGenus) {
         if (newGenus != null && !newGenus.equals("")) {
@@ -202,19 +202,19 @@ public class Guppy implements Comparable {
     }
 
     /**
-     * Accessor method for species.
+     * Returns the species of the fish.
      * 
-     * @return the species of the fish.
+     * @return the species of the fish
      */
     public String getSpecies() {
         return species;
     }
 
     /**
-     * Mutator method for species.
+     * Sets the species of the fish.
      * 
      * @param newSpecies
-     *            the new species for the fish.
+     *            the new species for the fish
      */
     public void setSpecies(String newSpecies) {
         if (newSpecies != null && !newSpecies.trim().equals("")) {
@@ -223,19 +223,19 @@ public class Guppy implements Comparable {
     }
 
     /**
-     * Accessor method for ageInWeeks.
+     * Returns the fish's age in weeks.
      * 
-     * @return the fish's age in weeks.
+     * @return the fish's age in weeks
      */
     public int getAgeInWeeks() {
         return ageInWeeks;
     }
 
     /**
-     * Mutator method for ageInWeeks.
+     * Sets the fish's age in weeks.
      * 
      * @param newAgeInWeeks
-     *            the new age in weeks for the fish.
+     *            the new age in weeks for the fish
      */
     public void setAgeInWeeks(int newAgeInWeeks) {
         if (newAgeInWeeks < 0 || newAgeInWeeks >= MAXIMUM_AGE_IN_WEEKS) {
@@ -246,38 +246,38 @@ public class Guppy implements Comparable {
     }
 
     /**
-     * Accessor method for isFemale.
+     * Returns true if the fish is female; false if male.
      * 
-     * @return true if the fish is female; false if male.
+     * @return true if the fish is female; false if male
      */
     public boolean getIsFemale() {
         return isFemale;
     }
 
     /**
-     * Mutator method for isFemale.
+     * Sets the sex of the fish.
      * 
      * @param newIsFemale
-     *            true if the fish is female; false if male.
+     *            true if the fish is female; false if male
      */
     public void setIsFemale(boolean newIsFemale) {
         isFemale = newIsFemale;
     }
 
     /**
-     * Accessor method for generationNumber.
+     * Returns the number corresponding to the fish's generation.
      * 
-     * @return the number corresponding to the fish's generation.
+     * @return the number corresponding to the fish's generation
      */
     public int getGenerationNumber() {
         return generationNumber;
     }
 
     /**
-     * Mutator method for generationNumber.
+     * Sets the generation number for the Guppy.
      * 
      * @param newGenerationNumber
-     *            the fish's generation number.
+     *            the fish's generation number
      */
     public void setGenerationNumber(int newGenerationNumber) {
         if (newGenerationNumber < 0) {
@@ -288,35 +288,35 @@ public class Guppy implements Comparable {
     }
 
     /**
-     * Accessor method for isAlive.
+     * Returns true if the Guppy is alive; false if dead.
      * 
-     * @return true if the fish is alive; false if dead.
+     * @return true if the Guppy is alive; false if dead
      */
     public boolean getIsAlive() {
         return isAlive;
     }
 
     /**
-     * Mutator method for isAlive.
+     * Sets the living status (alive or dead) of the Guppy.
      * 
      * @param newIsAlive
-     *            true if the fish is alive; false if dead.
+     *            true if the fish is alive; false if dead
      */
     public void setIsAlive(boolean newIsAlive) {
         isAlive = newIsAlive;
     }
 
     /**
-     * Accessor method for healthCoefficient.
+     * Returns the health coefficient of the fish.
      * 
-     * @return the health coefficient of the fish.
+     * @return the health coefficient of the fish
      */
     public double getHealthCoefficient() {
         return healthCoefficient;
     }
 
     /**
-     * Mutator method for healthCoefficient.
+     * Sets the health coefficient of the Guppy.
      * 
      * @param newHealthCoefficient
      *            the health coefficient of the fish.
@@ -331,16 +331,16 @@ public class Guppy implements Comparable {
     }
 
     /**
-     * Accessor method for identificationNumber.
+     * Returns the identification number of the Guppy.
      * 
-     * @return the fish's identification number.
+     * @return the identification number of the Guppy
      */
     public int getIdentificationNumber() {
         return identificationNumber;
     }
 
     /**
-     * Accessor for numberOfGuppiesBorn static variable.
+     * Returns the number of Guppies that have been born.
      * 
      * @return the number of Guppies that have been born.
      */
