@@ -14,26 +14,36 @@ public class Simulation {
     /**
      * The Ecosystem we will use in our simulation.
      */
-    private static Ecosystem ecosystem;
+    private Ecosystem ecosystem;
 
-    /**
-     * Drives the program.
-     * 
-     * @param args
-     *            command line arguments
-     */
-    public static void main(String[] args) {
+//    /**
+//     * Drives the program.
+//     * 
+//     * @param args
+//     *            command line arguments
+//     */
+//    public static void main(String[] args) {
+//        final int numberOfWeeks = 20;
+//        ecosystem = new Ecosystem();
+//        setUpSimulation();
+//        simulate(numberOfWeeks);
+//    }
+    
+    public Simulation() {
         final int numberOfWeeks = 20;
         ecosystem = new Ecosystem();
         setUpSimulation();
-        simulate(numberOfWeeks);
+    }
+    
+    public Ecosystem getEcosystem() {
+        return ecosystem;
     }
 
     /**
      * Sets up the Ecosystem with three Pools: Skookumchuk, Rutherford and
      * Gamelin.
      */
-    private static void setUpSimulation() {
+    private void setUpSimulation() {
         final int skookumchukVolume = 1000;
         final int skookumchukTemperature = 42;
         final double skookumchukPH = 7.9;
@@ -121,13 +131,13 @@ public class Simulation {
         return pool;
     }
     
-    private static void simulate(int numberOfWeeks) {
+    public void simulate(int numberOfWeeks) {
         for (int i = 1; i <= numberOfWeeks; i++) {
             ecosystem.simulateOneWeek(i);
         }
     }
 
-    private static class GuppySet {
+    private class GuppySet {
         private int numberOfGuppies;
         int minAge;
         int maxAge;
