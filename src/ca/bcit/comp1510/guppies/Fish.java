@@ -12,16 +12,11 @@ public abstract class Fish implements Comparable {
      * The number of fish that have been born since the program started running.
      */
     private static int numberOfFishBorn;
-
+    
     /**
-     * The first word of the scientific binomial name.
+     * The scientific binomial name of the fish.
      */
-    private String genus;
-
-    /**
-     * The second word of the scientific binomial name.
-     */
-    private String species;
+    private BinomialName binomialName;
 
     /**
      * The fish's age, in weeks.
@@ -84,8 +79,7 @@ public abstract class Fish implements Comparable {
     public Fish(String newGenus, String newSpecies, int newAgeInWeeks,
             boolean newIsFemale, int newGenerationNumber,
             double newHealthCoefficient) {
-        setGenus(newGenus);
-        setSpecies(newSpecies);
+        setBinomialName(new BinomialName(newGenus, newSpecies));
         setAgeInWeeks(newAgeInWeeks);
         setGenerationNumber(newGenerationNumber);
         setIsFemale(newIsFemale);
@@ -112,41 +106,15 @@ public abstract class Fish implements Comparable {
      * @return true if the fish has died of old age; false otherwise
      */
     abstract boolean hasDiedOfOldAge();
-
-    /**
-     * Returns the genus of the Fish.
-     * 
-     * @return the genus of the Fish
-     */
-    public String getGenus() {
-        return genus;
+    
+    public BinomialName getBinomialName() {
+        return binomialName;
     }
-
-    /**
-     * Sets the genus of the fish.
-     * 
-     * @param newGenus
-     *            the new genus for the fish
-     */
-    public void setGenus(String newGenus) {
-        if (newGenus != null && !newGenus.equals("")) {
-            String firstLetter = newGenus.substring(0, 1);
-            String restOfGenus = newGenus.substring(1, newGenus.length());
-
-            firstLetter = firstLetter.toUpperCase();
-            restOfGenus = restOfGenus.toLowerCase();
-
-            genus = firstLetter + restOfGenus;
+    
+    public void setBinomialName(BinomialName newName) {
+        if (newName != null) {
+            binomialName = newName;
         }
-    }
-
-    /**
-     * Returns the species of the fish.
-     * 
-     * @return the species of the fish
-     */
-    public String getSpecies() {
-        return species;
     }
 
     /**
@@ -155,11 +123,11 @@ public abstract class Fish implements Comparable {
      * @param newSpecies
      *            the new species for the fish
      */
-    public void setSpecies(String newSpecies) {
-        if (newSpecies != null && !newSpecies.trim().equals("")) {
-            species = newSpecies.toLowerCase();
-        }
-    }
+//    public void setSpecies(String newSpecies) {
+//        if (newSpecies != null && !newSpecies.trim().equals("")) {
+//            species = newSpecies.toLowerCase();
+//        }
+//    }
 
     /**
      * Returns the fish's age in weeks.

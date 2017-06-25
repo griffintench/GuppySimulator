@@ -61,8 +61,7 @@ public class Guppy extends Fish {
     public Guppy() {
 
         super();
-        setGenus(DEFAULT_GENUS);
-        setSpecies(DEFAULT_SPECIES);
+        setBinomialName(new BinomialName(DEFAULT_GENUS, DEFAULT_SPECIES));
 
         guppyID = ++numberOfGuppiesBorn;
 
@@ -91,16 +90,21 @@ public class Guppy extends Fish {
         super(newGenus, newSpecies, newAgeInWeeks, newIsFemale,
                 newGenerationNumber, newHealthCoefficient);
 
+        String genus;
+        String species;
+
         if (newGenus == null || newGenus.equals("")) {
-            super.setGenus(DEFAULT_GENUS);
+            genus = DEFAULT_GENUS;
         } else {
-            setGenus(newGenus);
+            genus = newGenus;
         }
         if (newSpecies == null || newSpecies.equals("")) {
-            super.setSpecies(DEFAULT_SPECIES);
+            species = DEFAULT_SPECIES;
         } else {
-            setSpecies(newSpecies);
+            species = newSpecies;
         }
+
+        setBinomialName(new BinomialName(genus, species));
 
         guppyID = ++numberOfGuppiesBorn;
 
@@ -190,8 +194,9 @@ public class Guppy extends Fish {
                 final double probabilityOfFemale = 0.5;
                 for (int i = 1; i <= numberOfFry; i++) {
                     isFemaleRoll = generator.nextDouble();
-                    babyGuppy = new Guppy(super.getGenus(), super.getSpecies(),
-                            0, isFemaleRoll <= probabilityOfFemale,
+                    babyGuppy = new Guppy(getBinomialName().getGenus(),
+                            getBinomialName().getSpecies(), 0,
+                            isFemaleRoll <= probabilityOfFemale,
                             super.getGenerationNumber() + 1,
                             newHealthCoefficient);
                     babyGuppies.add(babyGuppy);
@@ -204,12 +209,13 @@ public class Guppy extends Fish {
 
     @Override
     public String toString() {
-        return "Guppy [genus=" + super.getGenus() + ", species="
-                + super.getSpecies() + ", ageInWeeks=" + super.getAgeInWeeks()
-                + ", isFemale=" + super.getIsFemale() + ", generationNumber="
-                + super.getGenerationNumber() + ", isAlive="
-                + super.getHealth().getIsAlive() + ", healthCoefficient="
-                + super.getHealth().getHealthCoefficient() + ", guppyID=" + guppyID + "]";
+        return "Guppy [genus=" + getBinomialName().getGenus() + ", species="
+                + getBinomialName().getSpecies() + ", ageInWeeks="
+                + getAgeInWeeks() + ", isFemale=" + getIsFemale()
+                + ", generationNumber=" + getGenerationNumber() + ", isAlive="
+                + getHealth().getIsAlive() + ", healthCoefficient="
+                + getHealth().getHealthCoefficient() + ", guppyID=" + guppyID
+                + "]";
     }
 
 }
