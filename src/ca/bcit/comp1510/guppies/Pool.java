@@ -116,7 +116,7 @@ public class Pool extends WaterBody {
     public Pool(String newName, double newVolumeLitres,
             double newTemperatureCelsius, double newPH,
             double newNutrientCoefficient) {
-        
+
         super(newTemperatureCelsius, newPH);
 
         streamsTo = new ArrayList<Stream>();
@@ -555,7 +555,8 @@ public class Pool extends WaterBody {
 
     /**
      * Sends a Guppy downstream. Chooses a random Stream away from this Pool and
-     * sends the Guppy to the right destination Pool.
+     * sends the Guppy to the right destination Pool, or kills the Guppy if a
+     * random roll is more than the Guppy's nutrient coefficient.
      * 
      * @param guppy
      *            the Guppy to send downstream. Must be in this Pool.
@@ -564,11 +565,18 @@ public class Pool extends WaterBody {
         if (!guppiesInPool.contains(guppy)) {
             throw new IllegalArgumentException();
         }
-        guppiesInPool.remove(guppy);
-        int streams = streamsFrom.size();
         Random generator = new Random();
-        int streamNumber = generator.nextInt(streams);
-        streamsFrom.get(streamNumber).getDestination().addGuppy(guppy);
+
+        double roll = generator.nextDouble();
+        if (roll > guppy.getHealth().getHealthCoefficient()) {
+            guppy.getHealth().setIsAlive(false);
+        } else {
+            guppiesInPool.remove(guppy);
+            int streams = streamsFrom.size();
+
+            int streamNumber = generator.nextInt(streams);
+            streamsFrom.get(streamNumber).getDestination().addGuppy(guppy);
+        }
     }
 
     @Override

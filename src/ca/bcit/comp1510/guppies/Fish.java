@@ -258,8 +258,6 @@ public abstract class Fish implements Comparable {
     public abstract ArrayList<Fish> spawn();
     // TODO figure out what to do with spawn()
 
-    // TODO figure out what to do with toString()
-
     /**
      * Compares based on health coefficient.
      */
