@@ -173,7 +173,7 @@ public class FishGroup {
         int population = 0;
 
         for (int i = 0; i < fish.size(); i++) {
-            if (fish.get(i) != null && fish.get(i).getHealth().getIsAlive()) {
+            if (fish.get(i) != null && fish.get(i).isAlive()) {
                 population++;
             }
         }
@@ -203,7 +203,7 @@ public class FishGroup {
                 roll = generator.nextDouble();
 
                 if (roll > nutrientCoefficient) {
-                    curFish.getHealth().setIsAlive(false);
+                    curFish.kill();
                     numberOfDeaths++;
                 }
             }
@@ -222,7 +222,7 @@ public class FishGroup {
         int removedFish = 0;
         Iterator<Fish> iterator = fish.iterator();
         while (iterator.hasNext()) {
-            if (!iterator.next().getHealth().getIsAlive()) {
+            if (!iterator.next().isAlive()) {
                 iterator.remove();
                 removedFish++;
             }
@@ -247,7 +247,7 @@ public class FishGroup {
         for (int i = 0; i < fish.size(); i++) {
             currentFish = fish.get(i);
 
-            if (currentFish != null && currentFish.getHealth().getIsAlive()) {
+            if (currentFish != null && currentFish.isAlive()) {
                 totalVolumeMillilitres += currentFish.getVolumeNeeded();
             }
         }
@@ -308,10 +308,8 @@ public class FishGroup {
             for (int i = 0; i < fish.size(); i++) {
                 currentFish = fish.get(i);
 
-                if (currentFish != null
-                        && currentFish.getHealth().getIsAlive()) {
-                    healthCoefficientSum += currentFish.getHealth()
-                            .getHealthCoefficient();
+                if (currentFish != null && currentFish.isAlive()) {
+                    healthCoefficientSum += currentFish.getHealthCoefficient();
                 }
             }
 
@@ -339,7 +337,7 @@ public class FishGroup {
             for (int i = 0; i < fish.size(); i++) {
                 currentFish = fish.get(i);
 
-                if (currentFish != null && currentFish.getHealth().getIsAlive()
+                if (currentFish != null && currentFish.isAlive()
                         && currentFish.getIsFemale()) {
                     femaleCount++;
                 }
@@ -365,7 +363,7 @@ public class FishGroup {
         int index2;
         int[] fishAges = new int[population];
         Fish currentFish;
-        int currentAge = 0;
+        int currentAgeIndex = 0;
 
         if (population == 0) {
             return 0.0;
@@ -375,9 +373,9 @@ public class FishGroup {
                 currentFish = fish.get(i);
 
                 if (currentFish != null
-                        && currentFish.getHealth().getIsAlive()) {
-                    fishAges[currentAge] = currentFish.getAgeInWeeks();
-                    currentAge++;
+                        && currentFish.isAlive()) {
+                    fishAges[currentAgeIndex] = currentFish.getAgeInWeeks();
+                    currentAgeIndex++;
                 }
             }
 
@@ -432,7 +430,7 @@ public class FishGroup {
         for (Fish currentFish : fish) {
             if (currentFish != null) {
                 currentFish.incrementAge();
-                if (!currentFish.getHealth().getIsAlive()) {
+                if (!currentFish.isAlive()) {
                     numberOfDead++;
                 }
             }

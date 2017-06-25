@@ -521,7 +521,7 @@ public class Pool extends WaterBody {
             if (weakest instanceof Guppy) {
                 Guppy weakestGuppy = (Guppy) weakest;
                 crowdOut(weakestGuppy);
-                if (!weakestGuppy.getHealth().getIsAlive()) {
+                if (!weakestGuppy.isAlive()) {
                     killed++;
                 }
             }
@@ -540,23 +540,22 @@ public class Pool extends WaterBody {
             throw new IllegalArgumentException();
         }
         if (streamsFrom.isEmpty()) {
-            guppy.getHealth().setIsAlive(false);
+            guppy.kill();
         } else {
-            double healthCoefficient = guppy.getHealth().getHealthCoefficient();
+            double healthCoefficient = guppy.getHealthCoefficient();
             Random generator = new Random();
             double healthRoll = generator.nextDouble();
             if (healthRoll < healthCoefficient) {
                 sendDownstream(guppy);
             } else {
-                guppy.getHealth().setIsAlive(false);
+                guppy.kill();
             }
         }
     }
 
     /**
      * Sends a Guppy downstream. Chooses a random Stream away from this Pool and
-     * sends the Guppy to the right destination Pool, or kills the Guppy if a
-     * random roll is more than the Guppy's nutrient coefficient.
+     * sends the Guppy to the right destination Pool.
      * 
      * @param guppy
      *            the Guppy to send downstream. Must be in this Pool.
@@ -565,27 +564,21 @@ public class Pool extends WaterBody {
         if (!guppiesInPool.contains(guppy)) {
             throw new IllegalArgumentException();
         }
-        Random generator = new Random();
+        guppiesInPool.remove(guppy);
+        int streams = streamsFrom.size();
 
-        double roll = generator.nextDouble();
-        if (roll > guppy.getHealth().getHealthCoefficient()) {
-            guppy.getHealth().setIsAlive(false);
-        } else {
-            guppiesInPool.remove(guppy);
-            int streams = streamsFrom.size();
+        int streamNumber = randomNumberGenerator.nextInt(streams);
+        streamsFrom.get(streamNumber).getDestination().addGuppy(guppy);
 
-            int streamNumber = generator.nextInt(streams);
-            streamsFrom.get(streamNumber).getDestination().addGuppy(guppy);
-        }
     }
 
     @Override
     public String toString() {
         return "Pool [name=" + name + ", volumeLitres=" + volumeLitres
-                + ", temperatureCelsius=" + super.getTemperatureCelsius()
-                + ", pH=" + super.getPH() + ", nutrientCoefficient="
-                + nutrientCoefficient + ", identificationNumber="
-                + identificationNumber + ", guppiesInPool=" + guppiesInPool
+                + ", temperatureCelsius=" + getTemperatureCelsius() + ", pH="
+                + getPH() + ", nutrientCoefficient=" + nutrientCoefficient
+                + ", identificationNumber=" + identificationNumber
+                + ", guppiesInPool=" + guppiesInPool
                 + ", randomNumberGenerator=" + randomNumberGenerator + "]";
     }
 }

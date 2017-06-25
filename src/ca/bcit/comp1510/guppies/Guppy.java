@@ -186,7 +186,7 @@ public class Guppy extends Fish {
         final int ageToSpawn = 10;
         final int maxFry = 100;
         ArrayList<Fish> babyGuppies = new ArrayList<Fish>();
-        if (!super.getIsFemale() || super.getAgeInWeeks() < ageToSpawn) {
+        if (!getIsFemale() || getAgeInWeeks() < ageToSpawn) {
             return babyGuppies;
         } else {
             Random generator = new Random();
@@ -197,16 +197,15 @@ public class Guppy extends Fish {
 
                 Guppy babyGuppy;
                 double isFemaleRoll;
-                double newHealthCoefficient = (1.0
-                        + super.getHealth().getHealthCoefficient()) / 2.0;
+                double newHealthCoefficient = (1.0 + getHealthCoefficient())
+                        / 2.0;
                 final double probabilityOfFemale = 0.5;
                 for (int i = 1; i <= numberOfFry; i++) {
                     isFemaleRoll = generator.nextDouble();
                     babyGuppy = new Guppy(getBinomialName().getGenus(),
                             getBinomialName().getSpecies(), 0,
                             isFemaleRoll <= probabilityOfFemale,
-                            super.getGenerationNumber() + 1,
-                            newHealthCoefficient);
+                            getGenerationNumber() + 1, newHealthCoefficient);
                     babyGuppies.add(babyGuppy);
                 }
             }

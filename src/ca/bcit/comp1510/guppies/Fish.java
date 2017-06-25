@@ -244,6 +244,41 @@ public abstract class Fish implements Comparable {
     }
 
     /**
+     * Returns the health coefficient of the Fish.
+     * 
+     * @return the health coefficient of the Fish
+     */
+    public double getHealthCoefficient() {
+        return health.getHealthCoefficient();
+    }
+
+    /**
+     * Sets the health coefficient of the fish.
+     * 
+     * @param healthCoefficient
+     *            the health coefficient to set
+     */
+    public void setHealthCoefficient(double healthCoefficient) {
+        health.setHealthCoefficient(healthCoefficient);
+    }
+
+    /**
+     * Returns true if the fish is alive; false otherwise.
+     * 
+     * @return true if the fish is alive; false otherwise
+     */
+    public boolean isAlive() {
+        return health.getIsAlive();
+    }
+
+    /**
+     * Kills the fish.
+     */
+    public void kill() {
+        health.setIsAlive(false);
+    }
+
+    /**
      * Returns the volume needed for this fish to survive.
      * 
      * @return the volume needed for this fish to survive
@@ -288,8 +323,7 @@ public abstract class Fish implements Comparable {
         return "[species=" + getBinomialName() + ", ageInWeeks="
                 + getAgeInWeeks() + ", isFemale=" + getIsFemale()
                 + ", generationNumber=" + getGenerationNumber() + ", isAlive="
-                + getHealth().getIsAlive() + ", healthCoefficient="
-                + getHealth().getHealthCoefficient() + ", " + specificIDString()
-                + "]";
+                + isAlive() + ", healthCoefficient=" + getHealthCoefficient()
+                + ", " + specificIDString() + "]";
     }
 }
