@@ -9,16 +9,6 @@ package ca.bcit.comp1510.guppies;
 public abstract class Fish implements Comparable {
 
     /**
-     * The minimum health coefficient.
-     */
-    public static final double MINIMUM_HEALTH_COEFFICIENT = 0.0;
-
-    /**
-     * The maximum health coefficient for guppies.
-     */
-    public static final double MAXIMUM_HEALTH_COEFFICIENT = 1.0;
-
-    /**
      * The number of fish that have been born since the program started running.
      */
     private static int numberOfFishBorn;
@@ -49,14 +39,10 @@ public abstract class Fish implements Comparable {
     private int generationNumber;
 
     /**
-     * True if the fish is alive; false if dead.
+     * A health object representing the fish's health, as well as whether it is
+     * alive or dead.
      */
-    private boolean isAlive;
-
-    /**
-     * A double representing the fish's health.
-     */
-    private double healthCoefficient;
+    private Health health;
 
     /**
      * A unique identifier for the fish.
@@ -66,14 +52,13 @@ public abstract class Fish implements Comparable {
     /**
      * Null constructor. Sets the fish's age and generation number to 0; the
      * fish is female and alive. Increments the number of Fish that have been
-     * created and sets it to fishID. Genus, species and health coefficient are
-     * left alone.
+     * created and sets it to fishID. Genus and species are left alone.
      */
     public Fish() {
         setAgeInWeeks(0);
         setGenerationNumber(0);
         setIsFemale(true);
-        setIsAlive(true);
+        health = new Health();
 
         fishID = ++numberOfFishBorn;
     }
@@ -104,8 +89,7 @@ public abstract class Fish implements Comparable {
         setAgeInWeeks(newAgeInWeeks);
         setGenerationNumber(newGenerationNumber);
         setIsFemale(newIsFemale);
-        setIsAlive(true);
-        setHealthCoefficient(newHealthCoefficient);
+        health = new Health(true, newHealthCoefficient);
 
         fishID = ++numberOfFishBorn;
     }
@@ -118,7 +102,7 @@ public abstract class Fish implements Comparable {
         ageInWeeks++;
 
         if (hasDiedOfOldAge()) {
-            isAlive = false;
+            health.setIsAlive(false);
         }
     }
 
@@ -193,7 +177,6 @@ public abstract class Fish implements Comparable {
      *            the fish's new age in weeks
      */
     public abstract void setAgeInWeeks(int newAgeInWeeks);
-    // TODO look into another way to do this
 
     public void setAgeInWeeks(int newAgeInWeeks, int maxAgeInWeeks) {
         if (newAgeInWeeks < 0 || newAgeInWeeks >= maxAgeInWeeks) {
@@ -244,52 +227,13 @@ public abstract class Fish implements Comparable {
             generationNumber = newGenerationNumber;
         }
     }
-
-    /**
-     * Returns true if the fish is alive; false if dead.
-     * 
-     * @return true if the fish is alive; false if dead
-     */
-    public boolean getIsAlive() {
-        return isAlive;
+    
+    public Health getHealth() {
+        return health;
     }
-
-    /**
-     * Sets the living status (alive or dead) of the fish.
-     * 
-     * @param newIsAlive
-     *            true if the fish is alive; false if dead
-     */
-    public void setIsAlive(boolean newIsAlive) {
-        isAlive = newIsAlive;
-    }
-
-    /**
-     * Returns the health coefficient of the fish.
-     * 
-     * @return the health coefficient of the fish
-     */
-    public double getHealthCoefficient() {
-        return healthCoefficient;
-    }
-
-    /**
-     * Sets the health coefficient of the fish.
-     * 
-     * @param newHealthCoefficient
-     *            the health coefficient of the fish
-     */
-    public abstract void setHealthCoefficient(double newHealthCoefficient);
-    // TODO look into better way - maybe overload in super?
-
-    public void setHealthCoefficient(double newHealthCoefficient,
-            double defaultHealthCoefficient) {
-        if (newHealthCoefficient < MINIMUM_HEALTH_COEFFICIENT
-                || newHealthCoefficient > MAXIMUM_HEALTH_COEFFICIENT) {
-            healthCoefficient = defaultHealthCoefficient;
-        } else {
-            healthCoefficient = newHealthCoefficient;
-        }
+    
+    public void setHealth(Health newHealth) {
+        health = newHealth;
     }
 
     /**
@@ -317,27 +261,6 @@ public abstract class Fish implements Comparable {
      */
     public abstract double getVolumeNeeded();
 
-    /**
-     * Adds or subtracts a value to or from the fish's health coefficient.
-     * Health coefficient cannot exceed a maximum. If the fish's health
-     * coefficient is too small, the fish dies.
-     * 
-     * @param delta
-     *            the amount by which the health coefficient changes.
-     */
-    public void changeHealthCoefficient(double delta) {
-
-        healthCoefficient = healthCoefficient + delta;
-
-        if (healthCoefficient < MINIMUM_HEALTH_COEFFICIENT) {
-            healthCoefficient = 0.0;
-            isAlive = false;
-        } else if (healthCoefficient > MAXIMUM_HEALTH_COEFFICIENT) {
-            healthCoefficient = MAXIMUM_HEALTH_COEFFICIENT;
-        }
-
-    }
-
     // TODO figure out what to do with spawn()
 
     // TODO figure out what to do with toString()
@@ -345,6 +268,7 @@ public abstract class Fish implements Comparable {
     /**
      * Compares based on health coefficient.
      */
+    @Override
     public int compareTo(Object o) {
         if (this == o) {
             return 0;
@@ -356,13 +280,6 @@ public abstract class Fish implements Comparable {
             throw new IllegalArgumentException(); // ClassMismatchException
         }
         Fish other = (Fish) o;
-        if (healthCoefficient > other.healthCoefficient) {
-            return 1;
-        }
-        if (healthCoefficient < other.healthCoefficient) {
-            return -1;
-        }
-        return 0;
+        return health.compareTo(other.health);
     }
-    // TODO figure out why @Override doesn't go here
 }

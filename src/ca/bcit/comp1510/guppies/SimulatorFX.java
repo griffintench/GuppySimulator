@@ -56,16 +56,21 @@ public class SimulatorFX extends Application {
         root.getChildren().add(populationText);
         bPane.setBottom(btn);
         root.getChildren().add(bPane);
-        
+
         Scene scene = new Scene(root, sceneWidth, sceneHeight);
-//        Camera camera = new PerspectiveCamera(true);
-//        camera.setTranslateZ(100);
-//        scene.setCamera(camera);
-        
+        // Camera camera = new PerspectiveCamera(true);
+        // camera.setTranslateZ(100);
+        // scene.setCamera(camera);
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    /**
+     * Runs the simulation after the button has been pressed. Currently the
+     * number of weeks that are simulated at once is controlled within this
+     * method.
+     */
     private void runSimulation() {
         final int numberOfWeeks = 1;
         int weekNumber = weeksElapsed + 1;
@@ -115,12 +120,12 @@ public class SimulatorFX extends Application {
                 guppySphere.setTranslateZ(guppyTranslationZ);
 
                 PhongMaterial guppyMaterial = new PhongMaterial();
-                if (guppy.getHealthCoefficient() > 0.75) {
+                if (guppy.getHealth().getHealthCoefficient() > 0.75) {
                     guppyMaterial
                             .setSpecularColor(new Color(0.0, 1.0, 0.0, 1.0));
                     guppyMaterial
                             .setDiffuseColor(new Color(0.0, 1.0, 0.0, 0.75));
-                } else if (guppy.getHealthCoefficient() > 0.25) {
+                } else if (guppy.getHealth().getHealthCoefficient() > 0.25) {
                     guppyMaterial
                             .setSpecularColor(new Color(1.0, 0.5, 0.0, 1.0));
                     guppyMaterial

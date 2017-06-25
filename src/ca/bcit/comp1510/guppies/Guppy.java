@@ -44,11 +44,6 @@ public class Guppy extends Fish {
     public static final String DEFAULT_SPECIES = "reticulata";
 
     /**
-     * The default health coefficient for guppies.
-     */
-    public static final double DEFAULT_HEALTH_COEFFICIENT = 0.5;
-
-    /**
      * The number of guppies that have been born since the program started
      * running.
      */
@@ -68,7 +63,6 @@ public class Guppy extends Fish {
         super();
         setGenus(DEFAULT_GENUS);
         setSpecies(DEFAULT_SPECIES);
-        setHealthCoefficient(DEFAULT_HEALTH_COEFFICIENT);
 
         guppyID = ++numberOfGuppiesBorn;
 
@@ -124,17 +118,6 @@ public class Guppy extends Fish {
      */
     public void setAgeInWeeks(int newAgeInWeeks) {
         super.setAgeInWeeks(newAgeInWeeks, MAXIMUM_AGE_IN_WEEKS);
-    }
-
-    /**
-     * Sets the health coefficient of the Guppy.
-     * 
-     * @param newHealthCoefficient
-     *            the health coefficient of the fish.
-     */
-    public void setHealthCoefficient(double newHealthCoefficient) {
-        super.setHealthCoefficient(newHealthCoefficient,
-                DEFAULT_HEALTH_COEFFICIENT);
     }
 
     /**
@@ -203,7 +186,7 @@ public class Guppy extends Fish {
                 Guppy babyGuppy;
                 double isFemaleRoll;
                 double newHealthCoefficient = (1.0
-                        + super.getHealthCoefficient()) / 2.0;
+                        + super.getHealth().getHealthCoefficient()) / 2.0;
                 final double probabilityOfFemale = 0.5;
                 for (int i = 1; i <= numberOfFry; i++) {
                     isFemaleRoll = generator.nextDouble();
@@ -225,8 +208,8 @@ public class Guppy extends Fish {
                 + super.getSpecies() + ", ageInWeeks=" + super.getAgeInWeeks()
                 + ", isFemale=" + super.getIsFemale() + ", generationNumber="
                 + super.getGenerationNumber() + ", isAlive="
-                + super.getIsAlive() + ", healthCoefficient="
-                + super.getHealthCoefficient() + ", guppyID=" + guppyID + "]";
+                + super.getHealth().getIsAlive() + ", healthCoefficient="
+                + super.getHealth().getHealthCoefficient() + ", guppyID=" + guppyID + "]";
     }
 
 }

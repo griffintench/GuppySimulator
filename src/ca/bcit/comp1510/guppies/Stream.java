@@ -7,7 +7,7 @@ package ca.bcit.comp1510.guppies;
  * @version 1.0
  *
  */
-public class Stream {
+public class Stream extends WaterBody {
 
     /**
      * The Pool that this Stream leads away from.
@@ -20,18 +20,6 @@ public class Stream {
     private Pool destination;
 
     /**
-     * The pH of this Stream; by default it is equal to the pH of the origin
-     * Pool.
-     */
-    private double pH;
-
-    /**
-     * The temperature of this Stream by Celsius; by default it is equal to the
-     * temperature of the origin Pool.
-     */
-    private double temperatureCelsius;
-
-    /**
      * Constructor; sets the pH and temperature to those of the origin Pool.
      * 
      * @param origin
@@ -40,12 +28,12 @@ public class Stream {
      *            the Pool that this Stream leads to
      */
     public Stream(Pool origin, Pool destination) {
+        super(origin.getPH(), origin.getTemperatureCelsius());
+        
         this.origin = origin;
         origin.addStreamFrom(this);
         this.destination = destination;
         destination.addStreamTo(this);
-        this.pH = origin.getPH();
-        this.temperatureCelsius = origin.getTemperatureCelsius();
     }
 
     /**
@@ -84,44 +72,6 @@ public class Stream {
      */
     public void setDestination(Pool newDestination) {
         destination = newDestination;
-    }
-
-    /**
-     * Returns the pH level of this Stream.
-     * 
-     * @return the pH level of this Stream
-     */
-    public double getPH() {
-        return pH;
-    }
-
-    /**
-     * Sets the pH level of this Stream.
-     * 
-     * @param newPH
-     *            the pH level of this Stream
-     */
-    public void setPH(double newPH) {
-        pH = newPH;
-    }
-
-    /**
-     * Returns the temperature of this Stream in degrees Celsius.
-     * 
-     * @return the temperature of this Stream in degrees Celsius
-     */
-    public double getTemperatureCelsius() {
-        return temperatureCelsius;
-    }
-
-    /**
-     * Sets the temperature of this Stream in degrees Celsius.
-     * 
-     * @param newTemp
-     *            the temperature of this Stream in degrees Celsius
-     */
-    public void setTemperatureCelsius(double newTemp) {
-        temperatureCelsius = newTemp;
     }
 
 }

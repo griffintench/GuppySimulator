@@ -12,34 +12,12 @@ import java.util.Random;
  * @author griffin
  * @version 1
  */
-public class Pool {
+public class Pool extends WaterBody {
 
     /**
      * A default name for the pool.
      */
     public static final String DEFAULT_POOL_NAME = "Unnamed";
-
-    /**
-     * A default temperature for the pool, in degrees Celsius.
-     */
-    public static final double DEFAULT_POOL_TEMP_CELSIUS = 40.0;
-
-    /**
-     * The minimum temperature for the pool, in degrees Celsius. Any lower and
-     * the pool would freeze over.
-     */
-    public static final double MINIMUM_POOL_TEMP_CELSIUS = 0.0;
-
-    /**
-     * The maximum temperature for the pool, in degrees Celsius. Any lower and
-     * the pool would boil.
-     */
-    public static final double MAXIMUM_POOL_TEMP_CELSIUS = 100.0;
-
-    /**
-     * The point in the middle of the pH scale.
-     */
-    public static final double NEUTRAL_PH = 7.0;
 
     /**
      * A default nutrient coefficient for the pool.
@@ -70,17 +48,6 @@ public class Pool {
      * The volume of the Pool, in litres.
      */
     private double volumeLitres;
-
-    /**
-     * The current temperature of the Pool, in degrees Celsius.
-     */
-    private double temperatureCelsius;
-
-    /**
-     * The current pH level of the Pool. Must be between 0.0 and 14.0,
-     * inclusive.
-     */
-    private double pH;
 
     /**
      * The nutrient coefficient of the Pool. Must be between 0.0 and 1.0,
@@ -120,12 +87,12 @@ public class Pool {
      */
     public Pool() {
 
+        super();
+        
         streamsTo = new ArrayList<Stream>();
         streamsFrom = new ArrayList<Stream>();
         setVolumeLitres(0.0);
         setName(DEFAULT_POOL_NAME);
-        setTemperatureCelsius(DEFAULT_POOL_TEMP_CELSIUS);
-        setPH(NEUTRAL_PH);
         setNutrientCoefficient(DEFAULT_NUTRIENT_COEFFICIENT);
         setGuppiesInPool(new ArrayList<Guppy>());
 
@@ -152,13 +119,12 @@ public class Pool {
     public Pool(String newName, double newVolumeLitres,
             double newTemperatureCelsius, double newPH,
             double newNutrientCoefficient) {
-
+        super(newTemperatureCelsius, newPH);
+        
         streamsTo = new ArrayList<Stream>();
         streamsFrom = new ArrayList<Stream>();
         setVolumeLitres(0.0);
         setName(DEFAULT_POOL_NAME);
-        setTemperatureCelsius(DEFAULT_POOL_TEMP_CELSIUS);
-        setPH(NEUTRAL_PH);
         setNutrientCoefficient(DEFAULT_NUTRIENT_COEFFICIENT);
 
         setVolumeLitres(newVolumeLitres);
@@ -226,65 +192,23 @@ public class Pool {
         }
     }
 
-    /**
-     * Returns the temperature of the Pool in degrees Celsius.
-     * 
-     * @return the temperature of the Pool in degrees Celsius
-     */
-    public double getTemperatureCelsius() {
-        return temperatureCelsius;
-    }
-
-    /**
-     * Sets the temperature of the Pool in degrees Celsius. Temperature must be
-     * between 0 and 100.0, inclusive.
-     * 
-     * @param newTemperatureCelsius
-     *            the temperature of the Pool in degrees Celsius
-     */
+    @Override
     public void setTemperatureCelsius(double newTemperatureCelsius) {
-        if (newTemperatureCelsius >= MINIMUM_POOL_TEMP_CELSIUS
-                && newTemperatureCelsius <= MAXIMUM_POOL_TEMP_CELSIUS) {
-            temperatureCelsius = newTemperatureCelsius;
-            if (!streamsFrom.isEmpty()) {
-                for (Stream stream : streamsFrom) {
-                    stream.setTemperatureCelsius(newTemperatureCelsius);
-                }
+        super.setTemperatureCelsius(newTemperatureCelsius);
+        if (!streamsFrom.isEmpty()) {
+            for (Stream stream : streamsFrom) {
+                stream.setTemperatureCelsius(newTemperatureCelsius);
             }
         }
     }
 
-    /**
-     * Returns the pH level of the Pool.
-     * 
-     * @return the pH level of the Pool
-     */
-    public double getPH() {
-        return pH;
-    }
-
-    /**
-     * Sets the pH level of the Pool. The pH level must be between 0 and 14.0,
-     * inclusive. Also sets the pH level of all Streams leading away from the
-     * Pool.
-     * 
-     * @param newPH
-     *            the pH level of the Pool
-     */
+    @Override
     public void setPH(double newPH) {
-        final double minimumPH = 0.0;
-        final double maximumPH = 14.0;
-        double pHToSet;
-
-        if (newPH >= minimumPH && newPH <= maximumPH) {
-            pHToSet = newPH;
-        } else {
-            pHToSet = NEUTRAL_PH;
-        }
-
-        pH = pHToSet;
-        for (Stream stream : streamsFrom) {
-            stream.setPH(pHToSet);
+        super.setPH(newPH);
+        if (!streamsFrom.isEmpty()) {
+            for (Stream stream : streamsFrom) {
+                stream.setPH(newPH);
+            }
         }
     }
 
@@ -432,16 +356,6 @@ public class Pool {
     }
 
     /**
-     * Changes the temperature by a specified number of degrees Celsius.
-     * 
-     * @param delta
-     *            the number of degrees Celsius by which the temperature changes
-     */
-    public void changeTemperature(double delta) {
-        setTemperatureCelsius(temperatureCelsius + delta);
-    }
-
-    /**
      * Returns the number of Pool objects that have been created.
      * 
      * @return the number of Pool objects that have been created
@@ -502,7 +416,7 @@ public class Pool {
 
         for (int i = 0; i < guppiesInPool.size(); i++) {
             if (guppiesInPool.get(i) != null
-                    && guppiesInPool.get(i).getIsAlive()) {
+                    && guppiesInPool.get(i).getHealth().getIsAlive()) {
                 population++;
             }
         }
@@ -529,7 +443,7 @@ public class Pool {
                 roll = randomNumberGenerator.nextDouble();
 
                 if (roll > nutrientCoefficient) {
-                    curGuppy.setIsAlive(false);
+                    curGuppy.getHealth().setIsAlive(false);
                     numberOfDeaths++;
                 }
             }
@@ -549,7 +463,7 @@ public class Pool {
         int removedGuppies = 0;
         Iterator<Guppy> iterator = guppiesInPool.iterator();
         while (iterator.hasNext()) {
-            if (!iterator.next().getIsAlive()) {
+            if (!iterator.next().getHealth().getIsAlive()) {
                 iterator.remove();
                 removedGuppies++;
             }
@@ -576,7 +490,7 @@ public class Pool {
         for (int i = 0; i < guppiesInPool.size(); i++) {
             currentGuppy = guppiesInPool.get(i);
 
-            if (currentGuppy != null && currentGuppy.getIsAlive()) {
+            if (currentGuppy != null && currentGuppy.getHealth().getIsAlive()) {
                 totalVolumeMillilitres += currentGuppy.getVolumeNeeded();
             }
         }
@@ -607,7 +521,8 @@ public class Pool {
             for (int i = 0; i < guppiesInPool.size(); i++) {
                 currentGuppy = guppiesInPool.get(i);
 
-                if (currentGuppy != null && currentGuppy.getIsAlive()) {
+                if (currentGuppy != null
+                        && currentGuppy.getHealth().getIsAlive()) {
                     ageSum += currentGuppy.getAgeInWeeks();
                 }
             }
@@ -638,9 +553,10 @@ public class Pool {
             for (int i = 0; i < guppiesInPool.size(); i++) {
                 currentGuppy = guppiesInPool.get(i);
 
-                if (currentGuppy != null && currentGuppy.getIsAlive()) {
-
-                    healthCoefficientSum += currentGuppy.getHealthCoefficient();
+                if (currentGuppy != null
+                        && currentGuppy.getHealth().getIsAlive()) {
+                    healthCoefficientSum += currentGuppy.getHealth()
+                            .getHealthCoefficient();
                 }
             }
 
@@ -669,7 +585,8 @@ public class Pool {
             for (int i = 0; i < guppiesInPool.size(); i++) {
                 currentGuppy = guppiesInPool.get(i);
 
-                if (currentGuppy != null && currentGuppy.getIsAlive()
+                if (currentGuppy != null
+                        && currentGuppy.getHealth().getIsAlive()
                         && currentGuppy.getIsFemale()) {
                     femaleCount++;
                 }
@@ -705,7 +622,8 @@ public class Pool {
             for (int i = 0; i < guppiesInPool.size(); i++) {
                 currentGuppy = guppiesInPool.get(i);
 
-                if (currentGuppy != null && currentGuppy.getIsAlive()) {
+                if (currentGuppy != null
+                        && currentGuppy.getHealth().getIsAlive()) {
                     guppyAges[currentAge] = currentGuppy.getAgeInWeeks();
                     currentAge++;
                 }
@@ -762,7 +680,7 @@ public class Pool {
         for (Guppy guppy : guppiesInPool) {
             if (guppy != null) {
                 guppy.incrementAge();
-                if (!guppy.getIsAlive()) {
+                if (!guppy.getHealth().getIsAlive()) {
                     numberOfDead++;
                 }
             }
@@ -784,9 +702,8 @@ public class Pool {
         Collections.sort(guppiesInPool);
         while (getGuppyVolumeRequirementInLitres() > volumeLitres) {
             Guppy weakestGuppy = guppiesInPool.get(killed);
-            // weakestGuppy.setIsAlive(false);
             crowdOut(weakestGuppy);
-            if (!weakestGuppy.getIsAlive()) {
+            if (!weakestGuppy.getHealth().getIsAlive()) {
                 killed++;
             }
         }
@@ -804,15 +721,15 @@ public class Pool {
             throw new IllegalArgumentException();
         }
         if (streamsFrom.isEmpty()) {
-            guppy.setIsAlive(false);
+            guppy.getHealth().setIsAlive(false);
         } else {
-            double healthCoefficient = guppy.getHealthCoefficient();
+            double healthCoefficient = guppy.getHealth().getHealthCoefficient();
             Random generator = new Random();
             double healthRoll = generator.nextDouble();
             if (healthRoll < healthCoefficient) {
                 sendDownstream(guppy);
             } else {
-                guppy.setIsAlive(false);
+                guppy.getHealth().setIsAlive(false);
             }
         }
     }
@@ -838,10 +755,10 @@ public class Pool {
     @Override
     public String toString() {
         return "Pool [name=" + name + ", volumeLitres=" + volumeLitres
-                + ", temperatureCelsius=" + temperatureCelsius + ", pH=" + pH
-                + ", nutrientCoefficient=" + nutrientCoefficient
-                + ", identificationNumber=" + identificationNumber
-                + ", guppiesInPool=" + guppiesInPool
+                + ", temperatureCelsius=" + super.getTemperatureCelsius()
+                + ", pH=" + super.getPH() + ", nutrientCoefficient="
+                + nutrientCoefficient + ", identificationNumber="
+                + identificationNumber + ", guppiesInPool=" + guppiesInPool
                 + ", randomNumberGenerator=" + randomNumberGenerator + "]";
     }
 }
