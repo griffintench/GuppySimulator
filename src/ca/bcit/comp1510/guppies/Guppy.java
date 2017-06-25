@@ -120,6 +120,7 @@ public class Guppy extends Fish {
      * @param newAgeInWeeks
      *            the new age in weeks for the fish
      */
+    @Override
     public void setAgeInWeeks(int newAgeInWeeks) {
         super.setAgeInWeeks(newAgeInWeeks, MAXIMUM_AGE_IN_WEEKS);
     }
@@ -174,10 +175,11 @@ public class Guppy extends Fish {
      * @return an ArrayList object holding all of the baby Guppies, or null if
      *         this Guppy is male or under 10 weeks in age.
      */
-    public ArrayList<Guppy> spawn() {
+    // TODO how to get it to return ArrayList<Fish>
+    public ArrayList<Fish> spawn() {
         final int ageToSpawn = 10;
         final int maxFry = 100;
-        ArrayList<Guppy> babyGuppies = new ArrayList<Guppy>();
+        ArrayList<Fish> babyGuppies = new ArrayList<Fish>();
         if (!super.getIsFemale() || super.getAgeInWeeks() < ageToSpawn) {
             return babyGuppies;
         } else {

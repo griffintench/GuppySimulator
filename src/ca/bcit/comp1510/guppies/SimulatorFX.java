@@ -106,8 +106,8 @@ public class SimulatorFX extends Application {
             poolMaterial.setDiffuseColor(new Color(0.0, 0.75, 1.0, 0.75));
             pool.setMaterial(poolMaterial);
 
-            for (Guppy guppy : ecosystem.getPools().get(i - 1)
-                    .getGuppiesInPool()) {
+            for (Fish guppy : ecosystem.getPools().get(i - 1)
+                    .getGuppiesInPool().getFish()) {
                 Sphere guppySphere = new Sphere(2);
                 double guppyTranslationX = generator.nextInt(boxWidth)
                         + translation - boxWidth / 2;

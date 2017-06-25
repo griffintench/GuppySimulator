@@ -1,5 +1,7 @@
 package ca.bcit.comp1510.guppies;
 
+import java.util.ArrayList;
+
 /**
  * An abstract Fish class to be extended by Guppy.
  * 
@@ -229,6 +231,7 @@ public abstract class Fish implements Comparable {
      */
     public abstract double getVolumeNeeded();
 
+    public abstract ArrayList<Fish> spawn();
     // TODO figure out what to do with spawn()
 
     // TODO figure out what to do with toString()

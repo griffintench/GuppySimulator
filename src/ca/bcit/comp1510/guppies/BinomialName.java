@@ -9,15 +9,33 @@ import java.util.Scanner;
  * @version 1.0
  */
 public class BinomialName {
+
+    /**
+     * The genus of the animal.
+     */
     private String genus;
 
+    /**
+     * The species of the animal.
+     */
     private String species;
 
+    /**
+     * Default constructor; genus and species are empty Strings.
+     */
     public BinomialName() {
         genus = "";
         species = "";
     }
 
+    /**
+     * Constructor; if genus or species is invalid, sets it to an empty String.
+     * 
+     * @param genus
+     *            the genus of the animal
+     * @param species
+     *            the species of the animal
+     */
     public BinomialName(String genus, String species) {
         this.genus = "";
         setGenus(genus);
@@ -25,6 +43,13 @@ public class BinomialName {
         setSpecies(species);
     }
 
+    /**
+     * Constructor; takes the first two words of the parameter and sets them to
+     * genus and species, respectively.
+     * 
+     * @param binomialName
+     *            the binomial name in String form
+     */
     public BinomialName(String binomialName) {
         if (!binomialName.contains(" ")) {
             throw new IllegalArgumentException(
