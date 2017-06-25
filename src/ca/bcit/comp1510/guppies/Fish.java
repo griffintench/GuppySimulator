@@ -277,4 +277,21 @@ public abstract class Fish implements Comparable {
         Fish other = (Fish) o;
         return health.compareTo(other.health);
     }
+
+    /**
+     * Returns an ID specific to the class, to add to the toString method.
+     * 
+     * @return an ID specific to the class, to add to the toString method
+     */
+    public abstract String specificIDString();
+
+    @Override
+    public String toString() {
+        return "[species=" + getBinomialName() + ", ageInWeeks="
+                + getAgeInWeeks() + ", isFemale=" + getIsFemale()
+                + ", generationNumber=" + getGenerationNumber() + ", isAlive="
+                + getHealth().getIsAlive() + ", healthCoefficient="
+                + getHealth().getHealthCoefficient() + ", " + specificIDString()
+                + "]";
+    }
 }

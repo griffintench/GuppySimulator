@@ -114,7 +114,7 @@ public class Guppy extends Fish {
      * Returns true if the Guppy's age is above the maximum age for a Guppy.
      * 
      * @return true if the Guppy's age is above the maximum age for a Guppy;
-     *          false otherwise
+     *         false otherwise
      */
     public boolean hasDiedOfOldAge() {
         return getAgeInWeeks() >= MAXIMUM_AGE_IN_WEEKS;
@@ -215,15 +215,18 @@ public class Guppy extends Fish {
         }
     }
 
+    /**
+     * The specific ID String for a Guppy.
+     * 
+     * @return the specific ID String for a Guppy
+     */
+    public String specificIDString() {
+        return "guppyID=" + guppyID;
+    }
+
     @Override
     public String toString() {
-        return "Guppy [genus=" + getBinomialName().getGenus() + ", species="
-                + getBinomialName().getSpecies() + ", ageInWeeks="
-                + getAgeInWeeks() + ", isFemale=" + getIsFemale()
-                + ", generationNumber=" + getGenerationNumber() + ", isAlive="
-                + getHealth().getIsAlive() + ", healthCoefficient="
-                + getHealth().getHealthCoefficient() + ", guppyID=" + guppyID
-                + "]";
+        return "Guppy " + super.toString();
     }
 
 }

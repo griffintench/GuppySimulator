@@ -110,4 +110,12 @@ public class BinomialName {
             species = newSpecies.toLowerCase();
         }
     }
+
+    /**
+     * Returns the genus and species, separated by a space.
+     */
+    @Override
+    public String toString() {
+        return genus + " " + species;
+    }
 }
