@@ -1,9 +1,6 @@
 package ca.bcit.comp1510.guppies;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.Random;
 
 /**
@@ -119,6 +116,7 @@ public class Pool extends WaterBody {
     public Pool(String newName, double newVolumeLitres,
             double newTemperatureCelsius, double newPH,
             double newNutrientCoefficient) {
+        
         super(newTemperatureCelsius, newPH);
 
         streamsTo = new ArrayList<Stream>();
@@ -195,7 +193,7 @@ public class Pool extends WaterBody {
     @Override
     public void setTemperatureCelsius(double newTemperatureCelsius) {
         super.setTemperatureCelsius(newTemperatureCelsius);
-        if (!streamsFrom.isEmpty()) {
+        if (streamsFrom != null && !streamsFrom.isEmpty()) {
             for (Stream stream : streamsFrom) {
                 stream.setTemperatureCelsius(newTemperatureCelsius);
             }
@@ -205,7 +203,7 @@ public class Pool extends WaterBody {
     @Override
     public void setPH(double newPH) {
         super.setPH(newPH);
-        if (!streamsFrom.isEmpty()) {
+        if (streamsFrom != null && !streamsFrom.isEmpty()) {
             for (Stream stream : streamsFrom) {
                 stream.setPH(newPH);
             }
@@ -254,10 +252,10 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Sets the ArrayList object holding the Guppies in the Pool.
+     * Sets the FishGroup object holding the Guppies in the Pool.
      * 
      * @param newGuppiesInPool
-     *            an ArrayList object holding the Guppies in the Pool
+     *            an FishGroup object holding the Guppies in the Pool
      */
     public void setGuppiesInPool(FishGroup newGuppiesInPool) {
         if (newGuppiesInPool != null) {
@@ -265,6 +263,13 @@ public class Pool extends WaterBody {
         }
     }
 
+    /**
+     * Sets the FishGroup object holding the Guppies in the Pool; the FishGroup
+     * object is creating using an ArrayList object.
+     * 
+     * @param newGuppiesInPool
+     *            an ArrayList object holding the Guppies in the Pool
+     */
     public void setGuppiesInPool(ArrayList<Guppy> newGuppiesInPool) {
         if (newGuppiesInPool != null) {
             ArrayList<Fish> fish = new ArrayList<Fish>();
@@ -508,7 +513,6 @@ public class Pool extends WaterBody {
      * 
      * @return the number of Guppies killed off
      */
-    @SuppressWarnings("unchecked")
     public int adjustForCrowding() {
         int killed = 0;
 

@@ -19,13 +19,47 @@ import javafx.scene.shape.Sphere;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * A Simulator GUI that uses JavaFX.
+ * 
+ * @author griffin
+ * @version 1.0
+ */
 public class SimulatorFX extends Application {
-    public static final int sceneWidth = 1000;
-    public static final int sceneHeight = 500;
 
+    /**
+     * The width of the window.
+     */
+    public static final int SCENE_WIDTH = 1000;
+
+    /**
+     * The height of the window.
+     */
+    public static final int SCENE_HEIGHT = 500;
+
+    /**
+     * The amount by which the population text is translated down.
+     */
+    public static final double POPULATION_TEXT_TRANSLATION_Y = 100.0;
+
+    /**
+     * The root node.
+     */
     private StackPane root;
+
+    /**
+     * The Simulation we are running.
+     */
     private Simulation simulation;
+
+    /**
+     * The number of weeks that have elapsed so far.
+     */
     private int weeksElapsed;
+
+    /**
+     * The Text that displays the current population.
+     */
     private Text populationText;
 
     @Override
@@ -39,7 +73,7 @@ public class SimulatorFX extends Application {
 
         populationText = new Text("Population: "
                 + simulation.getEcosystem().getGuppyPopulation());
-        populationText.setTranslateY(50.0);
+        populationText.setTranslateY(POPULATION_TEXT_TRANSLATION_Y);
         drawObjects();
 
         primaryStage.setTitle("Simulation");
@@ -57,7 +91,7 @@ public class SimulatorFX extends Application {
         bPane.setBottom(btn);
         root.getChildren().add(bPane);
 
-        Scene scene = new Scene(root, sceneWidth, sceneHeight);
+        Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
         // Camera camera = new PerspectiveCamera(true);
         // camera.setTranslateZ(100);
         // scene.setCamera(camera);
@@ -86,14 +120,23 @@ public class SimulatorFX extends Application {
         weeksElapsed = weekNumber - 1;
     }
 
+    /**
+     * Draws the Pools and the Guppies.
+     */
     private void drawObjects() {
+        final double poolGreen = 0.75;
+        final double diffuseAlpha = 0.75;
+        final double goodHealthCoefficient = 0.75;
+        final double okayHealthCoefficient = 0.25;
+        final double okayGuppyGreen = 0.5;
+
         Random generator = new Random();
 
         Ecosystem ecosystem = simulation.getEcosystem();
         ArrayList<Box> pools = new ArrayList<Box>();
         ArrayList<Sphere> guppies = new ArrayList<Sphere>();
         int numberOfPools = ecosystem.getPools().size();
-        int boxWidth = sceneWidth / (2 * numberOfPools + 1);
+        int boxWidth = SCENE_WIDTH / (2 * numberOfPools + 1);
 
         for (int i = 1; i <= numberOfPools; i++) {
             Box pool = new Box(boxWidth, boxWidth, boxWidth);
@@ -102,12 +145,13 @@ public class SimulatorFX extends Application {
             pool.setTranslateX(translation);
 
             PhongMaterial poolMaterial = new PhongMaterial();
-            poolMaterial.setSpecularColor(new Color(0.0, 0.75, 1.0, 1.0));
-            poolMaterial.setDiffuseColor(new Color(0.0, 0.75, 1.0, 0.75));
+            poolMaterial.setSpecularColor(new Color(0.0, poolGreen, 1.0, 1.0));
+            poolMaterial.setDiffuseColor(
+                    new Color(0.0, poolGreen, 1.0, diffuseAlpha));
             pool.setMaterial(poolMaterial);
 
-            for (Fish guppy : ecosystem.getPools().get(i - 1)
-                    .getGuppiesInPool().getFish()) {
+            for (Fish guppy : ecosystem.getPools().get(i - 1).getGuppiesInPool()
+                    .getFish()) {
                 Sphere guppySphere = new Sphere(2);
                 double guppyTranslationX = generator.nextInt(boxWidth)
                         + translation - boxWidth / 2;
@@ -120,21 +164,23 @@ public class SimulatorFX extends Application {
                 guppySphere.setTranslateZ(guppyTranslationZ);
 
                 PhongMaterial guppyMaterial = new PhongMaterial();
-                if (guppy.getHealth().getHealthCoefficient() > 0.75) {
+                if (guppy.getHealth()
+                        .getHealthCoefficient() > goodHealthCoefficient) {
                     guppyMaterial
                             .setSpecularColor(new Color(0.0, 1.0, 0.0, 1.0));
-                    guppyMaterial
-                            .setDiffuseColor(new Color(0.0, 1.0, 0.0, 0.75));
-                } else if (guppy.getHealth().getHealthCoefficient() > 0.25) {
-                    guppyMaterial
-                            .setSpecularColor(new Color(1.0, 0.5, 0.0, 1.0));
-                    guppyMaterial
-                            .setDiffuseColor(new Color(1.0, 0.5, 0.0, 0.75));
+                    guppyMaterial.setDiffuseColor(
+                            new Color(0.0, 1.0, 0.0, diffuseAlpha));
+                } else if (guppy.getHealth()
+                        .getHealthCoefficient() > okayHealthCoefficient) {
+                    guppyMaterial.setSpecularColor(
+                            new Color(1.0, okayGuppyGreen, 0.0, 1.0));
+                    guppyMaterial.setDiffuseColor(
+                            new Color(1.0, okayGuppyGreen, 0.0, diffuseAlpha));
                 } else {
                     guppyMaterial
                             .setSpecularColor(new Color(1.0, 0.0, 0.0, 1.0));
-                    guppyMaterial
-                            .setDiffuseColor(new Color(1.0, 0.0, 0.0, 0.75));
+                    guppyMaterial.setDiffuseColor(
+                            new Color(1.0, 0.0, 0.0, diffuseAlpha));
                 }
                 guppySphere.setMaterial(guppyMaterial);
 

@@ -7,32 +7,87 @@ package ca.bcit.comp1510.guppies;
  * @version 1.0
  */
 public class WaterBody {
+
+    /**
+     * The default water temperature, in degrees Celsius.
+     */
     public static final double DEFAULT_TEMP_CELSIUS = 40.0;
+
+    /**
+     * The minimum temperature that water can be before it becomes ice, in
+     * degrees Celsius.
+     */
     public static final double MINIMUM_TEMP_CELSIUS = 0.0;
+
+    /**
+     * The maximum temperature that water can be before it boils, in degrees
+     * Celsius.
+     */
     public static final double MAXIMUM_TEMP_CELSIUS = 100.0;
+
+    /**
+     * The neutral pH level.
+     */
     public static final double NEUTRAL_PH = 7.0;
+
+    /**
+     * The minimum pH level for a water body.
+     */
     public static final double MINIMUM_PH = 0.0;
+
+    /**
+     * The maximum pH level for a water body.
+     */
     public static final double MAXIMUM_PH = 14.0;
 
+    /**
+     * The temperature of the water, in degrees Celsius.
+     */
     private double temperatureCelsius;
 
+    /**
+     * The pH level of the water.
+     */
     private double pH;
 
+    /**
+     * Default constructor; sets the temperature and pH to their default and
+     * neutral values, respectively.
+     */
     public WaterBody() {
         temperatureCelsius = DEFAULT_TEMP_CELSIUS;
         pH = NEUTRAL_PH;
     }
 
+    /**
+     * Constructor; sets the temperature and pH level accordingly.
+     * 
+     * @param temperatureCelsius
+     *            the temperature of the water
+     * @param pH
+     *            the pH level of the water
+     */
     public WaterBody(double temperatureCelsius, double pH) {
         setTemperatureCelsius(DEFAULT_TEMP_CELSIUS);
         setTemperatureCelsius(temperatureCelsius);
         setPH(pH);
     }
 
+    /**
+     * Returns the temperature of the water, in degrees Celsius.
+     * 
+     * @return the temperature of the water, in degrees Celsius
+     */
     public double getTemperatureCelsius() {
         return temperatureCelsius;
     }
 
+    /**
+     * Sets the temperature of the water, in degrees Celsius.
+     * 
+     * @param newTemperatureCelsius
+     *            the new temperature of the water, in degrees Celsius
+     */
     public void setTemperatureCelsius(double newTemperatureCelsius) {
         if (newTemperatureCelsius >= MINIMUM_TEMP_CELSIUS
                 && newTemperatureCelsius <= MAXIMUM_TEMP_CELSIUS) {
@@ -49,7 +104,7 @@ public class WaterBody {
     public void changeTemperature(double delta) {
         setTemperatureCelsius(temperatureCelsius + delta);
     }
-    
+
     /**
      * Returns the pH level of the Water Body.
      * 

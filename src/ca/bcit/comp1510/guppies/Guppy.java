@@ -110,8 +110,14 @@ public class Guppy extends Fish {
 
     }
 
+    /**
+     * Returns true if the Guppy's age is above the maximum age for a Guppy.
+     * 
+     * @return true if the Guppy's age is above the maximum age for a Guppy;
+     *          false otherwise
+     */
     public boolean hasDiedOfOldAge() {
-        return super.getAgeInWeeks() >= MAXIMUM_AGE_IN_WEEKS;
+        return getAgeInWeeks() >= MAXIMUM_AGE_IN_WEEKS;
     }
 
     /**

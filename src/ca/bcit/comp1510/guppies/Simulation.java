@@ -16,25 +16,19 @@ public class Simulation {
      */
     private Ecosystem ecosystem;
 
-//    /**
-//     * Drives the program.
-//     * 
-//     * @param args
-//     *            command line arguments
-//     */
-//    public static void main(String[] args) {
-//        final int numberOfWeeks = 20;
-//        ecosystem = new Ecosystem();
-//        setUpSimulation();
-//        simulate(numberOfWeeks);
-//    }
-    
+    /**
+     * Constructor; initializes the Ecosystem and then sets up the simulation.
+     */
     public Simulation() {
-        final int numberOfWeeks = 20;
         ecosystem = new Ecosystem();
         setUpSimulation();
     }
-    
+
+    /**
+     * Returns the Simulation's Ecosystem.
+     * 
+     * @return the Simulation's Ecosystem
+     */
     public Ecosystem getEcosystem() {
         return ecosystem;
     }
@@ -130,20 +124,68 @@ public class Simulation {
 
         return pool;
     }
-    
+
+    /**
+     * Runs the simulation for the specified number of weeks.
+     * 
+     * @param numberOfWeeks
+     *            the number of weeks to simulate
+     */
     public void simulate(int numberOfWeeks) {
         for (int i = 1; i <= numberOfWeeks; i++) {
             ecosystem.simulateOneWeek(i);
         }
     }
 
+    /**
+     * A Set of Guppies to use to initialize a Pool in the Simulation.
+     * 
+     * @author griffin
+     * @version 1.0
+     */
     private class GuppySet {
-        private int numberOfGuppies;
-        int minAge;
-        int maxAge;
-        double minHealthCoefficient;
-        double maxHealthCoefficient;
 
+        /**
+         * The number of Guppies to initialize.
+         */
+        private int numberOfGuppies;
+
+        /**
+         * The minimum starting age of all the initial Guppies.
+         */
+        private int minAge;
+
+        /**
+         * The maximum starting age of all the initial Guppies.
+         */
+        private int maxAge;
+
+        /**
+         * The minimum starting health coefficient of all the initial Guppies.
+         */
+        private double minHealthCoefficient;
+
+        /**
+         * The maximum starting health coefficient of all the initial Guppies.
+         */
+        private double maxHealthCoefficient;
+
+        /**
+         * Constructor; sets all the instance variables accordingly.
+         * 
+         * @param numberOfGuppies
+         *            the initial number of Guppies
+         * @param minAge
+         *            the minimum starting age of all the initial Guppies
+         * @param maxAge
+         *            the maximum starting age of all the initial Guppies
+         * @param minHealthCoefficient
+         *            the minimum starting health coefficient of all the initial
+         *            Guppies
+         * @param maxHealthCoefficient
+         *            the maximum starting health coefficient of all the initial
+         *            Guppies
+         */
         GuppySet(int numberOfGuppies, int minAge, int maxAge,
                 double minHealthCoefficient, double maxHealthCoefficient) {
             this.numberOfGuppies = numberOfGuppies;
@@ -153,6 +195,11 @@ public class Simulation {
             this.maxHealthCoefficient = maxHealthCoefficient;
         }
 
+        /**
+         * Generates an ArrayList object with our initial Guppies.
+         * 
+         * @return an ArrayList object with our initial Guppies
+         */
         public ArrayList<Guppy> generateGuppies() {
             ArrayList<Guppy> guppies = new ArrayList<Guppy>();
 
@@ -177,5 +224,4 @@ public class Simulation {
             return guppies;
         }
     }
-
 }

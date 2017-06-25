@@ -6,6 +6,7 @@ package ca.bcit.comp1510.guppies;
  * @author griffin
  * @version 1.0
  */
+@SuppressWarnings("rawtypes")
 public class Health implements Comparable {
 
     /**

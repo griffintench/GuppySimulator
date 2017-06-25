@@ -7,8 +7,11 @@ import java.util.Iterator;
 import java.util.Random;
 
 /**
+ * A Group of Fish with methods to increment ages, spawn, apply nutrient
+ * coefficients, and analyze.
+ * 
  * @author griffin
- *
+ * @version 1.0
  */
 public class FishGroup {
     /**
@@ -38,10 +41,21 @@ public class FishGroup {
         setFish(newFish);
     }
 
+    /**
+     * Returns an ArrayList with the Fish in this Group.
+     * 
+     * @return an ArrayList with the Fish in this Group
+     */
     public ArrayList<Fish> getFish() {
         return fish;
     }
 
+    /**
+     * Sets the Fish in this Group.
+     * 
+     * @param newFish
+     *            an ArrayList with the Fish in this Group
+     */
     public void setFish(ArrayList<Fish> newFish) {
         if (newFish == null) {
             fish = new ArrayList<Fish>();
@@ -50,22 +64,49 @@ public class FishGroup {
         }
         sorted = false;
     }
-    
+
+    /**
+     * Returns the Fish at the i-th index in the ArrayList containing this
+     * Group's Fish.
+     * 
+     * @param i
+     *            the index of the Fish
+     * @return the Fish at the i-th index
+     */
     public Fish get(int i) {
         return fish.get(i);
     }
-    
-    public boolean contains(Fish fish) {
-        return this.fish.contains(fish);
+
+    /**
+     * Returns true if this FishGroup contains a specified Fish; false
+     * otherwise.
+     * 
+     * @param fishToCheck
+     *            the Fish that may or may not be in this FishGroup
+     * @return true if this FishGroup contains the Fish; false otherwise
+     */
+    public boolean contains(Fish fishToCheck) {
+        return fish.contains(fishToCheck);
     }
-    
+
+    /**
+     * Removes the specified Fish from the Group.
+     * 
+     * @param fishToRemove
+     *            the Fish to remove from the Group
+     * @return true if the Fish was successfully removed
+     */
     public boolean remove(Fish fishToRemove) {
-        if (!contains(fishToRemove)) {
-            throw new IllegalArgumentException();
-        }
         return fish.remove(fishToRemove);
     }
 
+    /**
+     * Adds a Fish to this Group.
+     * 
+     * @param fishToAdd
+     *            the Fish to add to the Group
+     * @return true if the Fish was added successfully
+     */
     public boolean addFish(Fish fishToAdd) {
         boolean result = false;
 
@@ -77,6 +118,27 @@ public class FishGroup {
         return result;
     }
 
+    /**
+     * Adds multiple Fish to this Group.
+     * 
+     * @param fishToAdd
+     *            an ArrayList object with all the Fish to add
+     * @return true if the Fish were added successfully
+     */
+    public boolean addFish(ArrayList<Fish> fishToAdd) {
+        boolean result = false;
+
+        if (fishToAdd != null) {
+            fish.addAll(fishToAdd);
+            result = true;
+        }
+
+        return result;
+    }
+
+    /**
+     * Sorts the Fish, if they have not been sorted already.
+     */
     @SuppressWarnings("unchecked")
     public void sort() {
         if (!sorted) {

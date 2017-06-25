@@ -8,13 +8,14 @@ import java.util.ArrayList;
  * @author griffin
  * @version 1.0
  */
+@SuppressWarnings("rawtypes")
 public abstract class Fish implements Comparable {
 
     /**
      * The number of fish that have been born since the program started running.
      */
     private static int numberOfFishBorn;
-    
+
     /**
      * The scientific binomial name of the fish.
      */
@@ -108,28 +109,27 @@ public abstract class Fish implements Comparable {
      * @return true if the fish has died of old age; false otherwise
      */
     abstract boolean hasDiedOfOldAge();
-    
+
+    /**
+     * Returns the scientific binomial name of the fish.
+     * 
+     * @return the scientific binomial name of the fish
+     */
     public BinomialName getBinomialName() {
         return binomialName;
     }
-    
+
+    /**
+     * Sets the scientific binomial name of the fish (cannot be null).
+     * 
+     * @param newName
+     *            the scientific binomial name of the fish (cannot be null)
+     */
     public void setBinomialName(BinomialName newName) {
         if (newName != null) {
             binomialName = newName;
         }
     }
-
-    /**
-     * Sets the species of the fish.
-     * 
-     * @param newSpecies
-     *            the new species for the fish
-     */
-//    public void setSpecies(String newSpecies) {
-//        if (newSpecies != null && !newSpecies.trim().equals("")) {
-//            species = newSpecies.toLowerCase();
-//        }
-//    }
 
     /**
      * Returns the fish's age in weeks.
@@ -148,6 +148,14 @@ public abstract class Fish implements Comparable {
      */
     public abstract void setAgeInWeeks(int newAgeInWeeks);
 
+    /**
+     * Sets the fish's age in weeks, as long as it is under a given maximum.
+     * 
+     * @param newAgeInWeeks
+     *            the fish's age in weeks
+     * @param maxAgeInWeeks
+     *            the maximum possible age of the fish
+     */
     public void setAgeInWeeks(int newAgeInWeeks, int maxAgeInWeeks) {
         if (newAgeInWeeks < 0 || newAgeInWeeks >= maxAgeInWeeks) {
             ageInWeeks = 0;
@@ -197,11 +205,22 @@ public abstract class Fish implements Comparable {
             generationNumber = newGenerationNumber;
         }
     }
-    
+
+    /**
+     * Returns the Fish's Health object.
+     * 
+     * @return the Fish's Health object
+     */
     public Health getHealth() {
         return health;
     }
-    
+
+    /**
+     * Sets the Fihs's Health object.
+     * 
+     * @param newHealth
+     *            the Fish's Health object
+     */
     public void setHealth(Health newHealth) {
         health = newHealth;
     }
@@ -231,6 +250,11 @@ public abstract class Fish implements Comparable {
      */
     public abstract double getVolumeNeeded();
 
+    /**
+     * The Fish has babies; returns the babies.
+     * 
+     * @return the Fish's babies
+     */
     public abstract ArrayList<Fish> spawn();
     // TODO figure out what to do with spawn()
 
