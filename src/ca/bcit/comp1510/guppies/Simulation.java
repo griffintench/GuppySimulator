@@ -38,6 +38,24 @@ public class Simulation {
      * Gamelin.
      */
     private void setUpSimulation() {
+        Pool skookumchuk = setUpSkookumchuk();
+        Pool rutherford = setUpRutherford();
+        Pool gamelin = setUpGamelin();
+
+        ecosystem.addPool(skookumchuk);
+        ecosystem.addPool(rutherford);
+        ecosystem.addPool(gamelin);
+
+        ecosystem.addStream(new Stream(skookumchuk, rutherford));
+        ecosystem.addStream(new Stream(rutherford, gamelin));
+    }
+
+    /**
+     * Sets up the Skookumchuk Pool.
+     * 
+     * @return the Skookumchuk Pool
+     */
+    private Pool setUpSkookumchuk() {
         final int skookumchukVolume = 1000;
         final int skookumchukTemperature = 42;
         final double skookumchukPH = 7.9;
@@ -53,6 +71,19 @@ public class Simulation {
                 skookumchukMinHealthCoefficient,
                 skookumchukMaxHealthCoefficient);
 
+        Pool skookumchuk = setUpPool("Skookumchuk", skookumchukVolume,
+                skookumchukTemperature, skookumchukPH,
+                skookumchukNutrientCoefficient, skookumchukGuppies);
+
+        return skookumchuk;
+    }
+
+    /**
+     * Sets up the Rutherford Pool.
+     * 
+     * @return the Rutherford Pool
+     */
+    private Pool setUpRutherford() {
         final int rutherfordVolume = 5000;
         final int rutherfordTemperature = 39;
         final double rutherfordPH = 7.7;
@@ -67,6 +98,19 @@ public class Simulation {
                 rutherfordMinAge, rutherfordMaxAge,
                 rutherfordMinHealthCoefficient, rutherfordMaxHealthCoefficient);
 
+        Pool rutherford = setUpPool("Rutherford", rutherfordVolume,
+                rutherfordTemperature, rutherfordPH,
+                rutherfordNutrientCoefficient, rutherfordGuppies);
+
+        return rutherford;
+    }
+
+    /**
+     * Sets up the Gamelin Pool.
+     * 
+     * @return the Gamelin Pool
+     */
+    private Pool setUpGamelin() {
         final int gamelinVolume = 4300;
         final int gamelinTemperature = 37;
         final double gamelinPH = 7.5;
@@ -81,21 +125,10 @@ public class Simulation {
                 gamelinMinAge, gamelinMaxAge, gamelinMinHealthCoefficient,
                 gamelinMaxHealthCoefficient);
 
-        Pool skookumchuk = setUpPool("Skookumchuk", skookumchukVolume,
-                skookumchukTemperature, skookumchukPH,
-                skookumchukNutrientCoefficient, skookumchukGuppies);
-        Pool rutherford = setUpPool("Rutherford", rutherfordVolume,
-                rutherfordTemperature, rutherfordPH,
-                rutherfordNutrientCoefficient, rutherfordGuppies);
         Pool gamelin = setUpPool("Gamelin", gamelinVolume, gamelinTemperature,
                 gamelinPH, gamelinNutrientCoefficient, gamelinGuppies);
 
-        ecosystem.addPool(skookumchuk);
-        ecosystem.addPool(rutherford);
-        ecosystem.addPool(gamelin);
-
-        ecosystem.addStream(new Stream(skookumchuk, rutherford));
-        ecosystem.addStream(new Stream(rutherford, gamelin));
+        return gamelin;
     }
 
     /**
