@@ -114,8 +114,6 @@ public class SimulatorFX extends Application {
         final Color okayGuppyDiffuse = new Color(1.0, 0.5, 0.0, 0.75);
         final Color unhealthyGuppySpecular = new Color(1.0, 0.0, 0.0, 1.0);
         final Color unhealthyGuppyDiffuse = new Color(1.0, 0.0, 0.0, 0.75);
-        final double goodHealthCoefficient = 0.75;
-        final double okayHealthCoefficient = 0.25;
 
         Random generator = new Random();
 
@@ -150,12 +148,10 @@ public class SimulatorFX extends Application {
                 guppySphere.setTranslateZ(guppyTranslationZ);
 
                 PhongMaterial guppyMaterial = new PhongMaterial();
-                if (guppy.getHealth()
-                        .getHealthCoefficient() > goodHealthCoefficient) {
+                if (guppy.isHealthy()) {
                     guppyMaterial.setSpecularColor(healthyGuppySpecular);
                     guppyMaterial.setDiffuseColor(healthyGuppyDiffuse);
-                } else if (guppy.getHealth()
-                        .getHealthCoefficient() > okayHealthCoefficient) {
+                } else if (guppy.isOkay()) {
                     guppyMaterial.setSpecularColor(okayGuppySpecular);
                     guppyMaterial.setDiffuseColor(okayGuppyDiffuse);
                 } else {

@@ -279,6 +279,24 @@ public abstract class Fish implements Comparable {
     }
 
     /**
+     * Returns true if the fish is in good health.
+     * 
+     * @return true if the fish is in good health
+     */
+    public boolean isHealthy() {
+        return health.isHealthy();
+    }
+
+    /**
+     * Returns true if the fish is in at least okay health.
+     * 
+     * @return true if the fish is in at least okay health
+     */
+    public boolean isOkay() {
+        return health.isOkay();
+    }
+
+    /**
      * Returns the volume needed for this fish to survive.
      * 
      * @return the volume needed for this fish to survive

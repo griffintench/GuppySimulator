@@ -101,7 +101,7 @@ public class Health implements Comparable {
             healthCoefficient = newHealthCoefficient;
         }
     }
-    
+
     /**
      * Adds or subtracts a value to or from the animal's health coefficient.
      * Health coefficient cannot exceed a maximum. If the animal's health
@@ -119,6 +119,26 @@ public class Health implements Comparable {
         } else if (healthCoefficient > MAXIMUM_HEALTH_COEFFICIENT) {
             healthCoefficient = MAXIMUM_HEALTH_COEFFICIENT;
         }
+    }
+
+    /**
+     * Returns true if the animal is healthy.
+     * 
+     * @return true if the animal is healthy
+     */
+    public boolean isHealthy() {
+        final double goodHealthCoefficient = 0.75;
+        return isAlive && healthCoefficient > goodHealthCoefficient;
+    }
+
+    /**
+     * Returns true if the animal's health is at least okay.
+     * 
+     * @return true if the animal's health is at least okay
+     */
+    public boolean isOkay() {
+        final double okayHealthCoefficient = 0.25;
+        return isAlive && healthCoefficient > okayHealthCoefficient;
     }
 
     @Override
