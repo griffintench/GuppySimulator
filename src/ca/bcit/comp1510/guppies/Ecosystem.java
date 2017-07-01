@@ -130,11 +130,7 @@ public class Ecosystem {
         int starvedToDeath = 0;
         int newFry = 0;
         int crowdedOut = 0;
-        
-        if (weekNumber > 11) {
-            System.out.println("Breakpoint here");
-        }
-        
+
         for (Pool pool : pools) {
             diedOfOldAge += pool.incrementAges();
             numberRemoved += pool.removeDeadGuppies();

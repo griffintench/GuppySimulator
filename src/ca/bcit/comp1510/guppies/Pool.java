@@ -520,7 +520,8 @@ public class Pool extends WaterBody {
             Fish weakest = guppiesInPool.getWeakest();
             if (weakest instanceof Guppy) {
                 Guppy weakestGuppy = (Guppy) weakest;
-                crowdOut(weakestGuppy);
+                //crowdOut(weakestGuppy);
+                weakestGuppy.kill();
                 if (!weakestGuppy.isAlive()) {
                     killed++;
                 }

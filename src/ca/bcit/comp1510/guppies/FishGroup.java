@@ -25,6 +25,11 @@ public class FishGroup {
     private boolean sorted;
 
     /**
+     * If the fish have been sorted, the index of the weakest living fish.
+     */
+    private int weakestLivingIndex;
+
+    /**
      * Default constructor; starts with an empty ArrayList.
      */
     public FishGroup() {
@@ -63,6 +68,7 @@ public class FishGroup {
             fish = newFish;
         }
         sorted = false;
+        weakestLivingIndex = -1;
     }
 
     /**
@@ -97,6 +103,8 @@ public class FishGroup {
      * @return true if the Fish was successfully removed
      */
     public boolean remove(Fish fishToRemove) {
+        sorted = false;
+        weakestLivingIndex = -1;
         return fish.remove(fishToRemove);
     }
 
@@ -115,6 +123,8 @@ public class FishGroup {
             result = true;
         }
 
+        sorted = false;
+        weakestLivingIndex = -1;
         return result;
     }
 
@@ -133,6 +143,8 @@ public class FishGroup {
             result = true;
         }
 
+        sorted = false;
+        weakestLivingIndex = -1;
         return result;
     }
 
@@ -144,6 +156,11 @@ public class FishGroup {
         if (!sorted) {
             Collections.sort(fish);
             sorted = true;
+            for (int i = 0; i < fish.size() && weakestLivingIndex == -1; i++) {
+                if (fish.get(i).isAlive()) {
+                    weakestLivingIndex = i;
+                }
+            }
         }
     }
 
@@ -204,6 +221,8 @@ public class FishGroup {
 
                 if (roll > nutrientCoefficient) {
                     curFish.kill();
+                    sorted = false;
+                    weakestLivingIndex = -1;
                     numberOfDeaths++;
                 }
             }
@@ -224,6 +243,8 @@ public class FishGroup {
         while (iterator.hasNext()) {
             if (!iterator.next().isAlive()) {
                 iterator.remove();
+                sorted = false;
+                weakestLivingIndex = -1;
                 removedFish++;
             }
         }
@@ -372,8 +393,7 @@ public class FishGroup {
             for (int i = 0; i < fish.size(); i++) {
                 currentFish = fish.get(i);
 
-                if (currentFish != null
-                        && currentFish.isAlive()) {
+                if (currentFish != null && currentFish.isAlive()) {
                     fishAges[currentAgeIndex] = currentFish.getAgeInWeeks();
                     currentAgeIndex++;
                 }
@@ -415,6 +435,8 @@ public class FishGroup {
         }
         fish.addAll(newBabies);
 
+        sorted = false;
+        weakestLivingIndex = -1;
         return newBabies.size();
     }
 
@@ -436,6 +458,8 @@ public class FishGroup {
             }
         }
 
+        sorted = false;
+        weakestLivingIndex = -1;
         return numberOfDead;
     }
 
@@ -447,6 +471,14 @@ public class FishGroup {
      */
     public Fish getWeakest() {
         sort();
+        
+        for (int i = weakestLivingIndex; i < fish.size(); i++) {
+            if (fish.get(i).isAlive()) {
+                return fish.get(i);
+            } else {
+                weakestLivingIndex++;
+            }
+        }
         return fish.get(0);
     }
 }

@@ -160,7 +160,9 @@ public class Guppy extends Fish {
         double volumeNeeded;
         int ageInWeeks = super.getAgeInWeeks();
 
-        if (ageInWeeks < YOUNG_FISH_WEEKS) {
+        if (!isAlive()) {
+            volumeNeeded = 0.0;
+        } else if (ageInWeeks < YOUNG_FISH_WEEKS) {
             volumeNeeded = MINIMUM_WATER_VOLUME_ML;
         } else if (ageInWeeks <= MATURE_FISH_WEEKS) {
             volumeNeeded = MINIMUM_WATER_VOLUME_ML * ageInWeeks
