@@ -82,7 +82,6 @@ public class SimulatorFX extends Application {
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //runSimulation();
                 simulation.simulate(1);
                 populationText
                 .setText("Population: " + simulation.getEcosystemPopulation());
@@ -101,26 +100,6 @@ public class SimulatorFX extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
-    }
-
-    /**
-     * Runs the simulation after the button has been pressed. Currently the
-     * number of weeks that are simulated at once is controlled within this
-     * method.
-     */
-    private void runSimulation() {
-        final int numberOfWeeks = 1;
-        int weekNumber = weeksElapsed + 1;
-
-        for (int i = weekNumber; i <= numberOfWeeks + weeksElapsed; i++) {
-            Ecosystem ecosystem = simulation.getEcosystem();
-            ecosystem.simulateOneWeek(i);
-            populationText
-                    .setText("Population: " + ecosystem.getGuppyPopulation());
-            weekNumber++;
-        }
-
-        weeksElapsed = weekNumber - 1;
     }
 
     /**
