@@ -508,7 +508,7 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Kills off the weakest Guppies until the volume requirement is less than
+     * Crowds out the weakest Guppies until the volume requirement is less than
      * or equal to the Pool's volume.
      * 
      * @return the number of Guppies killed off

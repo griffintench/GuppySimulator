@@ -99,7 +99,7 @@ public abstract class Fish implements Comparable {
         ageInWeeks++;
 
         if (hasDiedOfOldAge()) {
-            health.setIsAlive(false);
+            kill();
         }
     }
 
