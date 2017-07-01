@@ -71,8 +71,8 @@ public class SimulatorFX extends Application {
 
         BorderPane bPane = new BorderPane();
 
-        populationText = new Text("Population: "
-                + simulation.getEcosystem().getGuppyPopulation());
+        populationText = new Text(
+                "Population: " + simulation.getEcosystemPopulation());
         populationText.setTranslateY(POPULATION_TEXT_TRANSLATION_Y);
         drawObjects();
 
@@ -82,7 +82,10 @@ public class SimulatorFX extends Application {
         btn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                runSimulation();
+                //runSimulation();
+                simulation.simulate(1);
+                populationText
+                .setText("Population: " + simulation.getEcosystemPopulation());
                 drawObjects();
             }
         });

@@ -15,13 +15,19 @@ public class Simulation {
      * The Ecosystem we will use in our simulation.
      */
     private Ecosystem ecosystem;
+    
+    /**
+     * The number of weeks that have elapsed since the start of the simulation.
+     */
+    private int weeksElapsed;
 
     /**
      * Constructor; initializes the Ecosystem and then sets up the simulation.
      */
     public Simulation() {
         ecosystem = new Ecosystem();
-        setUpSimulation();
+        weeksElapsed = 0;
+        setUpEcosystem();
     }
 
     /**
@@ -32,12 +38,21 @@ public class Simulation {
     public Ecosystem getEcosystem() {
         return ecosystem;
     }
+    
+    /**
+     * Returns the number of weeks since the start of the simulation.
+     * 
+     * @return the number of weeks since the start of the simulation
+     */
+    public int getWeeksElapsed() {
+        return weeksElapsed;
+    }
 
     /**
      * Sets up the Ecosystem with three Pools: Skookumchuk, Rutherford and
      * Gamelin.
      */
-    private void setUpSimulation() {
+    private void setUpEcosystem() {
         Pool skookumchuk = setUpSkookumchuk();
         Pool rutherford = setUpRutherford();
         Pool gamelin = setUpGamelin();
@@ -165,9 +180,21 @@ public class Simulation {
      *            the number of weeks to simulate
      */
     public void simulate(int numberOfWeeks) {
-        for (int i = 1; i <= numberOfWeeks; i++) {
+        int finalWeek = weeksElapsed + numberOfWeeks;
+        
+        for (int i = weeksElapsed + 1; i <= finalWeek; i++) {
             ecosystem.simulateOneWeek(i);
+            weeksElapsed++;
         }
+    }
+    
+    /**
+     * Returns the population of this simulation's Ecosystem.
+     * 
+     * @return the population of this simulation's Ecosystem
+     */
+    public int getEcosystemPopulation() {
+        return ecosystem.getGuppyPopulation();
     }
 
     /**
