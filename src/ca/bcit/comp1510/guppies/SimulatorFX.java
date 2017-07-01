@@ -53,18 +53,12 @@ public class SimulatorFX extends Application {
     private Simulation simulation;
 
     /**
-     * The number of weeks that have elapsed so far.
-     */
-    private int weeksElapsed;
-
-    /**
      * The Text that displays the current population.
      */
     private Text populationText;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        weeksElapsed = 0;
         simulation = new Simulation();
 
         root = new StackPane();
