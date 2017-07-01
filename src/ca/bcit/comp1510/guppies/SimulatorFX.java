@@ -83,8 +83,8 @@ public class SimulatorFX extends Application {
             @Override
             public void handle(ActionEvent event) {
                 simulation.simulate(1);
-                populationText
-                .setText("Population: " + simulation.getEcosystemPopulation());
+                populationText.setText(
+                        "Population: " + simulation.getEcosystemPopulation());
                 drawObjects();
             }
         });
@@ -106,11 +106,16 @@ public class SimulatorFX extends Application {
      * Draws the Pools and the Guppies.
      */
     private void drawObjects() {
-        final double poolGreen = 0.75;
-        final double diffuseAlpha = 0.75;
+        final Color poolSpecular = new Color(0.0, 0.75, 1.0, 1.0);
+        final Color poolDiffuse = new Color(0.0, 0.75, 1.0, 0.75);
+        final Color healthyGuppySpecular = new Color(0.0, 1.0, 0.0, 1.0);
+        final Color healthyGuppyDiffuse = new Color(0.0, 1.0, 0.0, 0.75);
+        final Color okayGuppySpecular = new Color(1.0, 0.5, 0.0, 1.0);
+        final Color okayGuppyDiffuse = new Color(1.0, 0.5, 0.0, 0.75);
+        final Color unhealthyGuppySpecular = new Color(1.0, 0.0, 0.0, 1.0);
+        final Color unhealthyGuppyDiffuse = new Color(1.0, 0.0, 0.0, 0.75);
         final double goodHealthCoefficient = 0.75;
         final double okayHealthCoefficient = 0.25;
-        final double okayGuppyGreen = 0.5;
 
         Random generator = new Random();
 
@@ -127,9 +132,8 @@ public class SimulatorFX extends Application {
             pool.setTranslateX(translation);
 
             PhongMaterial poolMaterial = new PhongMaterial();
-            poolMaterial.setSpecularColor(new Color(0.0, poolGreen, 1.0, 1.0));
-            poolMaterial.setDiffuseColor(
-                    new Color(0.0, poolGreen, 1.0, diffuseAlpha));
+            poolMaterial.setSpecularColor(poolSpecular);
+            poolMaterial.setDiffuseColor(poolDiffuse);
             pool.setMaterial(poolMaterial);
 
             for (Fish guppy : ecosystem.getPools().get(i - 1).getGuppiesInPool()
@@ -148,21 +152,15 @@ public class SimulatorFX extends Application {
                 PhongMaterial guppyMaterial = new PhongMaterial();
                 if (guppy.getHealth()
                         .getHealthCoefficient() > goodHealthCoefficient) {
-                    guppyMaterial
-                            .setSpecularColor(new Color(0.0, 1.0, 0.0, 1.0));
-                    guppyMaterial.setDiffuseColor(
-                            new Color(0.0, 1.0, 0.0, diffuseAlpha));
+                    guppyMaterial.setSpecularColor(healthyGuppySpecular);
+                    guppyMaterial.setDiffuseColor(healthyGuppyDiffuse);
                 } else if (guppy.getHealth()
                         .getHealthCoefficient() > okayHealthCoefficient) {
-                    guppyMaterial.setSpecularColor(
-                            new Color(1.0, okayGuppyGreen, 0.0, 1.0));
-                    guppyMaterial.setDiffuseColor(
-                            new Color(1.0, okayGuppyGreen, 0.0, diffuseAlpha));
+                    guppyMaterial.setSpecularColor(okayGuppySpecular);
+                    guppyMaterial.setDiffuseColor(okayGuppyDiffuse);
                 } else {
-                    guppyMaterial
-                            .setSpecularColor(new Color(1.0, 0.0, 0.0, 1.0));
-                    guppyMaterial.setDiffuseColor(
-                            new Color(1.0, 0.0, 0.0, diffuseAlpha));
+                    guppyMaterial.setSpecularColor(unhealthyGuppySpecular);
+                    guppyMaterial.setDiffuseColor(unhealthyGuppyDiffuse);
                 }
                 guppySphere.setMaterial(guppyMaterial);
 
