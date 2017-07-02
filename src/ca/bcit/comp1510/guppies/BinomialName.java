@@ -79,7 +79,7 @@ public class BinomialName {
      *            the new genus for the animal
      */
     public void setGenus(String newGenus) {
-        if (newGenus != null && !newGenus.equals("")) {
+        if (newGenus != null && !newGenus.trim().equals("")) {
             String firstLetter = newGenus.substring(0, 1);
             String restOfGenus = newGenus.substring(1, newGenus.length());
 
