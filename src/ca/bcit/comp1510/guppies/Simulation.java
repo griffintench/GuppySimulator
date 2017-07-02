@@ -15,7 +15,7 @@ public class Simulation {
      * The Ecosystem we will use in our simulation.
      */
     private Ecosystem ecosystem;
-    
+
     /**
      * The number of weeks that have elapsed since the start of the simulation.
      */
@@ -38,7 +38,7 @@ public class Simulation {
     public Ecosystem getEcosystem() {
         return ecosystem;
     }
-    
+
     /**
      * Returns the number of weeks since the start of the simulation.
      * 
@@ -181,13 +181,13 @@ public class Simulation {
      */
     public void simulate(int numberOfWeeks) {
         int finalWeek = weeksElapsed + numberOfWeeks;
-        
+
         for (int i = weeksElapsed + 1; i <= finalWeek; i++) {
             ecosystem.simulateOneWeek(i);
             weeksElapsed++;
         }
     }
-    
+
     /**
      * Returns the population of this simulation's Ecosystem.
      * 
@@ -195,6 +195,17 @@ public class Simulation {
      */
     public int getEcosystemPopulation() {
         return ecosystem.getGuppyPopulation();
+    }
+
+    /**
+     * Returns all the Guppies of a specified Pool.
+     * 
+     * @param poolIndex
+     *            the index of the Pool
+     * @return an ArrayList of Fish (all Guppies)
+     */
+    public ArrayList<Fish> getGuppies(int poolIndex) {
+        return ecosystem.getPools().get(poolIndex).getGuppiesInPool().getFish();
     }
 
     /**
