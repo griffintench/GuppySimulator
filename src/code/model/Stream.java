@@ -1,4 +1,4 @@
-package ca.bcit.comp1510.guppies;
+package code.model;
 
 /**
  * A stream from one pool to another.

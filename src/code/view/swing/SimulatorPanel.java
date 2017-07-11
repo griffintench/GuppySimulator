@@ -1,4 +1,4 @@
-package ca.bcit.comp1510.guppies;
+package code.view.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -9,6 +9,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import code.model.Ecosystem;
+import code.model.Simulation;
 
 /**
  * @author griffin

@@ -1,4 +1,4 @@
-package ca.bcit.comp1510.guppies;
+package code.model;
 
 import java.util.ArrayList;
 import java.util.Arrays;

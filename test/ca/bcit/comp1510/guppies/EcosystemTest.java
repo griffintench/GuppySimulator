@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import code.model.Ecosystem;
+import code.model.Guppy;
+import code.model.Pool;
+
 import static org.hamcrest.CoreMatchers.*;
 import org.hamcrest.number.IsCloseTo;
 

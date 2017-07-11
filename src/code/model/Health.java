@@ -1,4 +1,4 @@
-package ca.bcit.comp1510.guppies;
+package code.model;
 
 /**
  * Represents the health of a fish (or other animal).

@@ -1,4 +1,4 @@
-package ca.bcit.comp1510.guppies;
+package code.model;
 
 /**
  * The temperature and pH conditions of a body of water.

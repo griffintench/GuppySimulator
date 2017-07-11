@@ -1,6 +1,7 @@
-package ca.bcit.comp1510.guppies;
+package code.model;
 
 import java.util.ArrayList;
+import java.util.Observable;
 import java.util.Random;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Random;
  * @author griffin
  * @version 1.0
  */
-public class Simulation {
+public class Simulation extends Observable {
 
     /**
      * The Ecosystem we will use in our simulation.
@@ -27,7 +28,7 @@ public class Simulation {
     public Simulation() {
         ecosystem = new Ecosystem();
         weeksElapsed = 0;
-        setUpEcosystem();
+        setUpEcosystem(); // TODO delete this when ready
     }
 
     /**
@@ -51,8 +52,10 @@ public class Simulation {
     /**
      * Sets up the Ecosystem with three Pools: Skookumchuk, Rutherford and
      * Gamelin.
+     * 
+     * TODO come up with a better name for this method when necessary
      */
-    private void setUpEcosystem() {
+    public void setUpEcosystem() {
         Pool skookumchuk = setUpSkookumchuk();
         Pool rutherford = setUpRutherford();
         Pool gamelin = setUpGamelin();
@@ -63,6 +66,9 @@ public class Simulation {
 
         ecosystem.addStream(new Stream(skookumchuk, rutherford));
         ecosystem.addStream(new Stream(rutherford, gamelin));
+        
+        setChanged();
+        notifyObservers();
     }
 
     /**

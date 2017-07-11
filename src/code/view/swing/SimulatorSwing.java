@@ -1,4 +1,4 @@
-package ca.bcit.comp1510.guppies;
+package code.view.swing;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

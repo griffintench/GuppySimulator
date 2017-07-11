@@ -14,3 +14,26 @@ Should pH and temperature even be stored in Stream? Just use Pool's instead?
 If we assume that the stream emptying from the Pool is short enough that probably makes
 sense.  if however a Stream could ever have 2 or more sources, or if a Stream is long
 enough for its pH or temp to change, then we might want to assign its own.
+
+NEW QUESTION AS OF JULY 10:
+
+OK, I'm currently trying to reorganize the way the GUI is set up so it uses the model-view-controller pattern.
+This involves a SimulationPane which will have the display of the Pools using Boxes, as well as all the 
+simulation controls. This SimulationPane is going to be an Observer of the Observable Simulation class. The
+issue I have is this - the information that the SimulationPane class needs is the configuration of Pools and
+Streams, as well as the number of Guppies in each Pool and what colour each Guppy should be. The way things
+have been in the past (in the SimulatorFX class, which I haven't modified yet), I just have the GUI observe
+the Ecosystem class directly. That's not ideal, so here are the possibilities for how I could handle it:
+
+-Keep it the way it is, and have Simulation send SimulationPane an Ecosystem object. Bad for 
+re-use/portability/adaptability.
+-Have Simulation send SimulationPane some other kind of object. This object would need to contain all the above
+information - maybe an ArrayList of ArrayLists, with each item in the outer ArrayList representing a Pool, and
+with each of the inner ArrayLists filled with the indexes of all the Pools that Pool is connected to. Then I'd
+also need another ArrayList of int[3] arrays, with each int representing the number of Guppies of a certain health
+within the Pool. That could get pretty complicated.
+-Have Simulation call notifyObservers() multiple times, each time passing a different parameter. Then have
+SimulationPane.update() respond differently depending on what type of object arg is. I don't know what rule
+or guideline this violates but it still feels weirdly hacky to me.
+
+Right now I'm leaning towards that second option. Any thoughts?

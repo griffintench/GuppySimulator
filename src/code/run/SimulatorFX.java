@@ -1,8 +1,13 @@
-package ca.bcit.comp1510.guppies;
+package code.run;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 
+import code.model.Ecosystem;
+import code.model.Fish;
+import code.model.Simulation;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,7 +30,7 @@ import javafx.stage.Stage;
  * @author griffin
  * @version 1.0
  */
-public class SimulatorFX extends Application {
+public class SimulatorFX extends Application implements Observer {
 
     /**
      * The width of the window.
@@ -220,6 +225,12 @@ public class SimulatorFX extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+        // TODO Auto-generated method stub
+        
     }
 
 }
