@@ -2,6 +2,7 @@ package code.model;
 
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 
 /**
@@ -23,12 +24,23 @@ public class Simulation extends Observable {
     private int weeksElapsed;
 
     /**
-     * Constructor; initializes the Ecosystem and then sets up the simulation.
+     * Constructor; initializes the Ecosystem and then sets up the week number.
      */
     public Simulation() {
         ecosystem = new Ecosystem();
         weeksElapsed = 0;
-        setUpEcosystem(); // TODO delete this when ready
+    }
+
+    /**
+     * Constructor; initializes the Ecosystem and gives it an observer (a view).
+     * 
+     * @param observer
+     *            a view which observes the model.
+     */
+    public Simulation(Observer observer) {
+        addObserver(observer);
+        ecosystem = new Ecosystem();
+        weeksElapsed = 0;
     }
 
     /**
@@ -66,9 +78,6 @@ public class Simulation extends Observable {
 
         ecosystem.addStream(new Stream(skookumchuk, rutherford));
         ecosystem.addStream(new Stream(rutherford, gamelin));
-        
-        setChanged();
-        notifyObservers();
     }
 
     /**
@@ -192,6 +201,14 @@ public class Simulation extends Observable {
             ecosystem.simulateOneWeek(i);
             weeksElapsed++;
         }
+
+        constructPoolList();
+    }
+
+    private void constructPoolList() {
+        ArrayList<int[]> list = ecosystem.constructPoolList();
+        setChanged();
+        notifyObservers(list);
     }
 
     /**

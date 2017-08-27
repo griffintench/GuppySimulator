@@ -173,4 +173,20 @@ public class Ecosystem {
         return crowdedOut;
     }
 
+    /**
+     * Constructs the list of pools, and the number of Guppies of each health
+     * type.
+     * 
+     * @return the list of pools, and the number of Guppies of each health type
+     */
+    public ArrayList<int[]> constructPoolList() {
+        ArrayList<int[]> result = new ArrayList<int[]>();
+
+        for (Pool pool : pools) {
+            result.add(pool.getGuppyHealthNumbers());
+        }
+
+        return result;
+    }
+
 }

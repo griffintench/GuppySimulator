@@ -1,24 +1,24 @@
 package code.controller;
 
 import code.model.Simulation;
-import code.run.SimulatorFXv2;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 
 /**
+ * 
  * @author griffin
- *
+ * @version 1.0
  */
-public class LoadDefaultHandler implements EventHandler {
+public class SimulationHandler implements EventHandler {
 
     private Simulation simulation;
-
+    
     @Override
     public void handle(Event event) {
-        simulation.setUpEcosystem(); // I'll probably rename this method later
-        SimulatorFXv2.loadSimulationPane(); // don't like this for portability reasons
+        // for now just handles "1 week" button
+        simulation.simulate(1);
     }
-
+    
     /**
      * Sets the simulation that this handler communicates with.
      * 

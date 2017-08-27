@@ -471,7 +471,7 @@ public class FishGroup {
      */
     public Fish getWeakest() {
         sort();
-        
+
         for (int i = weakestLivingIndex; i < fish.size(); i++) {
             if (fish.get(i).isAlive()) {
                 return fish.get(i);
@@ -480,5 +480,31 @@ public class FishGroup {
             }
         }
         return fish.get(0);
+    }
+
+    /**
+     * Returns an int array with the number of fish of each health type.
+     * 
+     * @return an int array with the number of fish of each health type
+     */
+    public int[] getFishHealthNumbers() {
+        final int healthy = 0;
+        final int okay = 1;
+        final int unhealthy = 2;
+        final int healthTypes = 3;
+
+        int[] result = new int[healthTypes];
+        
+        for (Fish curFish : fish) {
+            if (curFish.isHealthy()) {
+                result[healthy]++;
+            } else if (curFish.isOkay()) {
+                result[okay]++;
+            } else {
+                result[unhealthy]++;
+            }
+        }
+
+        return result;
     }
 }

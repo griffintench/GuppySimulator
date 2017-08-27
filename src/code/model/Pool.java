@@ -572,6 +572,15 @@ public class Pool extends WaterBody {
         streamsFrom.get(streamNumber).getDestination().addGuppy(guppy);
 
     }
+    
+    /**
+     * Returns an int array with the number of fish of each health type.
+     * 
+     * @return an int array with the number of fish of each health type
+     */
+    public int[] getGuppyHealthNumbers() {
+        return guppiesInPool.getFishHealthNumbers();
+    }
 
     @Override
     public String toString() {

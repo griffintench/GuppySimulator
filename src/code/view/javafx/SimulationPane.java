@@ -1,82 +1,58 @@
 package code.view.javafx;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import code.controller.SimulationHandler;
 import javafx.scene.layout.VBox;
 
 /**
+ * The pane showing the simulation itself. This pane is comprised of a control
+ * pane (with buttons) and an ecosystem pane (showing the pools).
+ * 
  * @author griffin
- *
+ * @version 1.0
  */
 public class SimulationPane extends VBox implements Observer {
-    private TextField numberOfWeeks;
-    private Button go;
-    private Button oneWeek;
-    private Button pause;
-    private Button resume;
-    private Button step;
-    private Button slower;
-    private Button faster;
-    private Button populationGraph;
-    private Button generateReport;
-    
+    public static final int SCENE_WIDTH = 1000;
+    public static final int SCENE_HEIGHT = 1000;
+
+    private EcosystemPane ecosystemPane;
+    private ControlPane controlPane;
+
     public SimulationPane() {
-        Pane topPane = new Pane();
-        VBox bottomPane = new VBox();
-        
-        Label simulate = new Label("Simulate");
-        numberOfWeeks = new TextField();
-        Label weeks = new Label("weeks");
-        go = new Button("Go");
-        oneWeek = new Button("1 week");
-        pause = new Button("Pause");
-        resume = new Button("Resume");
-        step = new Button("Step");
-        slower = new Button("Slower");
-        faster = new Button("Faster");
-        populationGraph = new Button("Population Graph");
-        generateReport = new Button("Generate Report");
-        
-        disableButtons();
-        
-        HBox row1 = new HBox();
-        HBox row2 = new HBox();
-        HBox row3 = new HBox();
-        
-        row1.getChildren().addAll(simulate, numberOfWeeks, weeks, go, oneWeek);
-        row2.getChildren().addAll(pause, resume, step, slower, faster);
-        row3.getChildren().addAll(populationGraph, generateReport);
-        
-        bottomPane.getChildren().addAll(row1, row2, row3);
-        getChildren().addAll(topPane, bottomPane);
+        final double multiplier = 0.7;
+        final double rounder = 0.5;
+
+        setPrefSize(SCENE_WIDTH, SCENE_HEIGHT);
+
+        ecosystemPane = new EcosystemPane(SCENE_WIDTH,
+                (int) (multiplier * SCENE_HEIGHT + rounder));
+
+        controlPane = new ControlPane(SCENE_WIDTH,
+                (int) ((1 - multiplier) * SCENE_HEIGHT + rounder));
+
+        getChildren().addAll(ecosystemPane, controlPane);
     }
-    
+
     /**
-     * Disables buttons until I've actually implemented their functionality.
+     * Adds the simulation handler to the simulation pane.
+     * 
+     * @param handler
+     *            a SimulationHandler object
      */
-    private void disableButtons() {
-        numberOfWeeks.setDisable(true);
-        go.setDisable(true);
-        pause.setDisable(true);
-        resume.setDisable(true);
-        step.setDisable(true);
-        slower.setDisable(true);
-        faster.setDisable(true);
-        populationGraph.setDisable(true);
-        generateReport.setDisable(true);
+    @SuppressWarnings("unchecked")
+    public void addSimulationHandler(SimulationHandler handler) {
+        controlPane.addSimulationHandler(handler);
     }
 
     @Override
     public void update(Observable o, Object arg) {
-        // TODO Auto-generated method stub
-        
+        if (arg instanceof ArrayList) {
+            ArrayList<int[]> castedArg = (ArrayList<int[]>) arg;
+            ecosystemPane.update(castedArg);
+        }
     }
-    
-    
+
 }
