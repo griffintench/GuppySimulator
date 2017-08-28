@@ -1,10 +1,4 @@
-/**
- * 
- */
 package code.run;
-
-import java.util.Observable;
-import java.util.Observer;
 
 import code.controller.LoadDefaultHandler;
 import code.controller.SimulationHandler;
@@ -17,10 +11,12 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
+ * A newer simulator using JavaFX; code is organized much better in this one.
+ * 
  * @author griffin
- *
+ * @version 1.0
  */
-public class SimulatorFXv2 extends Application implements Observer {
+public class SimulatorFXv2 extends Application {
 
     /**
      * The width of the window.
@@ -33,18 +29,21 @@ public class SimulatorFXv2 extends Application implements Observer {
     public static final int SCENE_HEIGHT = 500;
 
     private static StackPane root;
-    private static Stage primaryStage;
+    private static Stage stage;
 
     private static Simulation simulation;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        SimulatorFXv2.primaryStage = primaryStage;
+        stage = primaryStage;
         root = new StackPane();
-        simulation = new Simulation(this);
+        simulation = new Simulation();
         loadLoadSimulationPane();
     }
 
+    /**
+     * Loads the LoadSimulationPane; adds necessary handlers.
+     */
     public static void loadLoadSimulationPane() {
         LoadSimulationPane pane = new LoadSimulationPane();
         LoadDefaultHandler loadDefaultHandler = new LoadDefaultHandler();
@@ -54,10 +53,13 @@ public class SimulatorFXv2 extends Application implements Observer {
 
         root.getChildren().add(pane);
         Scene scene = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        stage.setScene(scene);
+        stage.show();
     }
 
+    /**
+     * Loads the SimulationPane; adds necessary handlers and observers.
+     */
     public static void loadSimulationPane() {
         SimulationPane pane = new SimulationPane();
         SimulationHandler handler = new SimulationHandler();
@@ -66,16 +68,15 @@ public class SimulatorFXv2 extends Application implements Observer {
         simulation.addObserver(pane);
 
         Scene scene = new Scene(pane, SCENE_WIDTH, SCENE_HEIGHT);
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    @Override
-    public void update(Observable o, Object arg) {
+        stage.setScene(scene);
+        stage.show();
     }
 
     /**
+     * Drives the program.
+     * 
      * @param args
+     *            command line arguments
      */
     public static void main(String[] args) {
         launch(args);

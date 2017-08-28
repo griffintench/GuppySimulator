@@ -26,6 +26,7 @@ import javafx.stage.Stage;
 
 /**
  * A Simulator GUI that uses JavaFX.
+ * OLD; NO REAL POINT IN USING.
  * 
  * @author griffin
  * @version 1.0
