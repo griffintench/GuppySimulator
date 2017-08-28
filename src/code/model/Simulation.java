@@ -228,7 +228,7 @@ public class Simulation extends Observable {
      * @return an ArrayList of Fish (all Guppies)
      */
     public ArrayList<Fish> getGuppies(int poolIndex) {
-        return ecosystem.getPools().get(poolIndex).getGuppiesInPool().getFish();
+        return ecosystem.getGuppies(poolIndex);
     }
 
     /**

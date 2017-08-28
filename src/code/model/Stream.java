@@ -12,12 +12,12 @@ public class Stream extends WaterBody {
     /**
      * The Pool that this Stream leads away from.
      */
-    private Pool origin;
+    private final Pool origin;
 
     /**
      * The Pool that this Stream leads to.
      */
-    private Pool destination;
+    private final Pool destination;
 
     /**
      * Constructor; sets the pH and temperature to those of the origin Pool.
@@ -46,32 +46,12 @@ public class Stream extends WaterBody {
     }
 
     /**
-     * Sets the origin Pool.
-     * 
-     * @param newOrigin
-     *            the origin Pool
-     */
-    public void setOrigin(Pool newOrigin) {
-        origin = newOrigin;
-    }
-
-    /**
      * Returns the destination Pool.
      * 
      * @return the destination Pool
      */
     public Pool getDestination() {
         return destination;
-    }
-
-    /**
-     * Sets the destination Pool.
-     * 
-     * @param newDestination
-     *            the destination Pool
-     */
-    public void setDestination(Pool newDestination) {
-        destination = newDestination;
     }
 
 }

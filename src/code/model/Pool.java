@@ -39,7 +39,7 @@ public class Pool extends WaterBody {
     /**
      * The name of the Pool.
      */
-    private String name;
+    private final String name;
 
     /**
      * The volume of the Pool, in litres.
@@ -89,7 +89,7 @@ public class Pool extends WaterBody {
         streamsTo = new ArrayList<Stream>();
         streamsFrom = new ArrayList<Stream>();
         setVolumeLitres(0.0);
-        setName(DEFAULT_POOL_NAME);
+        name = DEFAULT_POOL_NAME;
         setNutrientCoefficient(DEFAULT_NUTRIENT_COEFFICIENT);
         setGuppiesInPool(new ArrayList<Guppy>());
 
@@ -122,11 +122,10 @@ public class Pool extends WaterBody {
         streamsTo = new ArrayList<Stream>();
         streamsFrom = new ArrayList<Stream>();
         setVolumeLitres(0.0);
-        setName(DEFAULT_POOL_NAME);
         setNutrientCoefficient(DEFAULT_NUTRIENT_COEFFICIENT);
 
         setVolumeLitres(newVolumeLitres);
-        setName(newName);
+        name = processName(newName);
         setTemperatureCelsius(newTemperatureCelsius);
         setPH(newPH);
         setNutrientCoefficient(newNutrientCoefficient);
@@ -139,6 +138,22 @@ public class Pool extends WaterBody {
         identificationNumber = ++numberOfPools;
 
     }
+    
+    private String processName(String name) {
+        if (name == null) {
+            return DEFAULT_POOL_NAME;
+        }
+        name = name.replaceAll("\\s", "");
+        if (name.equals("")) {
+            return DEFAULT_POOL_NAME;
+        }
+        String firstLetter = name.substring(0, 1);
+        String restOfName = name.substring(1, name.length());
+        firstLetter = firstLetter.toUpperCase();
+        restOfName = restOfName.toLowerCase();
+        
+        return firstLetter + restOfName;
+    }
 
     /**
      * Returns the name of the Pool.
@@ -147,26 +162,6 @@ public class Pool extends WaterBody {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Sets the name of the Pool.
-     * 
-     * @param newName
-     *            the name of the Pool
-     */
-    public void setName(String newName) {
-        if (newName != null) {
-            newName = newName.replaceAll("\\s", "");
-            if (!newName.equals("")) {
-                String firstLetter = newName.substring(0, 1);
-                String restOfName = newName.substring(1, newName.length());
-                firstLetter = firstLetter.toUpperCase();
-                restOfName = restOfName.toLowerCase();
-
-                name = firstLetter + restOfName;
-            }
-        }
     }
 
     /**
@@ -247,8 +242,8 @@ public class Pool extends WaterBody {
      * 
      * @return an ArrayList object holding the Guppies in the Pool
      */
-    public FishGroup getGuppiesInPool() {
-        return guppiesInPool;
+    public ArrayList<Fish> getGuppiesInPool() {
+        return guppiesInPool.getFish();
     }
 
     /**

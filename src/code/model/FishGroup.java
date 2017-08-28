@@ -431,7 +431,9 @@ public class FishGroup {
 
         for (Fish currentFish : fish) {
             ArrayList<Fish> newFish = currentFish.spawn();
-            newBabies.addAll(newFish);
+            if (newFish != null) {
+                newBabies.addAll(newFish);
+            }
         }
         fish.addAll(newBabies);
 
@@ -494,7 +496,7 @@ public class FishGroup {
         final int healthTypes = 3;
 
         int[] result = new int[healthTypes];
-        
+
         for (Fish curFish : fish) {
             if (curFish.isHealthy()) {
                 result[healthy]++;

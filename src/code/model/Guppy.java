@@ -60,8 +60,7 @@ public class Guppy extends Fish {
      */
     public Guppy() {
 
-        super();
-        setBinomialName(new BinomialName(DEFAULT_GENUS, DEFAULT_SPECIES));
+        super(DEFAULT_GENUS, DEFAULT_SPECIES);
 
         guppyID = ++numberOfGuppiesBorn;
 
@@ -87,24 +86,9 @@ public class Guppy extends Fish {
             boolean newIsFemale, int newGenerationNumber,
             double newHealthCoefficient) {
 
-        super(newGenus, newSpecies, newAgeInWeeks, newIsFemale,
+        super(new BinomialName(newGenus, newSpecies, DEFAULT_GENUS,
+                DEFAULT_SPECIES), newAgeInWeeks, newIsFemale,
                 newGenerationNumber, newHealthCoefficient);
-
-        String genus;
-        String species;
-
-        if (newGenus == null || newGenus.equals("")) {
-            genus = DEFAULT_GENUS;
-        } else {
-            genus = newGenus;
-        }
-        if (newSpecies == null || newSpecies.equals("")) {
-            species = DEFAULT_SPECIES;
-        } else {
-            species = newSpecies;
-        }
-
-        setBinomialName(new BinomialName(genus, species));
 
         guppyID = ++numberOfGuppiesBorn;
 
@@ -183,14 +167,14 @@ public class Guppy extends Fish {
      * @return an ArrayList object holding all of the baby Guppies, or null if
      *         this Guppy is male or under 10 weeks in age.
      */
-    // TODO how to get it to return ArrayList<Fish>
     public ArrayList<Fish> spawn() {
         final int ageToSpawn = 10;
-        final int maxFry = 100;
-        ArrayList<Fish> babyGuppies = new ArrayList<Fish>();
         if (!getIsFemale() || getAgeInWeeks() < ageToSpawn) {
-            return babyGuppies;
+            return null;
         } else {
+            final int maxFry = 100;
+
+            ArrayList<Fish> babyGuppies = new ArrayList<Fish>();
             Random generator = new Random();
             double spawnRoll = generator.nextDouble();
             final double probabilityOfSpawn = 0.25;

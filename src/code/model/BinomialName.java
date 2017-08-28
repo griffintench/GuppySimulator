@@ -13,12 +13,12 @@ public class BinomialName {
     /**
      * The genus of the animal.
      */
-    private String genus;
+    private final String genus;
 
     /**
      * The species of the animal.
      */
-    private String species;
+    private final String species;
 
     /**
      * Default constructor; genus and species are empty Strings.
@@ -37,10 +37,26 @@ public class BinomialName {
      *            the species of the animal
      */
     public BinomialName(String genus, String species) {
-        this.genus = "";
-        setGenus(genus);
-        this.species = "";
-        setSpecies(species);
+        this.genus = processGenus(genus, "");
+        this.species = processSpecies(species, "");
+    }
+
+    /**
+     * Constructor; if genus or species is invalid, sets it to the default.
+     * 
+     * @param genus
+     *            the genus of the animal
+     * @param species
+     *            the species of the animal
+     * @param defaultGenus
+     *            the default genus
+     * @param defaultSpecies
+     *            the default species
+     */
+    public BinomialName(String genus, String species, String defaultGenus,
+            String defaultSpecies) {
+        this.genus = processGenus(genus, defaultGenus);
+        this.species = processSpecies(species, defaultSpecies);
     }
 
     /**
@@ -56,11 +72,53 @@ public class BinomialName {
                     "binomial name must contain space");
         }
         Scanner scan = new Scanner(binomialName);
-        genus = "";
-        setGenus(scan.next());
-        species = "";
-        setSpecies(scan.next());
+        genus = processGenus(scan.next(), "");
+        species = processSpecies(scan.next(), "");
         scan.close();
+    }
+
+    /**
+     * Constructor; takes the first two words of the name parameter and sets
+     * them to genus and species, respectively. If either genus or species is
+     * invalid, sets it to the default.
+     * 
+     * @param binomialName
+     *            the binomial name in String form
+     * @param defaultGenus
+     *            the default genus
+     * @param defaultSpecies
+     *            the default species
+     */
+    public BinomialName(String binomialName, String defaultGenus,
+            String defaultSpecies) {
+        if (!binomialName.contains(" ")) {
+            throw new IllegalArgumentException(
+                    "binomial name must contain space");
+        }
+        Scanner scan = new Scanner(binomialName);
+        genus = processGenus(scan.next(), defaultGenus);
+        species = processSpecies(scan.next(), "");
+        scan.close();
+    }
+
+    private String processGenus(String genus, String defaultGenus) {
+        if (genus == null || genus.trim().equals("")) {
+            return defaultGenus;
+        }
+        String firstLetter = genus.substring(0, 1);
+        String restOfGenus = genus.substring(1, genus.length());
+
+        firstLetter = firstLetter.toUpperCase();
+        restOfGenus = restOfGenus.toLowerCase();
+
+        return firstLetter + restOfGenus;
+    }
+
+    private String processSpecies(String species, String defaultSpecies) {
+        if (species == null || species.trim().equals("")) {
+            return defaultSpecies;
+        }
+        return species.toLowerCase();
     }
 
     /**
@@ -73,42 +131,12 @@ public class BinomialName {
     }
 
     /**
-     * Sets the genus of the animal.
-     * 
-     * @param newGenus
-     *            the new genus for the animal
-     */
-    public void setGenus(String newGenus) {
-        if (newGenus != null && !newGenus.trim().equals("")) {
-            String firstLetter = newGenus.substring(0, 1);
-            String restOfGenus = newGenus.substring(1, newGenus.length());
-
-            firstLetter = firstLetter.toUpperCase();
-            restOfGenus = restOfGenus.toLowerCase();
-
-            genus = firstLetter + restOfGenus;
-        }
-    }
-
-    /**
      * Returns the species of the animal.
      * 
      * @return the species of the animal
      */
     public String getSpecies() {
         return species;
-    }
-
-    /**
-     * Sets the species of the animal.
-     * 
-     * @param newSpecies
-     *            the new species for the animal
-     */
-    public void setSpecies(String newSpecies) {
-        if (newSpecies != null && !newSpecies.trim().equals("")) {
-            species = newSpecies.toLowerCase();
-        }
     }
 
     /**

@@ -188,5 +188,16 @@ public class Ecosystem {
 
         return result;
     }
+    
+    /**
+     * Returns all the Guppies of a specified Pool.
+     * 
+     * @param poolIndex
+     *            the index of the Pool
+     * @return an ArrayList of Fish (all Guppies)
+     */
+    public ArrayList<Fish> getGuppies(int poolIndex) {
+        return pools.get(poolIndex).getGuppiesInPool();
+    }
 
 }
