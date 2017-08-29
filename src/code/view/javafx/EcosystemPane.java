@@ -1,54 +1,75 @@
 package code.view.javafx;
 
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Random;
 
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
 import javafx.scene.shape.Sphere;
 
 /**
+ * The pane showing the ecosystem and its pools and guppies.
+ * 
  * @author griffin
- *
+ * @version 1.0
  */
 public class EcosystemPane extends StackPane {
+
+    /** Represents a healthy guppy. */
+    public static final int HEALTHY = 0;
+
+    /** Represents a guppy in okay health. */
+    public static final int OKAY = 1;
+
+    /** Represents an unhealthy guppy. */
+    public static final int UNHEALTHY = 2;
+
     private int sceneWidth;
     private int sceneHeight;
-    
-    public static final int HEALTHY = 0;
-    public static final int OKAY = 1;
-    public static final int UNHEALTHY = 2;
 
     private Random generator;
 
     private ArrayList<Box> pools;
     private ArrayList<Sphere> guppies;
-    
+
+    /**
+     * Creates an EcosystemPane with a certain width and height. Initializes the
+     * Random and ArrayList variables.
+     * 
+     * @param sceneWidth
+     *            the width of the pane
+     * @param sceneHeight
+     *            the height of the pane
+     */
     public EcosystemPane(int sceneWidth, int sceneHeight) {
         this.sceneWidth = sceneWidth;
         setPrefWidth(sceneWidth);
         this.sceneHeight = sceneHeight;
         setPrefHeight(sceneHeight);
-        
+
         generator = new Random();
-        
+
         pools = new ArrayList<Box>();
         guppies = new ArrayList<Sphere>();
     }
-    
+
+    /**
+     * Receives information about pools and guppies and translates into a change
+     * in the viewable model.
+     * 
+     * @param arg
+     *            an ArrayList object containing information about the pools;
+     *            each entry represents a pool in the form of an array of three
+     *            ints, representing the numbers of healthy, okay and unhealthy
+     *            guppies
+     */
     public void update(ArrayList<int[]> arg) {
         pools = new ArrayList<Box>();
         guppies = new ArrayList<Sphere>();
+        
+        getChildren().clear();
 
         int numberOfPools = arg.size();
         int boxWidth = sceneWidth / (2 * numberOfPools + 1);
@@ -65,7 +86,7 @@ public class EcosystemPane extends StackPane {
             getChildren().add(guppy);
         }
     }
-    
+
     /**
      * Creates a Box object representing a pool and adds it to pools.
      * 
