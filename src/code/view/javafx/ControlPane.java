@@ -75,7 +75,7 @@ public class ControlPane extends VBox {
         row1.getChildren().addAll(simulate, numberOfWeeks, weeks, go, oneWeek);
         row2.getChildren().addAll(pause, resume, step, slower, faster);
         row3.getChildren().addAll(populationGraph, generateReport);
-        
+
         row1.setAlignment(Pos.CENTER);
         row2.setAlignment(Pos.CENTER);
         row3.setAlignment(Pos.CENTER);
@@ -87,8 +87,8 @@ public class ControlPane extends VBox {
      * Disables buttons until I've actually implemented their functionality.
      */
     private void disableButtons() {
-        numberOfWeeks.setDisable(true);
-        go.setDisable(true);
+//        numberOfWeeks.setDisable(true);
+//        go.setDisable(true);
         pause.setDisable(true);
         resume.setDisable(true);
         step.setDisable(true);
@@ -99,6 +99,19 @@ public class ControlPane extends VBox {
     }
 
     /**
+     * Disables or enables the numberOfWeeks, go, and oneWeek controls depending
+     * on whether or not the simulation is currently running.
+     * 
+     * @param inProgress
+     *            true if the simulation is currently running
+     */
+    public void simulationInProgress(boolean inProgress) {
+        numberOfWeeks.setDisable(inProgress);
+        go.setDisable(inProgress);
+        oneWeek.setDisable(inProgress);
+    }
+
+    /**
      * Adds the simulation handler to the simulation pane.
      * 
      * @param handler
@@ -106,7 +119,17 @@ public class ControlPane extends VBox {
      */
     @SuppressWarnings("unchecked")
     public void addSimulationHandler(SimulationHandler handler) {
+        go.setOnAction(handler);
         oneWeek.setOnAction(handler);
+    }
+
+    /**
+     * Returns whatever is currently typed in the number of weeks field.
+     * 
+     * @return whatever is currently typed in the number of weeks field
+     */
+    public String getNumberOfWeeks() {
+        return numberOfWeeks.getText();
     }
 
 }

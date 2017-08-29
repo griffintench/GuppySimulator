@@ -45,13 +45,17 @@ public class SimulationPane extends VBox implements Observer {
     @SuppressWarnings("unchecked")
     public void addSimulationHandler(SimulationHandler handler) {
         controlPane.addSimulationHandler(handler);
+        handler.addControlPane(controlPane);
     }
 
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof ArrayList) {
-            ArrayList<int[]> castedArg = (ArrayList<int[]>) arg;
-            ecosystemPane.update(castedArg);
+            ArrayList<int[]> castArg = (ArrayList<int[]>) arg;
+            ecosystemPane.update(castArg);
+        } else if (arg instanceof Boolean) {
+            Boolean castArg = (Boolean) arg;
+            controlPane.simulationInProgress(castArg);
         }
     }
 

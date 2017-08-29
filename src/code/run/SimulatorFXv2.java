@@ -66,6 +66,7 @@ public class SimulatorFXv2 extends Application {
         handler.setSimulation(simulation);
         pane.addSimulationHandler(handler);
         simulation.addObserver(pane);
+        
 
         Scene scene = new Scene(pane, SCENE_WIDTH, SCENE_HEIGHT);
         stage.setScene(scene);

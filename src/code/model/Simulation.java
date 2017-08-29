@@ -32,18 +32,6 @@ public class Simulation extends Observable {
     }
 
     /**
-     * Constructor; initializes the Ecosystem and gives it an observer (a view).
-     * 
-     * @param observer
-     *            a view which observes the model.
-     */
-    public Simulation(Observer observer) {
-        addObserver(observer);
-        ecosystem = new Ecosystem();
-        weeksElapsed = 0;
-    }
-
-    /**
      * Returns the Simulation's Ecosystem.
      * 
      * @return the Simulation's Ecosystem
@@ -195,14 +183,19 @@ public class Simulation extends Observable {
      *            the number of weeks to simulate
      */
     public void simulate(int numberOfWeeks) {
+        setChanged();
+        notifyObservers(true);
+        
         int finalWeek = weeksElapsed + numberOfWeeks;
 
         for (int i = weeksElapsed + 1; i <= finalWeek; i++) {
             ecosystem.simulateOneWeek(i);
             weeksElapsed++;
+            constructPoolList();
         }
-
-        constructPoolList();
+        
+        setChanged();
+        notifyObservers(false);
     }
 
     private void constructPoolList() {
