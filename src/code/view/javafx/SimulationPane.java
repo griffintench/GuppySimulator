@@ -5,6 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import code.controller.SimulationHandler;
+import javafx.application.Platform;
 import javafx.scene.layout.VBox;
 
 /**
@@ -51,11 +52,19 @@ public class SimulationPane extends VBox implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof ArrayList) {
-            ArrayList<int[]> castArg = (ArrayList<int[]>) arg;
-            ecosystemPane.update(castArg);
+            final ArrayList<int[]> castArg = (ArrayList<int[]>) arg;
+            Platform.runLater(new Runnable() {
+               public void run() {
+                   ecosystemPane.update(castArg);
+               }
+            });
         } else if (arg instanceof Boolean) {
-            Boolean castArg = (Boolean) arg;
-            controlPane.simulationInProgress(castArg);
+            final Boolean castArg = (Boolean) arg;
+            Platform.runLater(new Runnable() {
+               public void run() {
+                   controlPane.simulationInProgress(castArg);
+               }
+            });
         }
     }
 

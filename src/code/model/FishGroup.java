@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -17,7 +19,7 @@ public class FishGroup {
     /**
      * The Fish in the Group.
      */
-    private ArrayList<Fish> fish;
+    private List<Fish> fish;
 
     /**
      * True if we know that the ArrayList is properly sorted; false otherwise.
@@ -35,7 +37,7 @@ public class FishGroup {
      * Zero-parameter constructor; starts with an empty ArrayList.
      */
     public FishGroup() {
-        setFish(new ArrayList<Fish>());
+        setFish(new LinkedList<Fish>());
     }
 
     /**
@@ -44,7 +46,7 @@ public class FishGroup {
      * @param newFish
      *            an ArrayList of Fish
      */
-    public FishGroup(ArrayList<Fish> newFish) {
+    public FishGroup(LinkedList<Fish> newFish) {
         setFish(newFish);
     }
 
@@ -53,7 +55,7 @@ public class FishGroup {
      * 
      * @return an ArrayList with the Fish in this Group
      */
-    public ArrayList<Fish> getFish() {
+    public List<Fish> getFish() {
         return fish;
     }
 
@@ -63,9 +65,9 @@ public class FishGroup {
      * @param newFish
      *            an ArrayList with the Fish in this Group
      */
-    public void setFish(ArrayList<Fish> newFish) {
+    public void setFish(LinkedList<Fish> newFish) {
         if (newFish == null) {
-            fish = new ArrayList<Fish>();
+            fish = new LinkedList<Fish>();
             volumeRequirementLitres = 0;
         } else {
             fish = newFish;
@@ -145,7 +147,7 @@ public class FishGroup {
      *            an ArrayList object with all the Fish to add
      * @return true if the Fish were added successfully
      */
-    public boolean addFish(ArrayList<Fish> fishToAdd) {
+    public boolean addFish(LinkedList<Fish> fishToAdd) {
         boolean result = false;
 
         if (fishToAdd != null) {
@@ -162,14 +164,21 @@ public class FishGroup {
     /**
      * Sorts the Fish, if they have not been sorted already.
      */
-    @SuppressWarnings("unchecked")
     public void sort() {
         if (!sorted) {
             Collections.sort(fish);
             sorted = true;
-            for (int i = 0; i < fish.size() && weakestLivingIndex == -1; i++) {
-                if (fish.get(i).isAlive()) {
-                    weakestLivingIndex = i;
+            // for (int i = 0; i < fish.size() && weakestLivingIndex == -1; i++)
+            // {
+            // if (fish.get(i).isAlive()) {
+            // weakestLivingIndex = i;
+            // }
+            // }
+            Iterator<Fish> iterator = fish.iterator();
+            while (weakestLivingIndex == -1 && iterator.hasNext()) {
+                Fish next = iterator.next();
+                if (next.isAlive()) {
+                    weakestLivingIndex = fish.indexOf(next);
                 }
             }
         }
@@ -181,15 +190,16 @@ public class FishGroup {
      * @return the number of Fish in the Group
      */
     public int getPopulation() {
-        int population = 0;
-
-        for (int i = 0; i < fish.size(); i++) {
-            if (fish.get(i) != null) {
-                population++;
-            }
-        }
-
-        return population;
+        // int population = 0;
+        //
+        // for (int i = 0; i < fish.size(); i++) {
+        // if (fish.get(i) != null) {
+        // population++;
+        // }
+        // }
+        //
+        // return population;
+        return fish.size();
     }
 
     /**
@@ -223,13 +233,26 @@ public class FishGroup {
         Random generator = new Random();
         double roll;
         int numberOfDeaths = 0;
-        Fish curFish;
+        // Fish curFish;
 
-        for (int i = 0; i < fish.size(); i++) {
-            curFish = fish.get(i);
-            if (curFish != null && curFish.isAlive()) {
+        // for (int i = 0; i < fish.size(); i++) {
+        // curFish = fish.get(i);
+        // if (curFish != null && curFish.isAlive()) {
+        // roll = generator.nextDouble();
+        //
+        // if (roll > nutrientCoefficient) {
+        // curFish.kill();
+        // volumeRequirementLitres -= curFish.getVolumeNeeded();
+        // sorted = false;
+        // weakestLivingIndex = -1;
+        // numberOfDeaths++;
+        // }
+        // }
+        // }
+
+        for (Fish curFish : fish) {
+            if (curFish.isAlive()) {
                 roll = generator.nextDouble();
-
                 if (roll > nutrientCoefficient) {
                     curFish.kill();
                     volumeRequirementLitres -= curFish.getVolumeNeeded();
@@ -250,18 +273,29 @@ public class FishGroup {
      * @return the number of Fish removed from the array
      */
     public int removeDeadFish() {
-        int removedFish = 0;
-        Iterator<Fish> iterator = fish.iterator();
-        while (iterator.hasNext()) {
-            if (!iterator.next().isAlive()) {
-                iterator.remove();
-                sorted = false;
-                weakestLivingIndex = -1;
-                removedFish++;
-            }
+        // int removedFish = 0;
+        // Iterator<Fish> iterator = fish.iterator();
+        // while (iterator.hasNext()) {
+        // if (!iterator.next().isAlive()) {
+        // iterator.remove();
+        // sorted = false;
+        // weakestLivingIndex = -1;
+        // removedFish++;
+        // }
+        // }
+        //
+        // return removedFish;
+
+        sort();
+
+        for (int i = 0; i < weakestLivingIndex; i++) {
+            fish.remove(0);
         }
 
-        return removedFish;
+        int result = weakestLivingIndex;
+        weakestLivingIndex = 0;
+
+        return result;
     }
 
     /**
@@ -275,7 +309,7 @@ public class FishGroup {
         return volumeRequirementLitres;
     }
 
-    private void addToVolumeRequirement(ArrayList<Fish> fishList) {
+    private void addToVolumeRequirement(LinkedList<Fish> fishList) {
         double totalVolumeLitres = 0.0;
         double totalVolumeMillilitres = 0.0;
         final int millilitresInLitre = 1000;
@@ -440,7 +474,7 @@ public class FishGroup {
      * @return the number of baby Fish added to the Group
      */
     public int spawn() {
-        ArrayList<Fish> newBabies = new ArrayList<Fish>();
+        LinkedList<Fish> newBabies = new LinkedList<Fish>();
 
         for (Fish currentFish : fish) {
             ArrayList<Fish> newFish = currentFish.spawn();
@@ -471,8 +505,9 @@ public class FishGroup {
                 currentFish.incrementAge();
                 if (!currentFish.isAlive()) {
                     numberOfDead++;
-                    volumeRequirementLitres -= curFishVolReq;
                 }
+                volumeRequirementLitres = volumeRequirementLitres
+                        - curFishVolReq + currentFish.getVolumeNeeded();
             }
         }
 
@@ -525,13 +560,22 @@ public class FishGroup {
 
         return result;
     }
-    
+
     /**
      * Changes the volume requirement.
      * 
-     * @param delta the amount by which to change the volume requirement
+     * @param delta
+     *            the amount by which to change the volume requirement
      */
     public void changeVolumeRequirement(double delta) {
         volumeRequirementLitres += delta;
+    }
+
+    /**
+     * Sets sorted to false and weakestLivingIndex to -1.
+     */
+    public void setAsNotSorted() {
+        sorted = false;
+        weakestLivingIndex = -1;
     }
 }

@@ -1,8 +1,8 @@
 package code.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
-import java.util.Observer;
 import java.util.Random;
 
 /**
@@ -220,7 +220,7 @@ public class Simulation extends Observable {
      *            the index of the Pool
      * @return an ArrayList of Fish (all Guppies)
      */
-    public ArrayList<Fish> getGuppies(int poolIndex) {
+    public List<Fish> getGuppies(int poolIndex) {
         return ecosystem.getGuppies(poolIndex);
     }
 

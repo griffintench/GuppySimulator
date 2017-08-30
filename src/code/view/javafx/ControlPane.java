@@ -1,7 +1,5 @@
 package code.view.javafx;
 
-import java.util.ArrayList;
-
 import code.controller.SimulationHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -9,8 +7,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.Sphere;
 
 /**
  * The pane with all the buttons to control the simulation.
@@ -22,9 +18,6 @@ public class ControlPane extends VBox {
 
     private int sceneWidth;
     private int sceneHeight;
-
-    private ArrayList<Box> pools;
-    private ArrayList<Sphere> guppies;
 
     private TextField numberOfWeeks;
     private Button go;
@@ -87,8 +80,6 @@ public class ControlPane extends VBox {
      * Disables buttons until I've actually implemented their functionality.
      */
     private void disableButtons() {
-//        numberOfWeeks.setDisable(true);
-//        go.setDisable(true);
         pause.setDisable(true);
         resume.setDisable(true);
         step.setDisable(true);

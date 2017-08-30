@@ -101,12 +101,12 @@ public class BinomialName {
         scan.close();
     }
 
-    private String processGenus(String genus, String defaultGenus) {
-        if (genus == null || genus.trim().equals("")) {
+    private String processGenus(String inputGenus, String defaultGenus) {
+        if (inputGenus == null || inputGenus.trim().equals("")) {
             return defaultGenus;
         }
-        String firstLetter = genus.substring(0, 1);
-        String restOfGenus = genus.substring(1, genus.length());
+        String firstLetter = inputGenus.substring(0, 1);
+        String restOfGenus = inputGenus.substring(1, inputGenus.length());
 
         firstLetter = firstLetter.toUpperCase();
         restOfGenus = restOfGenus.toLowerCase();
@@ -114,11 +114,11 @@ public class BinomialName {
         return firstLetter + restOfGenus;
     }
 
-    private String processSpecies(String species, String defaultSpecies) {
-        if (species == null || species.trim().equals("")) {
+    private String processSpecies(String inputSpecies, String defaultSpecies) {
+        if (inputSpecies == null || inputSpecies.trim().equals("")) {
             return defaultSpecies;
         }
-        return species.toLowerCase();
+        return inputSpecies.toLowerCase();
     }
 
     /**

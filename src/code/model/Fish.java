@@ -8,8 +8,7 @@ import java.util.ArrayList;
  * @author griffin
  * @version 1.0
  */
-@SuppressWarnings("rawtypes")
-public abstract class Fish implements Comparable {
+public abstract class Fish implements Comparable<Fish> {
 
     /**
      * The number of fish that have been born since the program started running.
@@ -350,21 +349,15 @@ public abstract class Fish implements Comparable {
     // TODO figure out what to do with spawn()
 
     /**
-     * Compares based on health coefficient.
+     * Compares to another fish based on health coefficient.
+     * 
+     * @param o
+     *            another Fish to compare to
+     * @return a negative number if this fish is less healthy, a positive number
+     *         of this fish is more healthy, and zero if they're equally healthy
      */
-    @Override
-    public int compareTo(Object o) {
-        if (this == o) {
-            return 0;
-        }
-        if (o == null) {
-            throw new IllegalArgumentException();
-        }
-        if (getClass() != o.getClass()) {
-            throw new IllegalArgumentException(); // ClassMismatchException
-        }
-        Fish other = (Fish) o;
-        return health.compareTo(other.health);
+    public int compareTo(Fish o) {
+        return health.compareTo(o.health);
     }
 
     /**

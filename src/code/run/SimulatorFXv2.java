@@ -6,6 +6,7 @@ import code.model.Simulation;
 import code.view.javafx.LoadSimulationPane;
 import code.view.javafx.SimulationPane;
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -66,8 +67,6 @@ public class SimulatorFXv2 extends Application {
         handler.setSimulation(simulation);
         pane.addSimulationHandler(handler);
         simulation.addObserver(pane);
-        
-
         Scene scene = new Scene(pane, SCENE_WIDTH, SCENE_HEIGHT);
         stage.setScene(scene);
         stage.show();

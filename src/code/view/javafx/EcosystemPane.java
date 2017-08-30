@@ -68,7 +68,7 @@ public class EcosystemPane extends StackPane {
     public void update(ArrayList<int[]> arg) {
         pools = new ArrayList<Box>();
         guppies = new ArrayList<Sphere>();
-        
+
         getChildren().clear();
 
         int numberOfPools = arg.size();
@@ -115,13 +115,19 @@ public class EcosystemPane extends StackPane {
         poolMaterial.setDiffuseColor(poolDiffuse);
         pool.setMaterial(poolMaterial);
 
-        for (int guppy = 1; guppy <= guppyNumbers[HEALTHY]; guppy++) {
+        // For now, I'm capping the number of guppies at 20 per health type per
+        // pool just to save time
+        final int maxGuppies = 20;
+        for (int guppy = 1; guppy <= maxGuppies
+                && guppy <= guppyNumbers[HEALTHY]; guppy++) {
             drawGuppy(translation, boxWidth, HEALTHY);
         }
-        for (int guppy = 1; guppy <= guppyNumbers[OKAY]; guppy++) {
+        for (int guppy = 1; guppy <= maxGuppies
+                && guppy <= guppyNumbers[OKAY]; guppy++) {
             drawGuppy(translation, boxWidth, OKAY);
         }
-        for (int guppy = 1; guppy <= guppyNumbers[UNHEALTHY]; guppy++) {
+        for (int guppy = 1; guppy <= maxGuppies
+                && guppy <= guppyNumbers[UNHEALTHY]; guppy++) {
             drawGuppy(translation, boxWidth, UNHEALTHY);
         }
 

@@ -1,6 +1,8 @@
 package code.model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -139,16 +141,16 @@ public class Pool extends WaterBody {
 
     }
     
-    private String processName(String name) {
-        if (name == null) {
+    private String processName(String inputName) {
+        if (inputName == null) {
             return DEFAULT_POOL_NAME;
         }
-        name = name.replaceAll("\\s", "");
-        if (name.equals("")) {
+        inputName = inputName.replaceAll("\\s", "");
+        if (inputName.equals("")) {
             return DEFAULT_POOL_NAME;
         }
-        String firstLetter = name.substring(0, 1);
-        String restOfName = name.substring(1, name.length());
+        String firstLetter = inputName.substring(0, 1);
+        String restOfName = inputName.substring(1, inputName.length());
         firstLetter = firstLetter.toUpperCase();
         restOfName = restOfName.toLowerCase();
         
@@ -242,7 +244,7 @@ public class Pool extends WaterBody {
      * 
      * @return an ArrayList object holding the Guppies in the Pool
      */
-    public ArrayList<Fish> getGuppiesInPool() {
+    public List<Fish> getGuppiesInPool() {
         return guppiesInPool.getFish();
     }
 
@@ -267,7 +269,7 @@ public class Pool extends WaterBody {
      */
     public void setGuppiesInPool(ArrayList<Guppy> newGuppiesInPool) {
         if (newGuppiesInPool != null) {
-            ArrayList<Fish> fish = new ArrayList<Fish>();
+            LinkedList<Fish> fish = new LinkedList<Fish>();
             for (Guppy guppy : newGuppiesInPool) {
                 fish.add(guppy);
             }
@@ -516,8 +518,7 @@ public class Pool extends WaterBody {
             if (weakest instanceof Guppy) {
                 Guppy weakestGuppy = (Guppy) weakest;
                 double guppyVolReq = weakestGuppy.getVolumeNeeded();
-                //crowdOut(weakestGuppy);
-                weakestGuppy.kill();
+                crowdOut(weakestGuppy);
                 guppiesInPool.changeVolumeRequirement(-1 * guppyVolReq);
                 if (!weakestGuppy.isAlive()) {
                     killed++;
@@ -549,6 +550,7 @@ public class Pool extends WaterBody {
                 guppy.kill();
             }
         }
+        guppiesInPool.setAsNotSorted();
     }
 
     /**
@@ -566,7 +568,7 @@ public class Pool extends WaterBody {
         int streams = streamsFrom.size();
 
         int streamNumber = randomNumberGenerator.nextInt(streams);
-        streamsFrom.get(streamNumber).getDestination().addGuppy(guppy);
+        streamsFrom.get(streamNumber).sendDownstream(guppy);
 
     }
     
@@ -577,6 +579,13 @@ public class Pool extends WaterBody {
      */
     public int[] getGuppyHealthNumbers() {
         return guppiesInPool.getFishHealthNumbers();
+    }
+    
+    /**
+     * Sets this pool's Guppies as not sorted.
+     */
+    public void setAsNotSorted() {
+        guppiesInPool.setAsNotSorted();
     }
 
     @Override

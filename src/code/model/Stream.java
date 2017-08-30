@@ -29,7 +29,7 @@ public class Stream extends WaterBody {
      */
     public Stream(Pool origin, Pool destination) {
         super(origin.getPH(), origin.getTemperatureCelsius());
-        
+
         this.origin = origin;
         origin.addStreamFrom(this);
         this.destination = destination;
@@ -52,6 +52,17 @@ public class Stream extends WaterBody {
      */
     public Pool getDestination() {
         return destination;
+    }
+
+    /**
+     * Sends a Guppy to the destination pool.
+     * 
+     * @param guppy
+     *            the Guppy to send
+     */
+    public void sendDownstream(Guppy guppy) {
+        destination.addGuppy(guppy);
+        destination.setAsNotSorted();
     }
 
 }
