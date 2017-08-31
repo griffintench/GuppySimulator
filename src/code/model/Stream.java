@@ -62,7 +62,6 @@ public class Stream extends WaterBody {
      */
     public void sendDownstream(Guppy guppy) {
         destination.addGuppy(guppy);
-        destination.setAsNotSorted();
     }
 
 }

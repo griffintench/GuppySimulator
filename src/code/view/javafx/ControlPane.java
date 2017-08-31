@@ -16,8 +16,8 @@ import javafx.scene.layout.VBox;
  */
 public class ControlPane extends VBox {
 
-    private int sceneWidth;
-    private int sceneHeight;
+    // private int sceneWidth;
+    // private int sceneHeight;
 
     private TextField numberOfWeeks;
     private Button go;
@@ -40,10 +40,7 @@ public class ControlPane extends VBox {
      *            the height of the pane
      */
     public ControlPane(int sceneWidth, int sceneHeight) {
-        this.sceneWidth = sceneWidth;
         setPrefWidth(sceneWidth);
-
-        this.sceneHeight = sceneHeight;
         setPrefHeight(sceneHeight);
 
         Label simulate = new Label("Simulate");
@@ -108,7 +105,6 @@ public class ControlPane extends VBox {
      * @param handler
      *            a SimulationHandler object
      */
-    @SuppressWarnings("unchecked")
     public void addSimulationHandler(SimulationHandler handler) {
         go.setOnAction(handler);
         oneWeek.setOnAction(handler);

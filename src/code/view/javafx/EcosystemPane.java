@@ -27,7 +27,7 @@ public class EcosystemPane extends StackPane {
     public static final int UNHEALTHY = 2;
 
     private int sceneWidth;
-    private int sceneHeight;
+    // private int sceneHeight;
 
     private Random generator;
 
@@ -46,7 +46,7 @@ public class EcosystemPane extends StackPane {
     public EcosystemPane(int sceneWidth, int sceneHeight) {
         this.sceneWidth = sceneWidth;
         setPrefWidth(sceneWidth);
-        this.sceneHeight = sceneHeight;
+//        this.sceneHeight = sceneHeight;
         setPrefHeight(sceneHeight);
 
         generator = new Random();

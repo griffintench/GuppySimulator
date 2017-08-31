@@ -2,7 +2,7 @@ package code.controller;
 
 import code.model.Simulation;
 import code.view.javafx.ControlPane;
-import javafx.event.Event;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
@@ -12,13 +12,13 @@ import javafx.scene.control.Button;
  * @author griffin
  * @version 1.0
  */
-public class SimulationHandler implements EventHandler {
+public class SimulationHandler implements EventHandler<ActionEvent> {
 
     private Simulation simulation;
     private ControlPane controlPane;
 
     @Override
-    public void handle(Event event) {
+    public void handle(ActionEvent event) {
         Object source = event.getSource();
         if (source instanceof Button) {
             Button button = (Button) source;

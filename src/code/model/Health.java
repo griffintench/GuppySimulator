@@ -6,8 +6,7 @@ package code.model;
  * @author griffin
  * @version 1.0
  */
-@SuppressWarnings("rawtypes")
-public class Health implements Comparable {
+public class Health implements Comparable<Health> {
 
     /**
      * The default health coefficient, used if a health coefficient outside the
@@ -142,27 +141,23 @@ public class Health implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
+    public int compareTo(Health o) {
         if (this == o) {
             return 0;
         }
         if (o == null) {
             throw new IllegalArgumentException();
         }
-        if (getClass() != o.getClass()) {
-            throw new IllegalArgumentException();
-        }
-        Health other = (Health) o;
-        if (isAlive && !other.isAlive) {
+        if (isAlive && !o.isAlive) {
             return 1;
         }
-        if (!isAlive && other.isAlive) {
+        if (!isAlive && o.isAlive) {
             return -1;
         }
-        if (healthCoefficient > other.healthCoefficient) {
+        if (healthCoefficient > o.healthCoefficient) {
             return 1;
         }
-        if (healthCoefficient < other.healthCoefficient) {
+        if (healthCoefficient < o.healthCoefficient) {
             return -1;
         }
         return 0;

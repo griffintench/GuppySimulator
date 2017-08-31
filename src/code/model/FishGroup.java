@@ -170,12 +170,7 @@ public class FishGroup {
         if (!sorted) {
             Collections.sort(fish);
             sorted = true;
-            // for (int i = 0; i < fish.size() && weakestLivingIndex == -1; i++)
-            // {
-            // if (fish.get(i).isAlive()) {
-            // weakestLivingIndex = i;
-            // }
-            // }
+            
             Iterator<Fish> iterator = fish.iterator();
             while (weakestLivingIndex == -1 && iterator.hasNext()) {
                 Fish next = iterator.next();
@@ -187,20 +182,11 @@ public class FishGroup {
     }
 
     /**
-     * Counts and returns the number of Fish in the Group.
+     * Returns the number of Fish in the Group.
      * 
      * @return the number of Fish in the Group
      */
     public int getPopulation() {
-        // int population = 0;
-        //
-        // for (int i = 0; i < fish.size(); i++) {
-        // if (fish.get(i) != null) {
-        // population++;
-        // }
-        // }
-        //
-        // return population;
         return fish.size();
     }
 
@@ -235,22 +221,6 @@ public class FishGroup {
         Random generator = new Random();
         double roll;
         int numberOfDeaths = 0;
-        // Fish curFish;
-
-        // for (int i = 0; i < fish.size(); i++) {
-        // curFish = fish.get(i);
-        // if (curFish != null && curFish.isAlive()) {
-        // roll = generator.nextDouble();
-        //
-        // if (roll > nutrientCoefficient) {
-        // curFish.kill();
-        // volumeRequirementLitres -= curFish.getVolumeNeeded();
-        // sorted = false;
-        // weakestLivingIndex = -1;
-        // numberOfDeaths++;
-        // }
-        // }
-        // }
 
         for (Fish curFish : fish) {
             if (curFish.isAlive()) {
@@ -276,19 +246,6 @@ public class FishGroup {
      * @return the number of Fish removed from the array
      */
     public int removeDeadFish() {
-        // int removedFish = 0;
-        // Iterator<Fish> iterator = fish.iterator();
-        // while (iterator.hasNext()) {
-        // if (!iterator.next().isAlive()) {
-        // iterator.remove();
-        // sorted = false;
-        // weakestLivingIndex = -1;
-        // removedFish++;
-        // }
-        // }
-        //
-        // return removedFish;
-
         sort();
 
         for (int i = 0; i < weakestLivingIndex; i++) {

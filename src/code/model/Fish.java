@@ -357,6 +357,12 @@ public abstract class Fish implements Comparable<Fish> {
      *         of this fish is more healthy, and zero if they're equally healthy
      */
     public int compareTo(Fish o) {
+        if (this == o) {
+            return 0;
+        }
+        if (o == null) {
+            throw new IllegalArgumentException();
+        }
         return health.compareTo(o.health);
     }
 

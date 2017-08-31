@@ -1,5 +1,6 @@
 package code.view.javafx;
 
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -40,7 +41,7 @@ public class LoadSimulationPane extends VBox {
      * @param handler
      *            a LoadDefaultHandler object.
      */
-    public void addLoadDefaultHandler(EventHandler handler) {
+    public void addLoadDefaultHandler(EventHandler<ActionEvent> handler) {
         loadDefaultSimulation.setOnAction(handler);
     }
 

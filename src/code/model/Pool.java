@@ -553,9 +553,10 @@ public class Pool extends WaterBody {
      *            the Guppy to crowd out
      */
     private void crowdOut(Guppy guppy) {
-//        if (!guppiesInPool.contains(guppy)) {
-//            throw new IllegalArgumentException();
-//        }
+        // NOTE TO SELF DO NOT DELETE
+        // if (!guppiesInPool.contains(guppy)) {
+        // throw new IllegalArgumentException();
+        // }
         if (streamsFrom.isEmpty()) {
             guppy.kill();
         } else {

@@ -22,6 +22,10 @@ public class SimulationPane extends VBox implements Observer {
     private EcosystemPane ecosystemPane;
     private ControlPane controlPane;
 
+    /**
+     * Creates the pane at a size determined by constants; instantiates and adds
+     * an EcosystemPane and a ControlPane.
+     */
     public SimulationPane() {
         final double multiplier = 0.7;
         final double rounder = 0.5;
@@ -43,7 +47,6 @@ public class SimulationPane extends VBox implements Observer {
      * @param handler
      *            a SimulationHandler object
      */
-    @SuppressWarnings("unchecked")
     public void addSimulationHandler(SimulationHandler handler) {
         controlPane.addSimulationHandler(handler);
         handler.addControlPane(controlPane);
@@ -54,16 +57,16 @@ public class SimulationPane extends VBox implements Observer {
         if (arg instanceof ArrayList) {
             final ArrayList<int[]> castArg = (ArrayList<int[]>) arg;
             Platform.runLater(new Runnable() {
-               public void run() {
-                   ecosystemPane.update(castArg);
-               }
+                public void run() {
+                    ecosystemPane.update(castArg);
+                }
             });
         } else if (arg instanceof Boolean) {
             final Boolean castArg = (Boolean) arg;
             Platform.runLater(new Runnable() {
-               public void run() {
-                   controlPane.simulationInProgress(castArg);
-               }
+                public void run() {
+                    controlPane.simulationInProgress(castArg);
+                }
             });
         }
     }
