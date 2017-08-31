@@ -144,12 +144,12 @@ public class Ecosystem {
             numberRemoved += pool.removeDeadGuppies();
             // System.out.println(pool.getName() + " removed: " +
             // numberRemoved);
+            newFry += pool.spawn();
             crowdedOut += pool.adjustForCrowding();
             // System.out.println(pool.getName() + " crowded: " + crowdedOut);
             numberRemoved += pool.removeDeadGuppies();
             // System.out.println(pool.getName() + " removed: " +
             // numberRemoved);
-            newFry += pool.spawn();
         }
 
         if (diedOfOldAge + starvedToDeath + crowdedOut == numberRemoved) {
@@ -161,6 +161,8 @@ public class Ecosystem {
             for (Pool pool : pools) {
                 System.out.println(pool.getName() + " population: "
                         + pool.getPopulation());
+                System.out.println(pool.getName() + " volume requirement: "
+                        + pool.getGuppyVolumeRequirementInLitres());
             }
             System.out.println("Ecosystem population: " + getGuppyPopulation());
 

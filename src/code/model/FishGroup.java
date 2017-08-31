@@ -16,6 +16,8 @@ import java.util.Random;
  * @version 1.0
  */
 public class FishGroup {
+    public static final int MILLILITRES_IN_LITRE = 1000;
+
     /**
      * The Fish in the Group.
      */
@@ -112,7 +114,8 @@ public class FishGroup {
         sorted = false;
         weakestLivingIndex = -1;
         if (fishToRemove.isAlive()) {
-            volumeRequirementLitres -= fishToRemove.getVolumeNeeded();
+            volumeRequirementLitres -= fishToRemove.getVolumeNeeded()
+                    / MILLILITRES_IN_LITRE;
         }
         return fish.remove(fishToRemove);
     }
@@ -129,9 +132,8 @@ public class FishGroup {
 
         if (fishToAdd != null) {
             fish.add(fishToAdd);
-            if (fishToAdd.isAlive()) {
-                volumeRequirementLitres += fishToAdd.getVolumeNeeded();
-            }
+            volumeRequirementLitres += fishToAdd.getVolumeNeeded()
+                    / MILLILITRES_IN_LITRE;
             result = true;
         }
 
@@ -255,7 +257,8 @@ public class FishGroup {
                 roll = generator.nextDouble();
                 if (roll > nutrientCoefficient) {
                     curFish.kill();
-                    volumeRequirementLitres -= curFish.getVolumeNeeded();
+                    volumeRequirementLitres -= curFish.getVolumeNeeded()
+                            / MILLILITRES_IN_LITRE;
                     sorted = false;
                     weakestLivingIndex = -1;
                     numberOfDeaths++;
@@ -507,7 +510,8 @@ public class FishGroup {
                     numberOfDead++;
                 }
                 volumeRequirementLitres = volumeRequirementLitres
-                        - curFishVolReq + currentFish.getVolumeNeeded();
+                        + (currentFish.getVolumeNeeded() - curFishVolReq)
+                                / MILLILITRES_IN_LITRE;
             }
         }
 
@@ -525,14 +529,7 @@ public class FishGroup {
     public Fish getWeakest() {
         sort();
 
-        for (int i = weakestLivingIndex; i < fish.size(); i++) {
-            if (fish.get(i).isAlive()) {
-                return fish.get(i);
-            } else {
-                weakestLivingIndex++;
-            }
-        }
-        return fish.get(0);
+        return fish.get(weakestLivingIndex);
     }
 
     /**
@@ -565,7 +562,8 @@ public class FishGroup {
      * Changes the volume requirement.
      * 
      * @param delta
-     *            the amount by which to change the volume requirement
+     *            the amount by which to change the volume requirement, in
+     *            litres
      */
     public void changeVolumeRequirement(double delta) {
         volumeRequirementLitres += delta;

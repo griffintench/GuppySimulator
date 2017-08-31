@@ -140,7 +140,7 @@ public class Pool extends WaterBody {
         identificationNumber = ++numberOfPools;
 
     }
-    
+
     private String processName(String inputName) {
         if (inputName == null) {
             return DEFAULT_POOL_NAME;
@@ -153,7 +153,7 @@ public class Pool extends WaterBody {
         String restOfName = inputName.substring(1, inputName.length());
         firstLetter = firstLetter.toUpperCase();
         restOfName = restOfName.toLowerCase();
-        
+
         return firstLetter + restOfName;
     }
 
@@ -519,7 +519,8 @@ public class Pool extends WaterBody {
                 Guppy weakestGuppy = (Guppy) weakest;
                 double guppyVolReq = weakestGuppy.getVolumeNeeded();
                 crowdOut(weakestGuppy);
-                guppiesInPool.changeVolumeRequirement(-1 * guppyVolReq);
+                guppiesInPool.changeVolumeRequirement(
+                        -1 * guppyVolReq / FishGroup.MILLILITRES_IN_LITRE);
                 if (!weakestGuppy.isAlive()) {
                     killed++;
                 }
@@ -571,7 +572,7 @@ public class Pool extends WaterBody {
         streamsFrom.get(streamNumber).sendDownstream(guppy);
 
     }
-    
+
     /**
      * Returns an int array with the number of fish of each health type.
      * 
@@ -580,7 +581,7 @@ public class Pool extends WaterBody {
     public int[] getGuppyHealthNumbers() {
         return guppiesInPool.getFishHealthNumbers();
     }
-    
+
     /**
      * Sets this pool's Guppies as not sorted.
      */
