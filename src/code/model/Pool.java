@@ -511,18 +511,29 @@ public class Pool extends WaterBody {
      * @return the number of Guppies killed off
      */
     public int adjustForCrowding() {
+        final double maxVolReq = 0.75;
         int killed = 0;
+        double volReq;
 
-        while (getGuppyVolumeRequirementInLitres() > volumeLitres) {
-            Fish weakest = guppiesInPool.getWeakest();
-            if (weakest instanceof Guppy) {
-                Guppy weakestGuppy = (Guppy) weakest;
-                double guppyVolReq = weakestGuppy.getVolumeNeeded();
-                crowdOut(weakestGuppy);
-                guppiesInPool.changeVolumeRequirement(
-                        -1 * guppyVolReq / FishGroup.MILLILITRES_IN_LITRE);
-                if (!weakestGuppy.isAlive()) {
-                    killed++;
+        while ((volReq = getGuppyVolumeRequirementInLitres()) > volumeLitres) {
+            double difference = volReq - volumeLitres;
+            int minFishToRemove = (int) (difference / maxVolReq);
+            if (minFishToRemove == 0) {
+                minFishToRemove = 1;
+            }
+
+            List<Fish> weakest = guppiesInPool.getWeakest(minFishToRemove);
+
+            for (Fish weakFish : weakest) {
+                if (weakFish instanceof Guppy) {
+                    Guppy weakestGuppy = (Guppy) weakFish;
+                    double guppyVolReq = weakestGuppy.getVolumeNeeded();
+                    crowdOut(weakestGuppy);
+                    guppiesInPool.changeVolumeRequirement(
+                            -1 * guppyVolReq / FishGroup.MILLILITRES_IN_LITRE);
+                    if (!weakestGuppy.isAlive()) {
+                        killed++;
+                    }
                 }
             }
         }

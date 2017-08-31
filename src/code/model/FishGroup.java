@@ -521,7 +521,7 @@ public class FishGroup {
     }
 
     /**
-     * Sorts the ArrayList and then returns the Fish with the lowest health
+     * Sorts the List and then returns the Fish with the lowest health
      * coefficient.
      * 
      * @return the Fish with the lowest health coefficient
@@ -530,6 +530,26 @@ public class FishGroup {
         sort();
 
         return fish.get(weakestLivingIndex);
+    }
+
+    /**
+     * Sorts the List and then returns another List containing the weakest Fish,
+     * the amount of which is specified by the parameter.
+     * 
+     * @param amount
+     *            how many Fish to return
+     * @return a List containing the weakest Fish
+     */
+    public List<Fish> getWeakest(int amount) {
+        sort();
+        List<Fish> result = new LinkedList<Fish>();
+
+        Iterator<Fish> iterator = fish.listIterator(weakestLivingIndex);
+        for (int n = 1; n <= amount && iterator.hasNext(); n++) {
+            result.add(iterator.next());
+        }
+
+        return result;
     }
 
     /**
