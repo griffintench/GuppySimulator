@@ -117,7 +117,7 @@ public class EcosystemPane extends StackPane {
 
         // For now, I'm capping the number of guppies at 20 per health type per
         // pool just to save time
-        final int maxGuppies = 20;
+        final int maxGuppies = 100;
         for (int guppy = 1; guppy <= maxGuppies
                 && guppy <= guppyNumbers[HEALTHY]; guppy++) {
             drawGuppy(translation, boxWidth, HEALTHY);

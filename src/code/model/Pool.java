@@ -529,8 +529,8 @@ public class Pool extends WaterBody {
                     Guppy weakestGuppy = (Guppy) weakFish;
                     double guppyVolReq = weakestGuppy.getVolumeNeeded();
                     crowdOut(weakestGuppy);
-                    guppiesInPool.changeVolumeRequirement(
-                            -1 * guppyVolReq / FishGroup.MILLILITRES_IN_LITRE);
+                    guppiesInPool.changeVolumeRequirement(-1 * guppyVolReq
+                            / FishGroup.MILLILITRES_IN_LITRE); //problem here
                     if (!weakestGuppy.isAlive()) {
                         killed++;
                     }
