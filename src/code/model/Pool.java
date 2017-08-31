@@ -543,19 +543,24 @@ public class Pool extends WaterBody {
     /**
      * Crowds out a Guppy by either killing it or sending it downstream.
      * 
+     * IMPORTANT NOTE - I've commented out the first three lines for the sake of
+     * better performance. I am trusting that this method will never be used on
+     * a Guppy that isn't actually in this Pool, since the Pool class doesn't
+     * actually reference other Pools anyway. If another Pool gets referenced in
+     * this Pool class, the lines should be uncommented.
+     * 
      * @param guppy
-     *            the Guppy to crowd out. Must be in this Pool.
+     *            the Guppy to crowd out
      */
     private void crowdOut(Guppy guppy) {
-        if (!guppiesInPool.contains(guppy)) {
-            throw new IllegalArgumentException();
-        }
+//        if (!guppiesInPool.contains(guppy)) {
+//            throw new IllegalArgumentException();
+//        }
         if (streamsFrom.isEmpty()) {
             guppy.kill();
         } else {
             double healthCoefficient = guppy.getHealthCoefficient();
-            Random generator = new Random();
-            double healthRoll = generator.nextDouble();
+            double healthRoll = randomNumberGenerator.nextDouble();
             if (healthRoll < healthCoefficient) {
                 sendDownstream(guppy);
             } else {
@@ -570,17 +575,20 @@ public class Pool extends WaterBody {
      * sends the Guppy to the right destination Pool.
      * 
      * @param guppy
-     *            the Guppy to send downstream. Must be in this Pool.
+     *            the Guppy to send downstream.
      */
     private void sendDownstream(Guppy guppy) {
-        if (!guppiesInPool.contains(guppy)) {
-            throw new IllegalArgumentException();
-        }
-        guppiesInPool.remove(guppy);
-        int streams = streamsFrom.size();
+        boolean success = guppiesInPool.remove(guppy);
+        if (success) {
+            int streams = streamsFrom.size();
 
-        int streamNumber = randomNumberGenerator.nextInt(streams);
-        streamsFrom.get(streamNumber).sendDownstream(guppy);
+            int streamNumber = randomNumberGenerator.nextInt(streams);
+            streamsFrom.get(streamNumber).sendDownstream(guppy);
+        } else {
+            throw new IllegalArgumentException(
+                    "Tried to remove guppy, but guppy is not in this pool ("
+                            + name + ")");
+        }
 
     }
 
