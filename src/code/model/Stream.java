@@ -57,11 +57,11 @@ public class Stream extends WaterBody {
     /**
      * Sends a Guppy to the destination pool.
      * 
-     * @param guppy
+     * @param fish
      *            the Guppy to send
      */
-    public void sendDownstream(Guppy guppy) {
-        destination.addGuppy(guppy);
+    public void sendDownstream(Fish fish) {
+        destination.addFish(fish);
     }
 
 }

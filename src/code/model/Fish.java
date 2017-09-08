@@ -33,13 +33,13 @@ public abstract class Fish implements Comparable<Fish> {
     /**
      * The number corresponding to the fish's generation.
      */
-    private int generationNumber;
+    private final int generationNumber;
 
     /**
      * A health object representing the fish's health, as well as whether it is
      * alive or dead.
      */
-    private Health health;
+    private final Health health;
 
     /**
      * A unique identifier for the fish.
@@ -54,7 +54,7 @@ public abstract class Fish implements Comparable<Fish> {
     public Fish() {
         binomialName = new BinomialName("", "");
         setAgeInWeeks(0);
-        setGenerationNumber(0);
+        generationNumber = processGenerationNumber(0);
         setIsFemale(true);
         health = new Health();
 
@@ -73,7 +73,7 @@ public abstract class Fish implements Comparable<Fish> {
     public Fish(String newGenus, String newSpecies) {
         binomialName = new BinomialName(newGenus, newSpecies);
         setAgeInWeeks(0);
-        setGenerationNumber(0);
+        generationNumber = processGenerationNumber(0);
         setIsFemale(true);
         health = new Health();
 
@@ -103,7 +103,7 @@ public abstract class Fish implements Comparable<Fish> {
             double newHealthCoefficient) {
         binomialName = new BinomialName(newGenus, newSpecies);
         setAgeInWeeks(newAgeInWeeks);
-        setGenerationNumber(newGenerationNumber);
+        generationNumber = processGenerationNumber(newGenerationNumber);
         setIsFemale(newIsFemale);
         health = new Health(true, newHealthCoefficient);
 
@@ -131,7 +131,7 @@ public abstract class Fish implements Comparable<Fish> {
             double newHealthCoefficient) {
         binomialName = newBinomialName;
         setAgeInWeeks(newAgeInWeeks);
-        setGenerationNumber(newGenerationNumber);
+        generationNumber = processGenerationNumber(newGenerationNumber);
         setIsFemale(newIsFemale);
         health = new Health(true, newHealthCoefficient);
 
@@ -228,16 +228,18 @@ public abstract class Fish implements Comparable<Fish> {
     }
 
     /**
-     * Sets the generation number for the fish.
+     * Processes the generation number for the fish, so that the fish doesn't
+     * have a negative generation number.
      * 
      * @param newGenerationNumber
      *            the fish's generation number
+     * @return the processed generation number
      */
-    public void setGenerationNumber(int newGenerationNumber) {
+    public int processGenerationNumber(int newGenerationNumber) {
         if (newGenerationNumber < 0) {
-            generationNumber = 0;
+            return 0;
         } else {
-            generationNumber = newGenerationNumber;
+            return newGenerationNumber;
         }
     }
 
@@ -248,18 +250,6 @@ public abstract class Fish implements Comparable<Fish> {
      */
     public Health getHealth() {
         return health;
-    }
-
-    /**
-     * Sets the Fihs's Health object.
-     * 
-     * @param newHealth
-     *            the Fish's Health object
-     */
-    public void setHealth(Health newHealth) {
-        if (newHealth != null) {
-            health = newHealth;
-        }
     }
 
     /**

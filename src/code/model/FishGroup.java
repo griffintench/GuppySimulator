@@ -36,36 +36,27 @@ public class FishGroup {
     private double volumeRequirementLitres;
 
     /**
-     * Zero-parameter constructor; starts with an empty ArrayList.
+     * Zero-parameter constructor; starts with an empty LinkedList.
      */
     public FishGroup() {
         setFish(new LinkedList<Fish>());
     }
 
     /**
-     * Constructor; sets the ArrayList properly.
+     * Constructor; sets the LinkedList properly.
      * 
      * @param newFish
-     *            an ArrayList of Fish
+     *            an LinkedList of Fish
      */
     public FishGroup(LinkedList<Fish> newFish) {
         setFish(newFish);
     }
 
     /**
-     * Returns an ArrayList with the Fish in this Group.
-     * 
-     * @return an ArrayList with the Fish in this Group
-     */
-    public List<Fish> getFish() {
-        return fish;
-    }
-
-    /**
      * Sets the Fish in this Group.
      * 
      * @param newFish
-     *            an ArrayList with the Fish in this Group
+     *            an LinkedList with the Fish in this Group
      */
     public void setFish(LinkedList<Fish> newFish) {
         if (newFish == null) {
@@ -113,10 +104,10 @@ public class FishGroup {
     public boolean remove(Fish fishToRemove) {
         sorted = false;
         weakestLivingIndex = -1;
-        if (fishToRemove.isAlive()) {
-            volumeRequirementLitres -= fishToRemove.getVolumeNeeded()
-                    / MILLILITRES_IN_LITRE;
-        }
+        // if (fishToRemove.isAlive()) {
+        volumeRequirementLitres -= fishToRemove.getVolumeNeeded()
+                / MILLILITRES_IN_LITRE;
+        // }
         return fish.remove(fishToRemove);
     }
 
@@ -170,7 +161,7 @@ public class FishGroup {
         if (!sorted) {
             Collections.sort(fish);
             sorted = true;
-            
+
             Iterator<Fish> iterator = fish.iterator();
             while (weakestLivingIndex == -1 && iterator.hasNext()) {
                 Fish next = iterator.next();
@@ -262,17 +253,28 @@ public class FishGroup {
      * Returns the total volume of water needed to sustain all the Fish
      * currently in the Group, in litres.
      * 
+     * NOTE - I'd like to do this a different way but it's causing glitches.
+     * TODO Revisit
+     * 
      * @return the total volume of water needed to sustain all the Fish
      *         currently in the Group, in litres
      */
     public double getFishVolumeRequirementInLitres() {
-        return volumeRequirementLitres;
+        //return volumeRequirementLitres;
+        
+        
+        Iterator<Fish> iterator = fish.iterator();
+        double result = 0.0;
+        while (iterator.hasNext()) {
+            Fish curFish = iterator.next();
+            result += curFish.getVolumeNeeded() / MILLILITRES_IN_LITRE;
+        }
+        return result;
     }
 
     private void addToVolumeRequirement(LinkedList<Fish> fishList) {
         double totalVolumeLitres = 0.0;
         double totalVolumeMillilitres = 0.0;
-        final int millilitresInLitre = 1000;
 
         for (Fish curFish : fishList) {
             if (curFish != null && curFish.isAlive()) {
@@ -280,7 +282,7 @@ public class FishGroup {
             }
         }
 
-        totalVolumeLitres = totalVolumeMillilitres / millilitresInLitre;
+        totalVolumeLitres = totalVolumeMillilitres / MILLILITRES_IN_LITRE;
         volumeRequirementLitres += totalVolumeLitres;
     }
 
@@ -304,8 +306,7 @@ public class FishGroup {
             for (int i = 0; i < fish.size(); i++) {
                 currentFish = fish.get(i);
 
-                if (currentFish != null
-                        && currentFish.getHealth().getIsAlive()) {
+                if (currentFish != null && currentFish.isAlive()) {
                     ageSum += currentFish.getAgeInWeeks();
                 }
             }
@@ -350,7 +351,7 @@ public class FishGroup {
      * Calculates and returns the percentage of living Fish in the Group that
      * are female.
      * 
-     * @return the average health coefficient of all the Fish in the Group
+     * @return the percentage of living Fish in the group that are female
      */
     public double getFemalePercentage() {
         int fishCount = getPopulation();
@@ -552,5 +553,22 @@ public class FishGroup {
     public void setAsNotSorted() {
         sorted = false;
         weakestLivingIndex = -1;
+    }
+
+    /**
+     * Kills a Fish in this FishGroup and then modifies the volume requirement
+     * appropriately.
+     * 
+     * @param fishToKill
+     *            the fish to kill, in this FishGroup
+     */
+    public void killFish(Fish fishToKill) {
+        if (fishToKill.isAlive()) {
+            volumeRequirementLitres -= fishToKill.getVolumeNeeded()
+                    / MILLILITRES_IN_LITRE;
+            fishToKill.kill();
+            sorted = false;
+            weakestLivingIndex = -1;
+        }
     }
 }

@@ -1,7 +1,6 @@
 package code.model;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Observable;
 import java.util.Random;
 
@@ -171,7 +170,7 @@ public class Simulation extends Observable {
             double pH, double nutrientCoefficient, GuppySet startingGuppies) {
         Pool pool = new Pool(name, volume, temp, pH, nutrientCoefficient);
 
-        pool.setGuppiesInPool(startingGuppies.generateGuppies());
+        pool.setFishInPool(startingGuppies.generateGuppies());
 
         return pool;
     }
@@ -185,7 +184,7 @@ public class Simulation extends Observable {
     public void simulate(int numberOfWeeks) {
         setChanged();
         notifyObservers(true);
-        
+
         int finalWeek = weeksElapsed + numberOfWeeks;
 
         for (int i = weeksElapsed + 1; i <= finalWeek; i++) {
@@ -193,7 +192,7 @@ public class Simulation extends Observable {
             weeksElapsed++;
             constructPoolList();
         }
-        
+
         setChanged();
         notifyObservers(false);
     }
@@ -211,17 +210,6 @@ public class Simulation extends Observable {
      */
     public int getEcosystemPopulation() {
         return ecosystem.getGuppyPopulation();
-    }
-
-    /**
-     * Returns all the Guppies of a specified Pool.
-     * 
-     * @param poolIndex
-     *            the index of the Pool
-     * @return an ArrayList of Fish (all Guppies)
-     */
-    public List<Fish> getGuppies(int poolIndex) {
-        return ecosystem.getGuppies(poolIndex);
     }
 
     /**
@@ -287,8 +275,8 @@ public class Simulation extends Observable {
          * 
          * @return an ArrayList object with our initial Guppies
          */
-        public ArrayList<Guppy> generateGuppies() {
-            ArrayList<Guppy> guppies = new ArrayList<Guppy>();
+        public ArrayList<Fish> generateGuppies() {
+            ArrayList<Fish> generatedFish = new ArrayList<Fish>();
 
             final double femaleProbability = 0.5;
 
@@ -304,11 +292,12 @@ public class Simulation extends Observable {
                         + minHealthCoefficient;
                 femaleRoll = generator.nextDouble();
 
-                guppies.add(new Guppy("Poecilia", "reticulata", ageInWeeks,
-                        femaleRoll < femaleProbability, 0, healthCoefficient));
+                generatedFish.add(new Guppy("Poecilia", "reticulata",
+                        ageInWeeks, femaleRoll < femaleProbability, 0,
+                        healthCoefficient));
             }
 
-            return guppies;
+            return generatedFish;
         }
     }
 }

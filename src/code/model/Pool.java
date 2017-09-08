@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * A Pool class with some Guppies in it.
+ * A Pool class with some Fish in it.
  * 
  * @author griffin
  * @version 1
@@ -51,25 +51,25 @@ public class Pool extends WaterBody {
     /**
      * The nutrient coefficient of the Pool. Must be between 0.0 and 1.0,
      * inclusive. The higher the nutrient coefficient, the less likely it is for
-     * any given Guppy to die.
+     * any given Fish to die.
      */
     private double nutrientCoefficient;
 
     /**
      * A unique identifier for the Pool.
      */
-    private int identificationNumber;
+    private final int identificationNumber;
 
     /**
-     * An ArrayList of all the Guppies currently in the Pool.
+     * An group of all the Fish currently in the Pool.
      */
-    private FishGroup guppiesInPool;
+    private FishGroup fishInPool;
 
     /**
-     * A random number generator, used to determine which Guppies survive and
-     * which die.
+     * A random number generator, used to determine which Fish survive and which
+     * die.
      */
-    private Random randomNumberGenerator;
+    private final Random randomNumberGenerator;
 
     /**
      * An ArrayList of all Streams leading to this Pool.
@@ -93,7 +93,7 @@ public class Pool extends WaterBody {
         setVolumeLitres(0.0);
         name = DEFAULT_POOL_NAME;
         setNutrientCoefficient(DEFAULT_NUTRIENT_COEFFICIENT);
-        setGuppiesInPool(new ArrayList<Guppy>());
+        setFishInPool(new FishGroup());
 
         randomNumberGenerator = new Random();
 
@@ -132,8 +132,7 @@ public class Pool extends WaterBody {
         setPH(newPH);
         setNutrientCoefficient(newNutrientCoefficient);
 
-        ArrayList<Guppy> newGuppiesInPool = new ArrayList<Guppy>();
-        setGuppiesInPool(newGuppiesInPool);
+        setFishInPool(new FishGroup());
 
         randomNumberGenerator = new Random();
 
@@ -240,40 +239,31 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Returns an ArrayList object holding the Guppies in the Pool.
+     * Sets the FishGroup object holding the Fish in the Pool.
      * 
-     * @return an ArrayList object holding the Guppies in the Pool
+     * @param newFishInPool
+     *            an FishGroup object holding the Fish in the Pool
      */
-    public List<Fish> getGuppiesInPool() {
-        return guppiesInPool.getFish();
-    }
-
-    /**
-     * Sets the FishGroup object holding the Guppies in the Pool.
-     * 
-     * @param newGuppiesInPool
-     *            an FishGroup object holding the Guppies in the Pool
-     */
-    public void setGuppiesInPool(FishGroup newGuppiesInPool) {
-        if (newGuppiesInPool != null) {
-            guppiesInPool = newGuppiesInPool;
+    public void setFishInPool(FishGroup newFishInPool) {
+        if (newFishInPool != null) {
+            fishInPool = newFishInPool;
         }
     }
 
     /**
-     * Sets the FishGroup object holding the Guppies in the Pool; the FishGroup
-     * object is creating using an ArrayList object.
+     * Sets the FishGroup object holding the Fish in the Pool; the FishGroup
+     * object is creating using an List object.
      * 
-     * @param newGuppiesInPool
-     *            an ArrayList object holding the Guppies in the Pool
+     * @param newFishInPool
+     *            an List object holding the Fish in the Pool
      */
-    public void setGuppiesInPool(ArrayList<Guppy> newGuppiesInPool) {
-        if (newGuppiesInPool != null) {
+    public void setFishInPool(List<Fish> newFishInPool) {
+        if (newFishInPool != null) {
             LinkedList<Fish> fish = new LinkedList<Fish>();
-            for (Guppy guppy : newGuppiesInPool) {
-                fish.add(guppy);
+            for (Fish newFish : newFishInPool) {
+                fish.add(newFish);
             }
-            guppiesInPool = new FishGroup(fish);
+            fishInPool = new FishGroup(fish);
         }
     }
 
@@ -384,156 +374,154 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Adds a Guppy to the Pool.
+     * Adds a Fish to the Pool.
      * 
-     * @param guppy
-     *            the Guppy to add to the Pool
-     * @return true if a Guppy was successfully added; false otherwise
+     * @param fish
+     *            the Fish to add to the Pool
+     * @return true if a Fish was successfully added; false otherwise
      */
-    public boolean addGuppy(Guppy guppy) {
-        return guppiesInPool.addFish(guppy);
+    public boolean addFish(Fish fish) {
+        return fishInPool.addFish(fish);
     }
 
     /**
-     * Counts and returns the number of Guppies in the Pool.
+     * Counts and returns the number of Fish in the Pool.
      * 
-     * @return the number of Guppies in the Pool
+     * @return the number of Fish in the Pool
      */
     public int getPopulation() {
-        return guppiesInPool.getPopulation();
+        return fishInPool.getPopulation();
     }
 
     /**
-     * Counts and returns the number of living Guppies in the Pool.
+     * Counts and returns the number of living Fish in the Pool.
      * 
-     * @return the number of living Guppies in the Pool
+     * @return the number of living Fish in the Pool
      */
     public int getLivingPopulation() {
-        return guppiesInPool.getLivingPopulation();
+        return fishInPool.getLivingPopulation();
     }
 
     /**
-     * Loops through all the Guppies in the Pool and determines if each
-     * survives. Uses the Nutrient Coefficient to determine how likely it is
-     * that any given Guppy survives.
+     * Loops through all the Fish in the Pool and determines if each survives.
+     * Uses the Nutrient Coefficient to determine how likely it is that any
+     * given Fish survives.
      * 
-     * @return the number of newly dead Guppies
+     * @return the number of newly dead Fish
      */
     public int applyNutrientCoefficient() {
-        return guppiesInPool.applyNutrientCoefficient(nutrientCoefficient);
+        return fishInPool.applyNutrientCoefficient(nutrientCoefficient);
     }
 
     /**
-     * Removes any dead Guppies from the guppiesInPool array.
+     * Removes any dead Fish from the fishInPool array.
      * 
-     * @return the number of Guppies removed from the array
+     * @return the number of Fish removed from the array
      */
-    public int removeDeadGuppies() {
-        return guppiesInPool.removeDeadFish();
+    public int removeDeadFish() {
+        return fishInPool.removeDeadFish();
     }
 
     /**
-     * Calculates and returns the total volume needed to sustain all the Guppies
+     * Calculates and returns the total volume needed to sustain all the Fish
      * currently in the Pool, in litres.
      * 
-     * @return the total volume needed to sustain all the Guppies currently in
-     *         the Pool, in litres
+     * @return the total volume needed to sustain all the Fish currently in the
+     *         Pool, in litres
      */
-    public double getGuppyVolumeRequirementInLitres() {
-        return guppiesInPool.getFishVolumeRequirementInLitres();
+    public double getFishVolumeRequirementInLitres() {
+        return fishInPool.getFishVolumeRequirementInLitres();
     }
 
     /**
-     * Calculates and returns the average age in weeks of all the Guppies in the
+     * Calculates and returns the average age in weeks of all the Fish in the
      * Pool.
      * 
-     * @return the average age in weeks of all the Guppies in the Pool
+     * @return the average age in weeks of all the Fish in the Pool
      */
     public double getAverageAgeInWeeks() {
-        return guppiesInPool.getAverageAgeInWeeks();
+        return fishInPool.getAverageAgeInWeeks();
     }
 
     /**
-     * Calculates and returns the average health coefficient of all the Guppies
+     * Calculates and returns the average health coefficient of all the Fish
      * in the Pool.
      * 
-     * @return the average health coefficient of all the Guppies in the Pool
+     * @return the average health coefficient of all the Fish in the Pool
      */
     public double getAverageHealthCoefficient() {
-        return guppiesInPool.getAverageHealthCoefficient();
+        return fishInPool.getAverageHealthCoefficient();
     }
 
     /**
-     * Calculates and returns the percentage of living Guppies in the Pool that
+     * Calculates and returns the percentage of living Fish in the Pool that
      * are female.
      * 
-     * @return the average health coefficient of all the Guppies in the Pool
+     * @return the average health coefficient of all the Fish in the Pool
      */
     public double getFemalePercentage() {
-        return guppiesInPool.getFemalePercentage();
+        return fishInPool.getFemalePercentage();
     }
 
     /**
-     * Evaluates and returns the median age of all the living Guppies in the
+     * Evaluates and returns the median age of all the living Fish in the
      * Pool.
      * 
-     * @return the median age of all the living Guppies in the Pool
+     * @return the median age of all the living Fish in the Pool
      */
     public double getMedianAge() {
-        return guppiesInPool.getMedianAge();
+        return fishInPool.getMedianAge();
     }
 
     /**
-     * Invokes the spawn() method on all the Guppies in the Pool. Any baby
-     * Guppies born are added to the Pool. Returns the number of baby Guppies
+     * Invokes the spawn() method on all the Fish in the Pool. Any baby
+     * Fish born are added to the Pool. Returns the number of baby Fish
      * added to the Pool.
      * 
-     * @return the number of baby Guppies added to the Pool
+     * @return the number of baby Fish added to the Pool
      */
     public int spawn() {
-        return guppiesInPool.spawn();
+        return fishInPool.spawn();
     }
 
     /**
-     * Increments the ages of all the Guppies in the pool. Returns the number of
-     * Guppies that die of old age.
+     * Increments the ages of all the Fish in the pool. Returns the number of
+     * Fish that die of old age.
      * 
-     * @return the number of Guppies that have died of old age
+     * @return the number of Fish that have died of old age
      */
     public int incrementAges() {
-        return guppiesInPool.incrementAges();
+        return fishInPool.incrementAges();
     }
 
     /**
-     * Crowds out the weakest Guppies until the volume requirement is less than
+     * Crowds out the weakest Fish until the volume requirement is less than
      * or equal to the Pool's volume.
      * 
-     * @return the number of Guppies killed off
+     * @return the number of Fish killed off
      */
     public int adjustForCrowding() {
         final double maxVolReq = 0.75;
         int killed = 0;
         double volReq;
 
-        while ((volReq = getGuppyVolumeRequirementInLitres()) > volumeLitres) {
+        while ((volReq = getFishVolumeRequirementInLitres()) > volumeLitres) {
             double difference = volReq - volumeLitres;
             int minFishToRemove = (int) (difference / maxVolReq);
             if (minFishToRemove == 0) {
                 minFishToRemove = 1;
             }
 
-            List<Fish> weakest = guppiesInPool.getWeakest(minFishToRemove);
+            List<Fish> weakest = fishInPool.getWeakest(minFishToRemove);
 
             for (Fish weakFish : weakest) {
-                if (weakFish instanceof Guppy) {
-                    Guppy weakestGuppy = (Guppy) weakFish;
-                    double guppyVolReq = weakestGuppy.getVolumeNeeded();
-                    crowdOut(weakestGuppy);
-                    guppiesInPool.changeVolumeRequirement(-1 * guppyVolReq
-                            / FishGroup.MILLILITRES_IN_LITRE); //problem here
-                    if (!weakestGuppy.isAlive()) {
-                        killed++;
-                    }
+                double fishVolReq = weakFish.getVolumeNeeded();
+                crowdOut(weakFish);
+                // problem here:
+//                fishInPool.changeVolumeRequirement(
+//                        -1 * fishVolReq / FishGroup.MILLILITRES_IN_LITRE);
+                if (!weakFish.isAlive()) {
+                    killed++;
                 }
             }
         }
@@ -541,53 +529,55 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Crowds out a Guppy by either killing it or sending it downstream.
+     * Crowds out a Fish by either killing it or sending it downstream.
      * 
      * IMPORTANT NOTE - I've commented out the first three lines for the sake of
      * better performance. I am trusting that this method will never be used on
-     * a Guppy that isn't actually in this Pool, since the Pool class doesn't
+     * a Fish that isn't actually in this Pool, since the Pool class doesn't
      * actually reference other Pools anyway. If another Pool gets referenced in
      * this Pool class, the lines should be uncommented.
      * 
-     * @param guppy
-     *            the Guppy to crowd out
+     * @param fishToCrowd
+     *            the Fish to crowd out
      */
-    private void crowdOut(Guppy guppy) {
+    private void crowdOut(Fish fishToCrowd) {
         // NOTE TO SELF DO NOT DELETE
-        // if (!guppiesInPool.contains(guppy)) {
+        // if (!fishInPool.contains(fishToCrowd)) {
         // throw new IllegalArgumentException();
         // }
         if (streamsFrom.isEmpty()) {
-            guppy.kill();
+//            fishToCrowd.kill();
+            fishInPool.killFish(fishToCrowd);
         } else {
-            double healthCoefficient = guppy.getHealthCoefficient();
+            double healthCoefficient = fishToCrowd.getHealthCoefficient();
             double healthRoll = randomNumberGenerator.nextDouble();
             if (healthRoll < healthCoefficient) {
-                sendDownstream(guppy);
+                sendDownstream(fishToCrowd);
             } else {
-                guppy.kill();
+//                fishToCrowd.kill();
+                fishInPool.killFish(fishToCrowd);
             }
         }
-        guppiesInPool.setAsNotSorted();
+        fishInPool.setAsNotSorted();
     }
 
     /**
-     * Sends a Guppy downstream. Chooses a random Stream away from this Pool and
-     * sends the Guppy to the right destination Pool.
+     * Sends a Fish downstream. Chooses a random Stream away from this Pool and
+     * sends the Fish to the right destination Pool.
      * 
-     * @param guppy
-     *            the Guppy to send downstream.
+     * @param fishToSend
+     *            the Fish to send downstream.
      */
-    private void sendDownstream(Guppy guppy) {
-        boolean success = guppiesInPool.remove(guppy);
+    private void sendDownstream(Fish fishToSend) {
+        boolean success = fishInPool.remove(fishToSend);
         if (success) {
             int streams = streamsFrom.size();
 
             int streamNumber = randomNumberGenerator.nextInt(streams);
-            streamsFrom.get(streamNumber).sendDownstream(guppy);
+            streamsFrom.get(streamNumber).sendDownstream(fishToSend);
         } else {
             throw new IllegalArgumentException(
-                    "Tried to remove guppy, but guppy is not in this pool ("
+                    "Tried to remove fish, but fish is not in this pool ("
                             + name + ")");
         }
 
@@ -598,15 +588,15 @@ public class Pool extends WaterBody {
      * 
      * @return an int array with the number of fish of each health type
      */
-    public int[] getGuppyHealthNumbers() {
-        return guppiesInPool.getFishHealthNumbers();
+    public int[] getFishHealthNumbers() {
+        return fishInPool.getFishHealthNumbers();
     }
 
     /**
-     * Sets this pool's Guppies as not sorted.
+     * Sets this pool's Fish as not sorted.
      */
     public void setAsNotSorted() {
-        guppiesInPool.setAsNotSorted();
+        fishInPool.setAsNotSorted();
     }
 
     @Override
@@ -615,7 +605,7 @@ public class Pool extends WaterBody {
                 + ", temperatureCelsius=" + getTemperatureCelsius() + ", pH="
                 + getPH() + ", nutrientCoefficient=" + nutrientCoefficient
                 + ", identificationNumber=" + identificationNumber
-                + ", guppiesInPool=" + guppiesInPool
-                + ", randomNumberGenerator=" + randomNumberGenerator + "]";
+                + ", fishInPool=" + fishInPool + ", randomNumberGenerator="
+                + randomNumberGenerator + "]";
     }
 }

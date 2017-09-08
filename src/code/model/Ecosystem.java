@@ -1,7 +1,6 @@
 package code.model;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An Ecosystem, which contains Pools, which contain Guppies.
@@ -135,19 +134,19 @@ public class Ecosystem {
         for (Pool pool : pools) {
             diedOfOldAge += pool.incrementAges();
             // System.out.println(pool.getName() + " aged: " + diedOfOldAge);
-            numberRemoved += pool.removeDeadGuppies();
+            numberRemoved += pool.removeDeadFish();
             // System.out.println(pool.getName() + " removed: " +
             // numberRemoved);
             starvedToDeath += pool.applyNutrientCoefficient();
             // System.out.println(pool.getName() + " starved: " +
             // starvedToDeath);
-            numberRemoved += pool.removeDeadGuppies();
+            numberRemoved += pool.removeDeadFish();
             // System.out.println(pool.getName() + " removed: " +
             // numberRemoved);
             newFry += pool.spawn();
             crowdedOut += pool.adjustForCrowding();
             // System.out.println(pool.getName() + " crowded: " + crowdedOut);
-            numberRemoved += pool.removeDeadGuppies();
+            numberRemoved += pool.removeDeadFish();
             // System.out.println(pool.getName() + " removed: " +
             // numberRemoved);
         }
@@ -162,7 +161,7 @@ public class Ecosystem {
                 System.out.println(pool.getName() + " population: "
                         + pool.getPopulation());
                 System.out.println(pool.getName() + " volume requirement: "
-                        + pool.getGuppyVolumeRequirementInLitres());
+                        + pool.getFishVolumeRequirementInLitres());
             }
             System.out.println("Ecosystem population: " + getGuppyPopulation());
 
@@ -196,21 +195,10 @@ public class Ecosystem {
         ArrayList<int[]> result = new ArrayList<int[]>();
 
         for (Pool pool : pools) {
-            result.add(pool.getGuppyHealthNumbers());
+            result.add(pool.getFishHealthNumbers());
         }
 
         return result;
-    }
-
-    /**
-     * Returns all the Guppies of a specified Pool.
-     * 
-     * @param poolIndex
-     *            the index of the Pool
-     * @return an ArrayList of Fish (all Guppies)
-     */
-    public List<Fish> getGuppies(int poolIndex) {
-        return pools.get(poolIndex).getGuppiesInPool();
     }
 
 }
