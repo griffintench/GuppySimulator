@@ -7,3 +7,11 @@ Eclipse plugins - generate UML diagram
 Thursday 10:30
 javafx molecule
 Read the book that Chris sent
+
+
+make control panels tighter
+maybe add sliders for changing spawn probability, etc. (before sim starts) - just implement custom simulation
+all classes less than 100 lines excluding comments
+new GUI
+visitor design pattern - what is it, how can we use it
+Sept 22, 12:30

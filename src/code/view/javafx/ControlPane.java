@@ -16,9 +16,6 @@ import javafx.scene.layout.VBox;
  */
 public class ControlPane extends VBox {
 
-    // private int sceneWidth;
-    // private int sceneHeight;
-
     private TextField numberOfWeeks;
     private Button go;
     private Button oneWeek;

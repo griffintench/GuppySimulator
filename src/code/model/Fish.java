@@ -71,13 +71,8 @@ public abstract class Fish implements Comparable<Fish> {
      *            the species of the fish
      */
     public Fish(String newGenus, String newSpecies) {
-        binomialName = new BinomialName(newGenus, newSpecies);
-        setAgeInWeeks(0);
-        generationNumber = processGenerationNumber(0);
-        setIsFemale(true);
-        health = new Health();
-
-        fishID = ++numberOfFishBorn;
+        this(newGenus, newSpecies, 0, true, 0,
+                Health.DEFAULT_HEALTH_COEFFICIENT);
     }
 
     /**
@@ -192,11 +187,8 @@ public abstract class Fish implements Comparable<Fish> {
      *            the maximum possible age of the fish
      */
     public void setAgeInWeeks(int newAgeInWeeks, int maxAgeInWeeks) {
-        if (newAgeInWeeks < 0 || newAgeInWeeks >= maxAgeInWeeks) {
-            ageInWeeks = 0;
-        } else {
-            ageInWeeks = newAgeInWeeks;
-        }
+        ageInWeeks = (newAgeInWeeks < 0 || newAgeInWeeks >= maxAgeInWeeks) ? 0
+                : newAgeInWeeks;
     }
 
     /**
@@ -236,11 +228,7 @@ public abstract class Fish implements Comparable<Fish> {
      * @return the processed generation number
      */
     public int processGenerationNumber(int newGenerationNumber) {
-        if (newGenerationNumber < 0) {
-            return 0;
-        } else {
-            return newGenerationNumber;
-        }
+        return (newGenerationNumber < 0) ? 0 : newGenerationNumber;
     }
 
     /**

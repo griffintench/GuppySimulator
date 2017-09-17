@@ -199,7 +199,7 @@ public class Pool extends WaterBody {
     @Override
     public void setPH(double newPH) {
         super.setPH(newPH);
-        if (streamsFrom != null && !streamsFrom.isEmpty()) {
+        if (streamsFrom != null) {
             for (Stream stream : streamsFrom) {
                 stream.setPH(newPH);
             }

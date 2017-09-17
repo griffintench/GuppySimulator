@@ -16,27 +16,30 @@ import javafx.scene.layout.VBox;
  * @version 1.0
  */
 public class SimulationPane extends VBox implements Observer {
-    public static final int SCENE_WIDTH = 1000;
-    public static final int SCENE_HEIGHT = 1000;
-
+    
     private EcosystemPane ecosystemPane;
     private ControlPane controlPane;
 
     /**
-     * Creates the pane at a size determined by constants; instantiates and adds
-     * an EcosystemPane and a ControlPane.
+     * Creates the pane at a size determined by parameters; instantiates and
+     * adds an EcosystemPane and a ControlPane.
+     * 
+     * @param sceneWidth
+     *            the width of the scene
+     * @param sceneHeight
+     *            the height of the scene
      */
-    public SimulationPane() {
+    public SimulationPane(int sceneWidth, int sceneHeight) {
         final double multiplier = 0.7;
         final double rounder = 0.5;
 
-        setPrefSize(SCENE_WIDTH, SCENE_HEIGHT);
+        setPrefSize(sceneWidth, sceneHeight);
 
-        ecosystemPane = new EcosystemPane(SCENE_WIDTH,
-                (int) (multiplier * SCENE_HEIGHT + rounder));
+        ecosystemPane = new EcosystemPane(sceneWidth,
+                (int) (multiplier * sceneHeight + rounder));
 
-        controlPane = new ControlPane(SCENE_WIDTH,
-                (int) ((1 - multiplier) * SCENE_HEIGHT + rounder));
+        controlPane = new ControlPane(sceneWidth,
+                (int) ((1 - multiplier) * sceneHeight + rounder));
 
         getChildren().addAll(ecosystemPane, controlPane);
     }

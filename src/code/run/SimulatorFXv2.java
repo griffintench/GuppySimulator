@@ -61,7 +61,7 @@ public class SimulatorFXv2 extends Application {
      * Loads the SimulationPane; adds necessary handlers and observers.
      */
     public static void loadSimulationPane() {
-        SimulationPane pane = new SimulationPane();
+        SimulationPane pane = new SimulationPane(SCENE_WIDTH, SCENE_HEIGHT);
         SimulationHandler handler = new SimulationHandler();
         handler.setSimulation(simulation);
         pane.addSimulationHandler(handler);

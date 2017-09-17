@@ -51,8 +51,6 @@ public class Simulation extends Observable {
     /**
      * Sets up the Ecosystem with three Pools: Skookumchuk, Rutherford and
      * Gamelin.
-     * 
-     * TODO come up with a better name for this method when necessary
      */
     public void setUpEcosystem() {
         Pool skookumchuk = setUpSkookumchuk();
