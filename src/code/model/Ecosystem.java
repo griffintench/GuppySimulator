@@ -1,6 +1,7 @@
 package code.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * An Ecosystem, which contains Pools, which contain Guppies.
@@ -198,6 +199,16 @@ public class Ecosystem {
             result.add(pool.getFishHealthNumbers());
         }
 
+        return result;
+    }
+    
+    public HashMap<String, int[]> constructPoolList2() {
+        HashMap<String, int[]> result = new HashMap<String, int[]>();
+        
+        for (Pool pool : pools) {
+            result.put(pool.getName(), pool.getFishHealthNumbers());
+        }
+        
         return result;
     }
 

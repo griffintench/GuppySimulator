@@ -1,6 +1,7 @@
 package code.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Random;
 
@@ -188,7 +189,8 @@ public class Simulation extends Observable {
         for (int i = weeksElapsed + 1; i <= finalWeek; i++) {
             ecosystem.simulateOneWeek(i);
             weeksElapsed++;
-            constructPoolList();
+            //constructPoolList();
+            constructPoolHashMap();
         }
 
         setChanged();
@@ -199,6 +201,14 @@ public class Simulation extends Observable {
         ArrayList<int[]> list = ecosystem.constructPoolList();
         setChanged();
         notifyObservers(list);
+    }
+    
+    public void constructPoolHashMap() {
+        System.out.println("hello");
+        
+        HashMap<String, int[]> map = ecosystem.constructPoolList2();
+        setChanged();
+        notifyObservers(map);
     }
 
     /**

@@ -1,9 +1,13 @@
 package code.view.javafx;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Box;
@@ -15,7 +19,10 @@ import javafx.scene.shape.Sphere;
  * @author griffin
  * @version 1.0
  */
-public class EcosystemPane extends StackPane {
+public class EcosystemPane extends VBox {
+
+    /** The amount of spacing between the week number and the pools. */
+    public static final int SPACING = 20;
 
     /** Represents a healthy guppy. */
     public static final int HEALTHY = 0;
@@ -26,13 +33,18 @@ public class EcosystemPane extends StackPane {
     /** Represents an unhealthy guppy. */
     public static final int UNHEALTHY = 2;
 
+    private HBox weekNumber;
+    private Label weekLabel;
+
+    private StackPane poolPane;
+
     private int sceneWidth;
     // private int sceneHeight;
 
     private Random generator;
 
-    private ArrayList<Box> pools;
-    private ArrayList<Sphere> guppies;
+    private HashMap<String, Box> poolBoxes;
+    private HashMap<String, int[]> poolInfo; // name, [healthy, okay, unhealthy]
 
     /**
      * Creates an EcosystemPane with a certain width and height. Initializes the
@@ -44,15 +56,26 @@ public class EcosystemPane extends StackPane {
      *            the height of the pane
      */
     public EcosystemPane(int sceneWidth, int sceneHeight) {
+        super(SPACING);
+
+        weekNumber = new HBox();
+        weekLabel = new Label("Week 0");
+        weekNumber.getChildren().add(weekLabel);
+        weekNumber.setAlignment(Pos.CENTER);
+        poolPane = new StackPane();
+        getChildren().addAll(weekNumber, poolPane);
+        setAlignment(Pos.CENTER);
+
         this.sceneWidth = sceneWidth;
         setPrefWidth(sceneWidth);
-//        this.sceneHeight = sceneHeight;
+        // this.sceneHeight = sceneHeight;
         setPrefHeight(sceneHeight);
 
         generator = new Random();
 
-        pools = new ArrayList<Box>();
-        guppies = new ArrayList<Sphere>();
+        poolBoxes = new HashMap<String, Box>();
+        poolInfo = null; // just making this explicit for understandability
+                         // purposes
     }
 
     /**
@@ -60,93 +83,100 @@ public class EcosystemPane extends StackPane {
      * in the viewable model.
      * 
      * @param arg
-     *            an ArrayList object containing information about the pools;
-     *            each entry represents a pool in the form of an array of three
-     *            ints, representing the numbers of healthy, okay and unhealthy
-     *            guppies
+     *            a HashMap object containing information about the pools; each
+     *            entry represents a pool in the form of an array of three ints,
+     *            representing the numbers of healthy, okay and unhealthy
+     *            guppies; each key is the pool's name
      */
-    public void update(ArrayList<int[]> arg) {
-        pools = new ArrayList<Box>();
-        guppies = new ArrayList<Sphere>();
+    public void update(HashMap<String, int[]> arg) {
 
-        getChildren().clear();
+        if (poolInfo != null) {
+            setUpPoolInfo(arg);
 
-        int numberOfPools = arg.size();
-        int boxWidth = sceneWidth / (2 * numberOfPools + 1);
+            poolPane.getChildren().clear(); // TODO in the future, this should
+                                            // only clear the guppies, not the
+                                            // pool boxes
 
-        for (int i = 1; i <= arg.size(); i++) {
-            drawPool(i, boxWidth, numberOfPools, arg.get(i - 1));
-        }
-
-        for (Box pool : pools) {
-            getChildren().add(pool);
-        }
-
-        for (Sphere guppy : guppies) {
-            getChildren().add(guppy);
+            drawPools();
+            drawGuppies();
+        } else {
+            initialize(arg);
         }
     }
 
-    /**
-     * Creates a Box object representing a pool and adds it to pools.
-     * 
-     * @param index
-     *            the index of a pool (starting from 1)
-     * @param boxWidth
-     *            the width of the box representing a pool
-     * @param numberOfPools
-     *            the total number of pools in the simulation
-     * @param guppyNumbers
-     *            an int array showing how many guppies there are of each health
-     *            type
-     */
-    private void drawPool(int index, int boxWidth, int numberOfPools,
-            int[] guppyNumbers) {
+    private void initialize(HashMap<String, int[]> arg) {
+
+        setUpPoolBoxes(arg);
+        setUpPoolInfo(arg);
+
+        drawPools();
+        drawGuppies();
+    }
+
+    private void setUpPoolBoxes(HashMap<String, int[]> arg) {
         final Color poolSpecular = new Color(0.0, 0.75, 1.0, 1.0);
         final Color poolDiffuse = new Color(0.0, 0.75, 1.0, 0.75);
 
-        Box pool = new Box(boxWidth, boxWidth, boxWidth);
-        double translation = 0.0
-                + (-numberOfPools + (2 * index) - 1) * boxWidth;
-        pool.setTranslateX(translation);
+        final int numberOfPools = arg.size();
+        final int boxWidth = sceneWidth / (2 * numberOfPools + 1);
 
-        PhongMaterial poolMaterial = new PhongMaterial();
-        poolMaterial.setSpecularColor(poolSpecular);
-        poolMaterial.setDiffuseColor(poolDiffuse);
-        pool.setMaterial(poolMaterial);
+        poolBoxes = new HashMap<String, Box>();
 
-        // For now, I'm capping the number of guppies at 20 per health type per
-        // pool just to save time
-        final int maxGuppies = 100;
-        for (int guppy = 1; guppy <= maxGuppies
-                && guppy <= guppyNumbers[HEALTHY]; guppy++) {
-            drawGuppy(translation, boxWidth, HEALTHY);
-        }
-        for (int guppy = 1; guppy <= maxGuppies
-                && guppy <= guppyNumbers[OKAY]; guppy++) {
-            drawGuppy(translation, boxWidth, OKAY);
-        }
-        for (int guppy = 1; guppy <= maxGuppies
-                && guppy <= guppyNumbers[UNHEALTHY]; guppy++) {
-            drawGuppy(translation, boxWidth, UNHEALTHY);
-        }
+        for (HashMap.Entry<String, int[]> entry : arg.entrySet()) {
+            // create and colour box - doesn't position box, or add guppies, or
+            // show box
+            Box pool = new Box(boxWidth, boxWidth, boxWidth);
 
-        pools.add(pool);
+            PhongMaterial poolMaterial = new PhongMaterial();
+            poolMaterial.setSpecularColor(poolSpecular);
+            poolMaterial.setDiffuseColor(poolDiffuse);
+            pool.setMaterial(poolMaterial);
+
+            // add box to poolBoxes
+            poolBoxes.put(entry.getKey(), pool);
+        }
     }
 
-    /**
-     * Draws a particular Guppy inside its pool.
-     * 
-     * @param translation
-     *            A horizontal translation to ensure the Guppy is put in the
-     *            right pool
-     * @param boxWidth
-     *            the width of the box representing the pool
-     * @param health
-     *            an int representing whether a Guppy is healthy, okay, or
-     *            unhealthy
-     */
-    private void drawGuppy(double translation, int boxWidth, int health) {
+    private void setUpPoolInfo(HashMap<String, int[]> arg) {
+        poolInfo = arg;
+    }
+
+    private void drawPools() {
+        final int numberOfPools = poolBoxes.size();
+        final int boxWidth = sceneWidth / (2 * numberOfPools + 1);
+        int poolNumber = 1;
+        for (HashMap.Entry<String, Box> entry : poolBoxes.entrySet()) {
+            double translation = 0.0
+                    + (-numberOfPools + (2 * poolNumber) - 1) * boxWidth;
+            Box curPool = entry.getValue();
+            curPool.setTranslateX(translation);
+
+            poolPane.getChildren().add(curPool);
+            poolNumber++;
+        }
+    }
+
+    private void drawGuppies() {
+        for (HashMap.Entry<String, int[]> entry : poolInfo.entrySet()) {
+            String name = entry.getKey();
+            int[] guppyNumbers = entry.getValue();
+            Box correspondingBox = poolBoxes.get(name);
+
+            double translation = correspondingBox.getTranslateX();
+            double boxWidth = correspondingBox.getWidth();
+
+            final int maxGuppies = 100; // capping number of guppies per pool
+                                        // per health type
+            for (int healthType = 0; healthType <= UNHEALTHY; healthType++) {
+                for (int guppy = 1; guppy <= maxGuppies
+                        && guppy <= guppyNumbers[healthType]; guppy++) {
+                    drawOneGuppy(translation, boxWidth, healthType);
+                }
+            }
+        }
+    }
+
+    private void drawOneGuppy(double translation, double boxWidth, int health) {
         final Color healthyGuppySpecular = new Color(0.0, 1.0, 0.0, 1.0);
         final Color healthyGuppyDiffuse = new Color(0.0, 1.0, 0.0, 0.75);
         final Color okayGuppySpecular = new Color(1.0, 0.5, 0.0, 1.0);
@@ -154,11 +184,13 @@ public class EcosystemPane extends StackPane {
         final Color unhealthyGuppySpecular = new Color(1.0, 0.0, 0.0, 1.0);
         final Color unhealthyGuppyDiffuse = new Color(1.0, 0.0, 0.0, 0.75);
 
+        final int intWidth = (int) boxWidth;
+
         Sphere guppySphere = new Sphere(2);
-        double guppyTranslationX = generator.nextInt(boxWidth) + translation
+        double guppyTranslationX = generator.nextInt(intWidth) + translation
                 - boxWidth / 2;
-        double guppyTranslationY = generator.nextInt(boxWidth) - boxWidth / 2;
-        double guppyTranslationZ = generator.nextInt(boxWidth) - boxWidth / 2;
+        double guppyTranslationY = generator.nextInt(intWidth) - boxWidth / 2;
+        double guppyTranslationZ = generator.nextInt(intWidth) - boxWidth / 2;
         guppySphere.setTranslateX(guppyTranslationX);
         guppySphere.setTranslateY(guppyTranslationY);
         guppySphere.setTranslateZ(guppyTranslationZ);
@@ -176,6 +208,6 @@ public class EcosystemPane extends StackPane {
             guppyMaterial.setDiffuseColor(unhealthyGuppyDiffuse);
         }
         guppySphere.setMaterial(guppyMaterial);
-        guppies.add(guppySphere);
+        poolPane.getChildren().add(guppySphere);
     }
 }

@@ -16,7 +16,7 @@ import java.util.Random;
  * @version 1.0
  */
 public class FishGroup {
-    
+
     /**
      * The number of millilitres in a litre.
      */
@@ -66,8 +66,7 @@ public class FishGroup {
         } else {
             fish = newFish;
         }
-        sorted = false;
-        weakestLivingIndex = -1;
+        setAsNotSorted();
     }
 
     /**
@@ -102,8 +101,7 @@ public class FishGroup {
      * @return true if the Fish was successfully removed
      */
     public boolean remove(Fish fishToRemove) {
-        sorted = false;
-        weakestLivingIndex = -1;
+        setAsNotSorted();
         return fish.remove(fishToRemove);
     }
 
@@ -182,8 +180,10 @@ public class FishGroup {
     public int getLivingPopulation() {
         int population = 0;
 
-        for (int i = 0; i < fish.size(); i++) {
-            if (fish.get(i) != null && fish.get(i).isAlive()) {
+        Iterator<Fish> iterator = fish.iterator();
+        while (iterator.hasNext()) {
+            Fish curFish = iterator.next();
+            if (curFish != null && curFish.isAlive()) {
                 population++;
             }
         }
@@ -210,9 +210,7 @@ public class FishGroup {
             if (curFish.isAlive()) {
                 roll = generator.nextDouble();
                 if (roll > nutrientCoefficient) {
-                    curFish.kill();
-                    sorted = false;
-                    weakestLivingIndex = -1;
+                    killFish(curFish);
                     numberOfDeaths++;
                 }
             }
@@ -264,7 +262,7 @@ public class FishGroup {
      * @return the average age in weeks of all the Fish in the Group
      */
     public double getAverageAgeInWeeks() {
-        int fishCount = getPopulation();
+        int fishCount = getLivingPopulation();
         int ageSum = 0;
         double averageAge;
 
@@ -295,7 +293,7 @@ public class FishGroup {
      */
     public double getAverageHealthCoefficient() {
 
-        int fishCount = getPopulation();
+        int fishCount = getLivingPopulation();
         double healthCoefficientSum = 0.0;
         double averageHealthCoefficient;
 
@@ -325,20 +323,18 @@ public class FishGroup {
      * @return the percentage of living Fish in the group that are female
      */
     public double getFemalePercentage() {
-        int fishCount = getPopulation();
+        int fishCount = getLivingPopulation();
         int femaleCount = 0;
         double femalePercentage;
 
-        Fish currentFish;
-
-        if (getPopulation() == 0) {
+        if (fishCount == 0) {
             return 0.0;
         } else {
-            for (int i = 0; i < fish.size(); i++) {
-                currentFish = fish.get(i);
-
-                if (currentFish != null && currentFish.isAlive()
-                        && currentFish.getIsFemale()) {
+            Iterator<Fish> iterator = fish.iterator();
+            while (iterator.hasNext()) {
+                Fish curFish = iterator.next();
+                if (curFish != null && curFish.isAlive()
+                        && curFish.getIsFemale()) {
                     femaleCount++;
                 }
             }
@@ -354,7 +350,7 @@ public class FishGroup {
      */
     public double getMedianAge() {
 
-        int population = getPopulation();
+        int population = getLivingPopulation();
 
         double medianAge;
         double median1;
@@ -416,8 +412,7 @@ public class FishGroup {
         }
         fish.addAll(newBabies);
 
-        sorted = false;
-        weakestLivingIndex = -1;
+        setAsNotSorted();
         return newBabies.size();
     }
 
@@ -439,8 +434,7 @@ public class FishGroup {
             }
         }
 
-        sorted = false;
-        weakestLivingIndex = -1;
+        setAsNotSorted();
         return numberOfDead;
     }
 
@@ -520,8 +514,7 @@ public class FishGroup {
     public void killFish(Fish fishToKill) {
         if (fishToKill.isAlive()) {
             fishToKill.kill();
-            sorted = false;
-            weakestLivingIndex = -1;
+            setAsNotSorted();
         }
     }
 }

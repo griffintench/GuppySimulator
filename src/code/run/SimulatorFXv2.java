@@ -66,6 +66,7 @@ public class SimulatorFXv2 extends Application {
         handler.setSimulation(simulation);
         pane.addSimulationHandler(handler);
         simulation.addObserver(pane);
+        simulation.constructPoolHashMap();
         Scene scene = new Scene(pane, SCENE_WIDTH, SCENE_HEIGHT);
         stage.setScene(scene);
         stage.show();
@@ -80,5 +81,5 @@ public class SimulatorFXv2 extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
+    
 }

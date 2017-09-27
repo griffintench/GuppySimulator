@@ -1,6 +1,7 @@
 package code.view.javafx;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -58,18 +59,25 @@ public class SimulationPane extends VBox implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof ArrayList) {
-            final ArrayList<int[]> castArg = (ArrayList<int[]>) arg;
-            Platform.runLater(new Runnable() {
-                public void run() {
-                    ecosystemPane.update(castArg);
-                }
-            });
+//            final ArrayList<int[]> castArg = (ArrayList<int[]>) arg;
+//            Platform.runLater(new Runnable() {
+//                public void run() {
+//                    ecosystemPane.update(castArg);
+//                }
+//            });
         } else if (arg instanceof Boolean) {
             final Boolean castArg = (Boolean) arg;
             Platform.runLater(new Runnable() {
                 public void run() {
                     controlPane.simulationInProgress(castArg);
                 }
+            });
+        } else if (arg instanceof HashMap) {
+            final HashMap castArg = (HashMap) arg;
+            Platform.runLater(new Runnable() {
+               public void run() {
+                   ecosystemPane.update(castArg);
+               }
             });
         }
     }

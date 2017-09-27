@@ -2,7 +2,9 @@ package code.view.javafx;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 /**
@@ -23,6 +25,10 @@ public class LoadSimulationPane extends VBox {
      * Instantiates the three Buttons and adds them to the Pane.
      */
     public LoadSimulationPane() {
+        HBox row1 = new HBox();
+        HBox row2 = new HBox();
+        HBox row3 = new HBox();
+
         loadDefaultSimulation = new Button("Load Default Simulation");
         loadSimulationFromFile = new Button("Load Simulation From File");
         loadCustomSimulation = new Button("Load Custom Simulation");
@@ -30,8 +36,17 @@ public class LoadSimulationPane extends VBox {
         loadSimulationFromFile.setDisable(true);
         loadCustomSimulation.setDisable(true);
 
-        getChildren().addAll(loadDefaultSimulation, loadSimulationFromFile,
-                loadCustomSimulation);
+        row1.getChildren().add(loadDefaultSimulation);
+        row2.getChildren().add(loadSimulationFromFile);
+        row3.getChildren().add(loadCustomSimulation);
+        
+        row1.setAlignment(Pos.CENTER);
+        row2.setAlignment(Pos.CENTER);
+        row3.setAlignment(Pos.CENTER);
+
+        getChildren().addAll(row1, row2, row3);
+        
+        setAlignment(Pos.CENTER);
     }
 
     /**
