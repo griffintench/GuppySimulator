@@ -89,7 +89,6 @@ public class EcosystemPane extends VBox {
      *            guppies; each key is the pool's name
      */
     public void update(HashMap<String, int[]> arg) {
-
         if (poolInfo != null) {
             setUpPoolInfo(arg);
 
@@ -105,7 +104,6 @@ public class EcosystemPane extends VBox {
     }
 
     private void initialize(HashMap<String, int[]> arg) {
-
         setUpPoolBoxes(arg);
         setUpPoolInfo(arg);
 

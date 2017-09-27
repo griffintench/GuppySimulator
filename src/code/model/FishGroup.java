@@ -262,27 +262,23 @@ public class FishGroup {
      * @return the average age in weeks of all the Fish in the Group
      */
     public double getAverageAgeInWeeks() {
-        int fishCount = getLivingPopulation();
-        int ageSum = 0;
-        double averageAge;
+        final int fishCount = getLivingPopulation();
+        final int[] ages = new int[fishCount];
+        final Iterator<Fish> iterator = fish.iterator();
 
         Fish currentFish;
 
-        if (fishCount == 0) {
-            return 0.0;
-        } else {
+        int i = 0;
+        while (iterator.hasNext()) {
+            currentFish = iterator.next();
 
-            for (int i = 0; i < fish.size(); i++) {
-                currentFish = fish.get(i);
-
-                if (currentFish != null && currentFish.isAlive()) {
-                    ageSum += currentFish.getAgeInWeeks();
-                }
+            if (currentFish != null && currentFish.isAlive()) {
+                ages[i] = currentFish.getAgeInWeeks();
+                i++;
             }
-
-            averageAge = (double) ageSum / fishCount;
-            return averageAge;
         }
+
+        return Statistics.arrayMean(ages);
     }
 
     /**
@@ -292,28 +288,23 @@ public class FishGroup {
      * @return the average health coefficient of all the Fish in the Group
      */
     public double getAverageHealthCoefficient() {
-
-        int fishCount = getLivingPopulation();
-        double healthCoefficientSum = 0.0;
-        double averageHealthCoefficient;
+        final int fishCount = getLivingPopulation();
+        final double[] healths = new double[fishCount];
+        final Iterator<Fish> iterator = fish.iterator();
 
         Fish currentFish;
 
-        if (fishCount == 0) {
-            return 0.0;
-        } else {
+        int i = 0;
+        while (iterator.hasNext()) {
+            currentFish = iterator.next();
 
-            for (int i = 0; i < fish.size(); i++) {
-                currentFish = fish.get(i);
-
-                if (currentFish != null && currentFish.isAlive()) {
-                    healthCoefficientSum += currentFish.getHealthCoefficient();
-                }
+            if (currentFish != null && currentFish.isAlive()) {
+                healths[i] = currentFish.getHealthCoefficient();
+                i++;
             }
-
-            averageHealthCoefficient = healthCoefficientSum / fishCount;
-            return averageHealthCoefficient;
         }
+
+        return Statistics.arrayMean(healths);
     }
 
     /**
@@ -323,24 +314,24 @@ public class FishGroup {
      * @return the percentage of living Fish in the group that are female
      */
     public double getFemalePercentage() {
-        int fishCount = getLivingPopulation();
-        int femaleCount = 0;
-        double femalePercentage;
+        final int fishCount = getLivingPopulation();
+        final int[] females = new int[fishCount];
+        final Iterator<Fish> iterator = fish.iterator();
 
-        if (fishCount == 0) {
-            return 0.0;
-        } else {
-            Iterator<Fish> iterator = fish.iterator();
-            while (iterator.hasNext()) {
-                Fish curFish = iterator.next();
-                if (curFish != null && curFish.isAlive()
-                        && curFish.getIsFemale()) {
-                    femaleCount++;
-                }
+        Fish currentFish;
+
+        int i = 0;
+        while (iterator.hasNext()) {
+            currentFish = iterator.next();
+
+            if (currentFish != null && currentFish.getIsFemale()
+                    && currentFish.isAlive()) {
+                females[i] = 1;
+                i++;
             }
-            femalePercentage = (double) femaleCount / fishCount;
-            return femalePercentage;
         }
+
+        return Statistics.arrayMean(females);
     }
 
     /**
@@ -349,49 +340,23 @@ public class FishGroup {
      * @return the median age of all the living Fish in the Group
      */
     public double getMedianAge() {
+        final int fishCount = getLivingPopulation();
+        final int[] ages = new int[fishCount];
+        final Iterator<Fish> iterator = fish.iterator();
 
-        int population = getLivingPopulation();
-
-        double medianAge;
-        double median1;
-        double median2;
-        int index1;
-        int index2;
-        int[] fishAges = new int[population];
         Fish currentFish;
-        int currentAgeIndex = 0;
 
-        if (population == 0) {
-            return 0.0;
-        } else {
+        int i = 0;
+        while (iterator.hasNext()) {
+            currentFish = iterator.next();
 
-            for (int i = 0; i < fish.size(); i++) {
-                currentFish = fish.get(i);
-
-                if (currentFish != null && currentFish.isAlive()) {
-                    fishAges[currentAgeIndex] = currentFish.getAgeInWeeks();
-                    currentAgeIndex++;
-                }
+            if (currentFish != null && currentFish.isAlive()) {
+                ages[i] = currentFish.getAgeInWeeks();
+                i++;
             }
-
-            Arrays.sort(fishAges);
-
-            if (population % 2 == 0) {
-                index1 = population / 2;
-                index2 = index1 - 1;
-
-                median1 = fishAges[index1];
-                median2 = fishAges[index2];
-
-                medianAge = (median1 + median2) / 2;
-            } else {
-                index1 = population / 2;
-
-                medianAge = fishAges[index1];
-            }
-
-            return medianAge;
         }
+
+        return Statistics.arrayMedian(ages);
     }
 
     /**
@@ -436,18 +401,6 @@ public class FishGroup {
 
         setAsNotSorted();
         return numberOfDead;
-    }
-
-    /**
-     * Sorts the List and then returns the Fish with the lowest health
-     * coefficient.
-     * 
-     * @return the Fish with the lowest health coefficient
-     */
-    public Fish getWeakest() {
-        sort();
-
-        return fish.get(weakestLivingIndex);
     }
 
     /**

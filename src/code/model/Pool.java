@@ -74,31 +74,19 @@ public class Pool extends WaterBody {
     /**
      * An ArrayList of all Streams leading to this Pool.
      */
-    private ArrayList<Stream> streamsTo;
+    private final ArrayList<Stream> streamsTo;
 
     /**
      * An ArrayList of all Streams leading away from this Pool.
      */
-    private ArrayList<Stream> streamsFrom;
+    private final ArrayList<Stream> streamsFrom;
 
     /**
      * Instantiates a Pool with default parameters.
      */
     public Pool() {
-
-        super();
-
-        streamsTo = new ArrayList<Stream>();
-        streamsFrom = new ArrayList<Stream>();
-        setVolumeLitres(0.0);
-        name = DEFAULT_POOL_NAME;
-        setNutrientCoefficient(DEFAULT_NUTRIENT_COEFFICIENT);
-        setFishInPool(new FishGroup());
-
-        randomNumberGenerator = new Random();
-
-        identificationNumber = ++numberOfPools;
-
+        this(DEFAULT_POOL_NAME, 0.0, DEFAULT_TEMP_CELSIUS, NEUTRAL_PH,
+                DEFAULT_NUTRIENT_COEFFICIENT);
     }
 
     /**
@@ -140,7 +128,7 @@ public class Pool extends WaterBody {
 
     }
 
-    private String processName(String inputName) {
+    private static String processName(String inputName) {
         if (inputName == null) {
             return DEFAULT_POOL_NAME;
         }
@@ -268,25 +256,6 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Returns an ArrayList object holding all Streams to this Pool.
-     * 
-     * @return an ArrayList object holding all Streams to this Pool
-     */
-    public ArrayList<Stream> getStreamsTo() {
-        return streamsTo;
-    }
-
-    /**
-     * Sets the ArrayList object holding all Streams to this Pool.
-     * 
-     * @param newStreamsTo
-     *            an ArrayList object holding all Streams to this Pool
-     */
-    public void setStreamsTo(ArrayList<Stream> newStreamsTo) {
-        streamsTo = newStreamsTo;
-    }
-
-    /**
      * Adds a Stream that leads to this Pool; no duplicates allowed.
      * 
      * @param stream
@@ -306,29 +275,8 @@ public class Pool extends WaterBody {
      */
     public void addStreamsTo(ArrayList<Stream> streams) {
         for (Stream stream : streams) {
-            if (!streamsTo.contains(stream)) {
-                streamsTo.add(stream);
-            }
+            addStreamTo(stream);
         }
-    }
-
-    /**
-     * Returns an ArrayList object holding all Streams from this Pool.
-     * 
-     * @return an ArrayList object holding all Streams from this Pool
-     */
-    public ArrayList<Stream> getStreamsFrom() {
-        return streamsFrom;
-    }
-
-    /**
-     * Sets the ArrayList object holding all Streams from this Pool.
-     * 
-     * @param newStreamsFrom
-     *            an ArrayList object holding all Streams from this Pool
-     */
-    public void setStreamsFrom(ArrayList<Stream> newStreamsFrom) {
-        streamsFrom = newStreamsFrom;
     }
 
     /**
@@ -351,9 +299,7 @@ public class Pool extends WaterBody {
      */
     public void addStreamsFrom(ArrayList<Stream> streams) {
         for (Stream stream : streams) {
-            if (!streamsFrom.contains(stream)) {
-                streamsFrom.add(stream);
-            }
+            addStreamFrom(stream);
         }
     }
 
@@ -444,8 +390,8 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Calculates and returns the average health coefficient of all the Fish
-     * in the Pool.
+     * Calculates and returns the average health coefficient of all the Fish in
+     * the Pool.
      * 
      * @return the average health coefficient of all the Fish in the Pool
      */
@@ -454,8 +400,8 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Calculates and returns the percentage of living Fish in the Pool that
-     * are female.
+     * Calculates and returns the percentage of living Fish in the Pool that are
+     * female.
      * 
      * @return the average health coefficient of all the Fish in the Pool
      */
@@ -464,8 +410,7 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Evaluates and returns the median age of all the living Fish in the
-     * Pool.
+     * Evaluates and returns the median age of all the living Fish in the Pool.
      * 
      * @return the median age of all the living Fish in the Pool
      */
@@ -474,9 +419,9 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Invokes the spawn() method on all the Fish in the Pool. Any baby
-     * Fish born are added to the Pool. Returns the number of baby Fish
-     * added to the Pool.
+     * Invokes the spawn() method on all the Fish in the Pool. Any baby Fish
+     * born are added to the Pool. Returns the number of baby Fish added to the
+     * Pool.
      * 
      * @return the number of baby Fish added to the Pool
      */
@@ -495,8 +440,8 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Crowds out the weakest Fish until the volume requirement is less than
-     * or equal to the Pool's volume.
+     * Crowds out the weakest Fish until the volume requirement is less than or
+     * equal to the Pool's volume.
      * 
      * @return the number of Fish killed off
      */
@@ -515,11 +460,7 @@ public class Pool extends WaterBody {
             List<Fish> weakest = fishInPool.getWeakest(minFishToRemove);
 
             for (Fish weakFish : weakest) {
-                double fishVolReq = weakFish.getVolumeNeeded();
                 crowdOut(weakFish);
-                // problem here:
-//                fishInPool.changeVolumeRequirement(
-//                        -1 * fishVolReq / FishGroup.MILLILITRES_IN_LITRE);
                 if (!weakFish.isAlive()) {
                     killed++;
                 }
@@ -546,7 +487,6 @@ public class Pool extends WaterBody {
         // throw new IllegalArgumentException();
         // }
         if (streamsFrom.isEmpty()) {
-//            fishToCrowd.kill();
             fishInPool.killFish(fishToCrowd);
         } else {
             double healthCoefficient = fishToCrowd.getHealthCoefficient();
@@ -554,7 +494,6 @@ public class Pool extends WaterBody {
             if (healthRoll < healthCoefficient) {
                 sendDownstream(fishToCrowd);
             } else {
-//                fishToCrowd.kill();
                 fishInPool.killFish(fishToCrowd);
             }
         }
