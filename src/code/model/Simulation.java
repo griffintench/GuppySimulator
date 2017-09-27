@@ -196,17 +196,9 @@ public class Simulation extends Observable {
         setChanged();
         notifyObservers(false);
     }
-
-    private void constructPoolList() {
-        ArrayList<int[]> list = ecosystem.constructPoolList();
-        setChanged();
-        notifyObservers(list);
-    }
     
     public void constructPoolHashMap() {
-        System.out.println("hello");
-        
-        HashMap<String, int[]> map = ecosystem.constructPoolList2();
+        HashMap<String, int[]> map = ecosystem.constructPoolList();
         setChanged();
         notifyObservers(map);
     }

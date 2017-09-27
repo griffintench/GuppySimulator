@@ -58,14 +58,7 @@ public class SimulationPane extends VBox implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        if (arg instanceof ArrayList) {
-//            final ArrayList<int[]> castArg = (ArrayList<int[]>) arg;
-//            Platform.runLater(new Runnable() {
-//                public void run() {
-//                    ecosystemPane.update(castArg);
-//                }
-//            });
-        } else if (arg instanceof Boolean) {
+        if (arg instanceof Boolean) {
             final Boolean castArg = (Boolean) arg;
             Platform.runLater(new Runnable() {
                 public void run() {
