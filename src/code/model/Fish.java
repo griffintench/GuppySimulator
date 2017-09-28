@@ -21,11 +21,6 @@ public abstract class Fish implements Comparable<Fish> {
     private final BinomialName binomialName;
 
     /**
-     * The fish's age, in weeks.
-     */
-    private int ageInWeeks;
-
-    /**
      * True if the fish is female; false if male.
      */
     private boolean isFemale;
@@ -47,21 +42,6 @@ public abstract class Fish implements Comparable<Fish> {
     private final int fishID;
 
     /**
-     * Zero-parameter constructor. Sets the fish's age and generation number to
-     * 0; the fish is female and alive. Increments the number of Fish that have
-     * been created and sets it to fishID. Genus and species are left alone.
-     */
-    public Fish() {
-        binomialName = new BinomialName("", "");
-        setAgeInWeeks(0);
-        generationNumber = processGenerationNumber(0);
-        setIsFemale(true);
-        health = new Health();
-
-        fishID = ++numberOfFishBorn;
-    }
-
-    /**
      * Constructor with only genus and species parameters. Typically used by the
      * zero-parameter constructor of a particular species of fish.
      * 
@@ -69,9 +49,11 @@ public abstract class Fish implements Comparable<Fish> {
      *            the genus of the fish
      * @param newSpecies
      *            the species of the fish
+     * @param maxAgeInWeeks
+     *            the maximum age of the fish (species-specific)
      */
-    public Fish(String newGenus, String newSpecies) {
-        this(newGenus, newSpecies, 0, true, 0,
+    public Fish(String newGenus, String newSpecies, int maxAgeInWeeks) {
+        this(newGenus, newSpecies, 0, maxAgeInWeeks, true, 0,
                 Health.DEFAULT_HEALTH_COEFFICIENT);
     }
 
@@ -86,6 +68,8 @@ public abstract class Fish implements Comparable<Fish> {
      *            the species of the fish
      * @param newAgeInWeeks
      *            the age of the fish in weeks
+     * @param maxAgeInWeeks
+     *            the maximum age of the fish in weeks (species-specific)
      * @param newIsFemale
      *            true if the fish is female; false if male
      * @param newGenerationNumber
@@ -94,41 +78,39 @@ public abstract class Fish implements Comparable<Fish> {
      *            the health coefficient of the fish
      */
     public Fish(String newGenus, String newSpecies, int newAgeInWeeks,
-            boolean newIsFemale, int newGenerationNumber,
+            int maxAgeInWeeks, boolean newIsFemale, int newGenerationNumber,
             double newHealthCoefficient) {
-        binomialName = new BinomialName(newGenus, newSpecies);
-        setAgeInWeeks(newAgeInWeeks);
-        generationNumber = processGenerationNumber(newGenerationNumber);
-        setIsFemale(newIsFemale);
-        health = new Health(true, newHealthCoefficient);
-
-        fishID = ++numberOfFishBorn;
+        this(new BinomialName(newGenus, newSpecies), newAgeInWeeks,
+                maxAgeInWeeks, newIsFemale, newGenerationNumber,
+                newHealthCoefficient);
     }
 
     /**
-     * Constructor. Sets the fish's binomial name, age in weeks, sex, generation
-     * number, and health coefficient; increments the number of fish that have
-     * been created and sets it to fishID.
+     * Constructor. Sets the fish's binomial name, age in weeks, max age in
+     * weeks, sex, generation number, and health coefficient; increments the
+     * number of fish that have been created and sets it to fishID.
      * 
      * @param newBinomialName
      *            the binomial name of the fish
      * @param newAgeInWeeks
-     *            the age of the fish in weeks
+     *            the fish's age in weeks
+     * @param maxAgeInWeeks
+     *            the fish's max age in weeks (species-specific)
      * @param newIsFemale
-     *            true if the fish is female; false otherwise
+     *            true if the fish is female; false if not
      * @param newGenerationNumber
-     *            the generation number of the fish
+     *            an int corresponding to the generation of the fish
      * @param newHealthCoefficient
      *            the health coefficient of the fish
      */
     public Fish(BinomialName newBinomialName, int newAgeInWeeks,
-            boolean newIsFemale, int newGenerationNumber,
+            int maxAgeInWeeks, boolean newIsFemale, int newGenerationNumber,
             double newHealthCoefficient) {
         binomialName = newBinomialName;
-        setAgeInWeeks(newAgeInWeeks);
-        generationNumber = processGenerationNumber(newGenerationNumber);
+        generationNumber = (newGenerationNumber < 0) ? 0 : newGenerationNumber;
         setIsFemale(newIsFemale);
-        health = new Health(true, newHealthCoefficient);
+        health = new Health(true, newHealthCoefficient, newAgeInWeeks,
+                maxAgeInWeeks);
 
         fishID = ++numberOfFishBorn;
     }
@@ -138,19 +120,8 @@ public abstract class Fish implements Comparable<Fish> {
      * old age.
      */
     public void incrementAge() {
-        ageInWeeks++;
-
-        if (hasDiedOfOldAge()) {
-            kill();
-        }
+        health.incrementAge();
     }
-
-    /**
-     * Returns true if the fish has died of old age; false otherwise.
-     * 
-     * @return true if the fish has died of old age; false otherwise
-     */
-    abstract boolean hasDiedOfOldAge();
 
     /**
      * Returns the scientific binomial name of the fish.
@@ -167,28 +138,7 @@ public abstract class Fish implements Comparable<Fish> {
      * @return the fish's age in weeks
      */
     public int getAgeInWeeks() {
-        return ageInWeeks;
-    }
-
-    /**
-     * Sets the fish's age in weeks.
-     * 
-     * @param newAgeInWeeks
-     *            the fish's new age in weeks
-     */
-    public abstract void setAgeInWeeks(int newAgeInWeeks);
-
-    /**
-     * Sets the fish's age in weeks, as long as it is under a given maximum.
-     * 
-     * @param newAgeInWeeks
-     *            the fish's age in weeks
-     * @param maxAgeInWeeks
-     *            the maximum possible age of the fish
-     */
-    public void setAgeInWeeks(int newAgeInWeeks, int maxAgeInWeeks) {
-        ageInWeeks = (newAgeInWeeks < 0 || newAgeInWeeks >= maxAgeInWeeks) ? 0
-                : newAgeInWeeks;
+        return health.getAgeInWeeks();
     }
 
     /**
@@ -217,27 +167,6 @@ public abstract class Fish implements Comparable<Fish> {
      */
     public int getGenerationNumber() {
         return generationNumber;
-    }
-
-    /**
-     * Processes the generation number for the fish, so that the fish doesn't
-     * have a negative generation number.
-     * 
-     * @param newGenerationNumber
-     *            the fish's generation number
-     * @return the processed generation number
-     */
-    public int processGenerationNumber(int newGenerationNumber) {
-        return (newGenerationNumber < 0) ? 0 : newGenerationNumber;
-    }
-
-    /**
-     * Returns the Fish's Health object.
-     * 
-     * @return the Fish's Health object
-     */
-    public Health getHealth() {
-        return health;
     }
 
     /**

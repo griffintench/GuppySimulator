@@ -60,7 +60,7 @@ public class Guppy extends Fish {
      */
     public Guppy() {
 
-        super(DEFAULT_GENUS, DEFAULT_SPECIES);
+        super(DEFAULT_GENUS, DEFAULT_SPECIES, MAXIMUM_AGE_IN_WEEKS);
 
         guppyID = ++numberOfGuppiesBorn;
 
@@ -87,32 +87,11 @@ public class Guppy extends Fish {
             double newHealthCoefficient) {
 
         super(new BinomialName(newGenus, newSpecies, DEFAULT_GENUS,
-                DEFAULT_SPECIES), newAgeInWeeks, newIsFemale,
-                newGenerationNumber, newHealthCoefficient);
+                DEFAULT_SPECIES), newAgeInWeeks, MAXIMUM_AGE_IN_WEEKS,
+                newIsFemale, newGenerationNumber, newHealthCoefficient);
 
         guppyID = ++numberOfGuppiesBorn;
 
-    }
-
-    /**
-     * Returns true if the Guppy's age is above the maximum age for a Guppy.
-     * 
-     * @return true if the Guppy's age is above the maximum age for a Guppy;
-     *         false otherwise
-     */
-    public boolean hasDiedOfOldAge() {
-        return getAgeInWeeks() >= MAXIMUM_AGE_IN_WEEKS;
-    }
-
-    /**
-     * Sets the fish's age in weeks.
-     * 
-     * @param newAgeInWeeks
-     *            the new age in weeks for the fish
-     */
-    @Override
-    public void setAgeInWeeks(int newAgeInWeeks) {
-        super.setAgeInWeeks(newAgeInWeeks, MAXIMUM_AGE_IN_WEEKS);
     }
 
     /**

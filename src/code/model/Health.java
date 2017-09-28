@@ -25,6 +25,11 @@ public class Health implements Comparable<Health> {
     public static final double MAXIMUM_HEALTH_COEFFICIENT = 1.0;
 
     /**
+     * The default maximum age in weeks.
+     */
+    public static final int DEFAULT_MAX_AGE_WEEKS = 10;
+
+    /**
      * True if the animal is alive; false otherwise.
      */
     private boolean isAlive;
@@ -35,13 +40,16 @@ public class Health implements Comparable<Health> {
      */
     private double healthCoefficient;
 
+    private int ageInWeeks;
+
+    private int maxAgeInWeeks;
+
     /**
      * Default constructor. Sets the animal to alive and gives it a health
      * coefficient of 0.5.
      */
     public Health() {
-        healthCoefficient = DEFAULT_HEALTH_COEFFICIENT;
-        isAlive = true;
+        this(true, DEFAULT_HEALTH_COEFFICIENT, 0, DEFAULT_MAX_AGE_WEEKS);
     }
 
     /**
@@ -54,8 +62,44 @@ public class Health implements Comparable<Health> {
      *            a double between 0.0 and 1.0
      */
     public Health(boolean isAlive, double healthCoefficient) {
+        this(isAlive, healthCoefficient, 0, DEFAULT_MAX_AGE_WEEKS);
+    }
+
+    /**
+     * Constructor. Uses the default max age.
+     * 
+     * @param isAlive
+     *            true if the animal is alive; false otherwise
+     * @param healthCoefficient
+     *            a double between 0.0 and 1.0
+     * @param ageInWeeks
+     *            a nonnegative int
+     */
+    public Health(boolean isAlive, double healthCoefficient, int ageInWeeks) {
+        this(isAlive, healthCoefficient, ageInWeeks, DEFAULT_MAX_AGE_WEEKS);
+    }
+
+    /**
+     * Constructor with every parameter.
+     * 
+     * @param isAlive
+     *            true if the animal is alive; false otherwise
+     * @param healthCoefficient
+     *            a double between 0.0 and 1.0
+     * @param ageInWeeks
+     *            a nonnegative int, less than maxAgeInWeeks
+     * @param maxAgeInWeeks
+     *            a positive int
+     */
+    public Health(boolean isAlive, double healthCoefficient, int ageInWeeks,
+            int maxAgeInWeeks) {
         setIsAlive(isAlive);
         setHealthCoefficient(healthCoefficient);
+        this.maxAgeInWeeks = maxAgeInWeeks;
+
+        this.ageInWeeks = (ageInWeeks < 0 || ageInWeeks >= maxAgeInWeeks) ? 0
+                : ageInWeeks;
+
     }
 
     /**
@@ -98,6 +142,26 @@ public class Health implements Comparable<Health> {
             healthCoefficient = 0.0;
         } else {
             healthCoefficient = newHealthCoefficient;
+        }
+    }
+
+    /**
+     * Returns the age in weeks.
+     * 
+     * @return the age in weeks
+     */
+    public int getAgeInWeeks() {
+        return ageInWeeks;
+    }
+
+    /**
+     * Increments the age. If the age is too large, dies.
+     */
+    public void incrementAge() {
+        ageInWeeks++;
+
+        if (ageInWeeks > maxAgeInWeeks) {
+            setIsAlive(false);
         }
     }
 
@@ -158,6 +222,12 @@ public class Health implements Comparable<Health> {
             return 1;
         }
         if (healthCoefficient < o.healthCoefficient) {
+            return -1;
+        }
+        if ((maxAgeInWeeks - ageInWeeks) > (o.maxAgeInWeeks - o.ageInWeeks)) {
+            return 1;
+        }
+        if ((maxAgeInWeeks - ageInWeeks) < (o.maxAgeInWeeks - o.ageInWeeks)) {
             return -1;
         }
         return 0;
