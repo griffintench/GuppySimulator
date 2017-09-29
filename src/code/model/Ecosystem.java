@@ -122,6 +122,8 @@ public class Ecosystem {
      * crowded-out ones. Removes all dead Guppies, and checks that the number of
      * dead is equal to the number removed. Spawns new Guppies.
      * 
+     * NOTE - don't remove the comments; they make it easier to troubleshoot
+     * 
      * @param weekNumber
      *            an ordinal number representing the current week
      */

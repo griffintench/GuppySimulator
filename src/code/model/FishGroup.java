@@ -1,12 +1,12 @@
 package code.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 /**
  * A Group of Fish with methods to increment ages, spawn, apply nutrient
@@ -25,7 +25,7 @@ public class FishGroup {
     /**
      * The Fish in the Group.
      */
-    private List<Fish> fish;
+    private final List<Fish> fish;
 
     /**
      * True if we know that the ArrayList is properly sorted; false otherwise.
@@ -41,7 +41,7 @@ public class FishGroup {
      * Zero-parameter constructor; starts with an empty LinkedList.
      */
     public FishGroup() {
-        setFish(new LinkedList<Fish>());
+        this(new LinkedList<Fish>());
     }
 
     /**
@@ -51,34 +51,8 @@ public class FishGroup {
      *            an LinkedList of Fish
      */
     public FishGroup(LinkedList<Fish> newFish) {
-        setFish(newFish);
-    }
-
-    /**
-     * Sets the Fish in this Group.
-     * 
-     * @param newFish
-     *            an LinkedList with the Fish in this Group
-     */
-    public void setFish(LinkedList<Fish> newFish) {
-        if (newFish == null) {
-            fish = new LinkedList<Fish>();
-        } else {
-            fish = newFish;
-        }
+        fish = (newFish == null) ? new LinkedList<Fish>() : newFish;
         setAsNotSorted();
-    }
-
-    /**
-     * Returns the Fish at the i-th index in the ArrayList containing this
-     * Group's Fish.
-     * 
-     * @param i
-     *            the index of the Fish
-     * @return the Fish at the i-th index
-     */
-    public Fish get(int i) {
-        return fish.get(i);
     }
 
     /**
@@ -118,10 +92,9 @@ public class FishGroup {
         if (fishToAdd != null) {
             fish.add(fishToAdd);
             result = true;
+            setAsNotSorted();
         }
 
-        sorted = false;
-        weakestLivingIndex = -1;
         return result;
     }
 
@@ -137,11 +110,10 @@ public class FishGroup {
 
         if (fishToAdd != null) {
             fish.addAll(fishToAdd);
+            setAsNotSorted();
             result = true;
         }
 
-        sorted = false;
-        weakestLivingIndex = -1;
         return result;
     }
 
@@ -255,15 +227,9 @@ public class FishGroup {
         return result;
     }
 
-    /**
-     * Calculates and returns the average age in weeks of all the Fish in the
-     * Group.
-     * 
-     * @return the average age in weeks of all the Fish in the Group
-     */
-    public double getAverageAgeInWeeks() {
-        final int fishCount = getLivingPopulation();
-        final int[] ages = new int[fishCount];
+    private double getAverageStatistic(Function<Fish, Integer> fishOp,
+            Function<int[], Double> statsOp) {
+        final int[] stats = new int[getLivingPopulation()];
         final Iterator<Fish> iterator = fish.iterator();
 
         Fish currentFish;
@@ -273,14 +239,25 @@ public class FishGroup {
             currentFish = iterator.next();
 
             if (currentFish != null && currentFish.isAlive()) {
-                ages[i] = currentFish.getAgeInWeeks();
+                stats[i] = fishOp.apply(currentFish);
                 i++;
             }
         }
 
-        return Statistics.arrayMean(ages);
+        return statsOp.apply(stats);
     }
 
+    /**
+     * Calculates and returns the average age in weeks of all the Fish in the
+     * Group.
+     * 
+     * @return the average age in weeks of all the Fish in the Group
+     */
+    public double getAverageAgeInWeeks() {
+        return getAverageStatistic(Fish::getAgeInWeeks, Statistics::arrayMean);
+    }
+
+    // TODO figure out what's happening with ints/doubles in getAverageStatistic
     /**
      * Calculates and returns the average health coefficient of all the Fish in
      * the Group.
@@ -314,24 +291,8 @@ public class FishGroup {
      * @return the percentage of living Fish in the group that are female
      */
     public double getFemalePercentage() {
-        final int fishCount = getLivingPopulation();
-        final int[] females = new int[fishCount];
-        final Iterator<Fish> iterator = fish.iterator();
-
-        Fish currentFish;
-
-        int i = 0;
-        while (iterator.hasNext()) {
-            currentFish = iterator.next();
-
-            if (currentFish != null && currentFish.getIsFemale()
-                    && currentFish.isAlive()) {
-                females[i] = 1;
-                i++;
-            }
-        }
-
-        return Statistics.arrayMean(females);
+        return getAverageStatistic(f -> (f.getIsFemale()) ? 1 : 0,
+                Statistics::arrayMean);
     }
 
     /**
@@ -340,23 +301,8 @@ public class FishGroup {
      * @return the median age of all the living Fish in the Group
      */
     public double getMedianAge() {
-        final int fishCount = getLivingPopulation();
-        final int[] ages = new int[fishCount];
-        final Iterator<Fish> iterator = fish.iterator();
-
-        Fish currentFish;
-
-        int i = 0;
-        while (iterator.hasNext()) {
-            currentFish = iterator.next();
-
-            if (currentFish != null && currentFish.isAlive()) {
-                ages[i] = currentFish.getAgeInWeeks();
-                i++;
-            }
-        }
-
-        return Statistics.arrayMedian(ages);
+        return getAverageStatistic(Fish::getAgeInWeeks,
+                Statistics::arrayMedian);
     }
 
     /**
@@ -392,8 +338,7 @@ public class FishGroup {
 
         for (Fish currentFish : fish) {
             if (currentFish != null && currentFish.isAlive()) {
-                currentFish.incrementAge();
-                if (!currentFish.isAlive()) {
+                if (currentFish.incrementAge()) {
                     numberOfDead++;
                 }
             }
@@ -458,8 +403,7 @@ public class FishGroup {
     }
 
     /**
-     * Kills a Fish in this FishGroup and then modifies the volume requirement
-     * appropriately.
+     * Kills a Fish in this FishGroup.
      * 
      * @param fishToKill
      *            the fish to kill, in this FishGroup

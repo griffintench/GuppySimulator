@@ -139,7 +139,7 @@ public class Health implements Comparable<Health> {
     public void setHealthCoefficient(double newHealthCoefficient) {
         if (newHealthCoefficient < MINIMUM_HEALTH_COEFFICIENT
                 || newHealthCoefficient > MAXIMUM_HEALTH_COEFFICIENT) {
-            healthCoefficient = 0.0;
+            healthCoefficient = DEFAULT_HEALTH_COEFFICIENT;
         } else {
             healthCoefficient = newHealthCoefficient;
         }
@@ -155,14 +155,19 @@ public class Health implements Comparable<Health> {
     }
 
     /**
-     * Increments the age. If the age is too large, dies.
+     * Increments the age. If the age is too large, dies and returns true.
+     * 
+     * @return true if the animal dies
      */
-    public void incrementAge() {
+    public boolean incrementAge() {
         ageInWeeks++;
 
         if (ageInWeeks > maxAgeInWeeks) {
             setIsAlive(false);
+            return true;
         }
+        
+        return false;
     }
 
     /**
@@ -177,7 +182,7 @@ public class Health implements Comparable<Health> {
         healthCoefficient = healthCoefficient + delta;
 
         if (healthCoefficient < MINIMUM_HEALTH_COEFFICIENT) {
-            healthCoefficient = 0.0;
+            healthCoefficient = MINIMUM_HEALTH_COEFFICIENT;
             isAlive = false;
         } else if (healthCoefficient > MAXIMUM_HEALTH_COEFFICIENT) {
             healthCoefficient = MAXIMUM_HEALTH_COEFFICIENT;

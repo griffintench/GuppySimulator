@@ -117,10 +117,12 @@ public abstract class Fish implements Comparable<Fish> {
 
     /**
      * Increments the fish's age, and then checks to see if the fish has died of
-     * old age.
+     * old age. Returns true if the fish has died.
+     * 
+     * @return true if the fish has died, false otherwise
      */
-    public void incrementAge() {
-        health.incrementAge();
+    public boolean incrementAge() {
+        return health.incrementAge();
     }
 
     /**

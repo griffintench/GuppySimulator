@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 /**
  * A Pool class with some Fish in it.
@@ -169,15 +170,13 @@ public class Pool extends WaterBody {
      *            the volume of the Pool in litres.
      */
     public void setVolumeLitres(double newVolumeLitres) {
-        if (newVolumeLitres > 0.0) {
-            volumeLitres = newVolumeLitres;
-        }
+        volumeLitres = (newVolumeLitres > 0.0) ? newVolumeLitres : volumeLitres;
     }
 
     @Override
     public void setTemperatureCelsius(double newTemperatureCelsius) {
         super.setTemperatureCelsius(newTemperatureCelsius);
-        if (streamsFrom != null && !streamsFrom.isEmpty()) {
+        if (streamsFrom != null) {
             for (Stream stream : streamsFrom) {
                 stream.setTemperatureCelsius(newTemperatureCelsius);
             }
@@ -310,13 +309,6 @@ public class Pool extends WaterBody {
      */
     public static int getNumberCreated() {
         return numberOfPools;
-    }
-
-    /**
-     * Prints the details of this Pool to the console.
-     */
-    public void printDetails() {
-        System.out.println(toString());
     }
 
     /**
@@ -497,7 +489,7 @@ public class Pool extends WaterBody {
                 fishInPool.killFish(fishToCrowd);
             }
         }
-        fishInPool.setAsNotSorted();
+        fishInPool.setAsNotSorted(); // TODO this can probably be deleted
     }
 
     /**
@@ -508,8 +500,7 @@ public class Pool extends WaterBody {
      *            the Fish to send downstream.
      */
     private void sendDownstream(Fish fishToSend) {
-        boolean success = fishInPool.remove(fishToSend);
-        if (success) {
+        if (fishInPool.remove(fishToSend)) {
             int streams = streamsFrom.size();
 
             int streamNumber = randomNumberGenerator.nextInt(streams);
@@ -529,13 +520,6 @@ public class Pool extends WaterBody {
      */
     public int[] getFishHealthNumbers() {
         return fishInPool.getFishHealthNumbers();
-    }
-
-    /**
-     * Sets this pool's Fish as not sorted.
-     */
-    public void setAsNotSorted() {
-        fishInPool.setAsNotSorted();
     }
 
     @Override
