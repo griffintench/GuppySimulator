@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * A Pool class with some Fish in it.
@@ -176,30 +176,23 @@ public class Pool extends WaterBody {
     @Override
     public void setTemperatureCelsius(double newTemperatureCelsius) {
         super.setTemperatureCelsius(newTemperatureCelsius);
-        if (streamsFrom != null) {
-            for (Stream stream : streamsFrom) {
-                stream.setTemperatureCelsius(newTemperatureCelsius);
-            }
-        }
+        cascadeDownstream((BiConsumer<Stream, Double>) (Stream s, Double d) -> s
+                .setTemperatureCelsius(d), newTemperatureCelsius);
     }
 
     @Override
     public void setPH(double newPH) {
         super.setPH(newPH);
+        cascadeDownstream((BiConsumer<Stream, Double>) (Stream s, Double d) -> s
+                .setPH(d), newPH);
+    }
+    //TODO eliminate the second parameter in cascadeDownstream - not necessary
+    private void cascadeDownstream(BiConsumer<Stream, Double> op, double d) {
         if (streamsFrom != null) {
             for (Stream stream : streamsFrom) {
-                stream.setPH(newPH);
+                op.accept(stream, d);
             }
         }
-    }
-
-    /**
-     * Returns the nutrient coefficient of the Pool.
-     * 
-     * @return the nutrient coefficient of the Pool
-     */
-    public double getNutrientCoefficient() {
-        return nutrientCoefficient;
     }
 
     /**
@@ -267,18 +260,6 @@ public class Pool extends WaterBody {
     }
 
     /**
-     * Adds multiple Streams that lead to this Pool; no duplicates allowed.
-     * 
-     * @param streams
-     *            an ArrayList object holding Streams that lead to this Pool
-     */
-    public void addStreamsTo(ArrayList<Stream> streams) {
-        for (Stream stream : streams) {
-            addStreamTo(stream);
-        }
-    }
-
-    /**
      * Adds a Stream that leads from this Pool; no duplicates allowed.
      * 
      * @param stream
@@ -287,18 +268,6 @@ public class Pool extends WaterBody {
     public void addStreamFrom(Stream stream) {
         if (!streamsFrom.contains(stream)) {
             streamsFrom.add(stream);
-        }
-    }
-
-    /**
-     * Adds multiple Streams that lead from this Pool; no duplicates allowed.
-     * 
-     * @param streams
-     *            an ArrayList object holding Streams that lead from this Pool
-     */
-    public void addStreamsFrom(ArrayList<Stream> streams) {
-        for (Stream stream : streams) {
-            addStreamFrom(stream);
         }
     }
 
@@ -489,7 +458,7 @@ public class Pool extends WaterBody {
                 fishInPool.killFish(fishToCrowd);
             }
         }
-        fishInPool.setAsNotSorted(); // TODO this can probably be deleted
+        fishInPool.setAsNotSorted();
     }
 
     /**

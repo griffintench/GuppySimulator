@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * A Group of Fish with methods to increment ages, spawn, apply nutrient
@@ -150,17 +151,7 @@ public class FishGroup {
      * @return the number of living Fish in the Group
      */
     public int getLivingPopulation() {
-        int population = 0;
-
-        Iterator<Fish> iterator = fish.iterator();
-        while (iterator.hasNext()) {
-            Fish curFish = iterator.next();
-            if (curFish != null && curFish.isAlive()) {
-                population++;
-            }
-        }
-
-        return population;
+        return countIf(Fish::isAlive);
     }
 
     /**
@@ -218,16 +209,14 @@ public class FishGroup {
      *         currently in the Group, in litres
      */
     public double getFishVolumeRequirementInLitres() {
-        Iterator<Fish> iterator = fish.iterator();
         double result = 0.0;
-        while (iterator.hasNext()) {
-            Fish curFish = iterator.next();
+        for (Fish curFish : fish) {
             result += curFish.getVolumeNeeded() / MILLILITRES_IN_LITRE;
         }
         return result;
     }
 
-    private double getAverageStatistic(Function<Fish, Integer> fishOp,
+    private double getArrayStatistic(Function<Fish, Integer> fishOp,
             Function<int[], Double> statsOp) {
         final int[] stats = new int[getLivingPopulation()];
         final Iterator<Fish> iterator = fish.iterator();
@@ -254,7 +243,7 @@ public class FishGroup {
      * @return the average age in weeks of all the Fish in the Group
      */
     public double getAverageAgeInWeeks() {
-        return getAverageStatistic(Fish::getAgeInWeeks, Statistics::arrayMean);
+        return getArrayStatistic(Fish::getAgeInWeeks, Statistics::arrayMean);
     }
 
     // TODO figure out what's happening with ints/doubles in getAverageStatistic
@@ -265,8 +254,7 @@ public class FishGroup {
      * @return the average health coefficient of all the Fish in the Group
      */
     public double getAverageHealthCoefficient() {
-        final int fishCount = getLivingPopulation();
-        final double[] healths = new double[fishCount];
+        final double[] healths = new double[getLivingPopulation()];
         final Iterator<Fish> iterator = fish.iterator();
 
         Fish currentFish;
@@ -291,7 +279,7 @@ public class FishGroup {
      * @return the percentage of living Fish in the group that are female
      */
     public double getFemalePercentage() {
-        return getAverageStatistic(f -> (f.getIsFemale()) ? 1 : 0,
+        return getArrayStatistic(f -> (f.getIsFemale()) ? 1 : 0,
                 Statistics::arrayMean);
     }
 
@@ -301,8 +289,7 @@ public class FishGroup {
      * @return the median age of all the living Fish in the Group
      */
     public double getMedianAge() {
-        return getAverageStatistic(Fish::getAgeInWeeks,
-                Statistics::arrayMedian);
+        return getArrayStatistic(Fish::getAgeInWeeks, Statistics::arrayMedian);
     }
 
     /**
@@ -334,18 +321,20 @@ public class FishGroup {
      * @return the number of Fish that have died of old age
      */
     public int incrementAges() {
-        int numberOfDead = 0;
-
+        setAsNotSorted();
+        return countIf((Fish f) -> f.isAlive() && f.incrementAge());
+    }
+    
+    private int countIf(Predicate<Fish> pred) {
+        int count = 0;
+        
         for (Fish currentFish : fish) {
-            if (currentFish != null && currentFish.isAlive()) {
-                if (currentFish.incrementAge()) {
-                    numberOfDead++;
-                }
+            if (currentFish != null && pred.test(currentFish)) {
+                count++;
             }
         }
-
-        setAsNotSorted();
-        return numberOfDead;
+        
+        return count;
     }
 
     /**
@@ -409,7 +398,7 @@ public class FishGroup {
      *            the fish to kill, in this FishGroup
      */
     public void killFish(Fish fishToKill) {
-        if (fishToKill.isAlive()) {
+        if (fishToKill != null && fishToKill.isAlive()) {
             fishToKill.kill();
             setAsNotSorted();
         }

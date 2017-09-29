@@ -108,7 +108,7 @@ public abstract class Fish implements Comparable<Fish> {
             double newHealthCoefficient) {
         binomialName = newBinomialName;
         generationNumber = (newGenerationNumber < 0) ? 0 : newGenerationNumber;
-        setIsFemale(newIsFemale);
+        isFemale = newIsFemale;
         health = new Health(true, newHealthCoefficient, newAgeInWeeks,
                 maxAgeInWeeks);
 
