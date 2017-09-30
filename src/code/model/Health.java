@@ -38,7 +38,7 @@ public class Health implements Comparable<Health> {
      * A number between 0.0 and 1.0, representing how healthy the animal is (the
      * higher, the healthier).
      */
-    private double healthCoefficient;
+    private Coefficient healthCoefficient;
 
     private int ageInWeeks;
 
@@ -94,7 +94,7 @@ public class Health implements Comparable<Health> {
     public Health(boolean isAlive, double healthCoefficient, int ageInWeeks,
             int maxAgeInWeeks) {
         setIsAlive(isAlive);
-        setHealthCoefficient(healthCoefficient);
+        this.healthCoefficient = new Coefficient(healthCoefficient);
         this.maxAgeInWeeks = maxAgeInWeeks;
 
         this.ageInWeeks = (ageInWeeks < 0 || ageInWeeks >= maxAgeInWeeks) ? 0
@@ -127,7 +127,7 @@ public class Health implements Comparable<Health> {
      * @return the health coefficient of the animal
      */
     public double getHealthCoefficient() {
-        return healthCoefficient;
+        return healthCoefficient.value();
     }
 
     /**
@@ -137,12 +137,7 @@ public class Health implements Comparable<Health> {
      *            the health coefficient of the animal
      */
     public void setHealthCoefficient(double newHealthCoefficient) {
-        if (newHealthCoefficient < MINIMUM_HEALTH_COEFFICIENT
-                || newHealthCoefficient > MAXIMUM_HEALTH_COEFFICIENT) {
-            healthCoefficient = DEFAULT_HEALTH_COEFFICIENT;
-        } else {
-            healthCoefficient = newHealthCoefficient;
-        }
+        healthCoefficient.setValue(newHealthCoefficient);
     }
 
     /**
@@ -166,7 +161,7 @@ public class Health implements Comparable<Health> {
             setIsAlive(false);
             return true;
         }
-        
+
         return false;
     }
 
@@ -179,14 +174,7 @@ public class Health implements Comparable<Health> {
      *            the amount by which the health coefficient changes.
      */
     public void changeHealthCoefficient(double delta) {
-        healthCoefficient = healthCoefficient + delta;
-
-        if (healthCoefficient < MINIMUM_HEALTH_COEFFICIENT) {
-            healthCoefficient = MINIMUM_HEALTH_COEFFICIENT;
-            isAlive = false;
-        } else if (healthCoefficient > MAXIMUM_HEALTH_COEFFICIENT) {
-            healthCoefficient = MAXIMUM_HEALTH_COEFFICIENT;
-        }
+        healthCoefficient.changeValue(delta);
     }
 
     /**
@@ -196,7 +184,7 @@ public class Health implements Comparable<Health> {
      */
     public boolean isHealthy() {
         final double goodHealthCoefficient = 0.75;
-        return isAlive && healthCoefficient > goodHealthCoefficient;
+        return isAlive && healthCoefficient.value() > goodHealthCoefficient;
     }
 
     /**
@@ -206,7 +194,7 @@ public class Health implements Comparable<Health> {
      */
     public boolean isOkay() {
         final double okayHealthCoefficient = 0.25;
-        return isAlive && healthCoefficient > okayHealthCoefficient;
+        return isAlive && healthCoefficient.value() > okayHealthCoefficient;
     }
 
     @Override
@@ -223,11 +211,9 @@ public class Health implements Comparable<Health> {
         if (!isAlive && o.isAlive) {
             return -1;
         }
-        if (healthCoefficient > o.healthCoefficient) {
-            return 1;
-        }
-        if (healthCoefficient < o.healthCoefficient) {
-            return -1;
+        int healthCompare = healthCoefficient.compareTo(o.healthCoefficient);
+        if (healthCompare != 0) {
+            return healthCompare;
         }
         if ((maxAgeInWeeks - ageInWeeks) > (o.maxAgeInWeeks - o.ageInWeeks)) {
             return 1;

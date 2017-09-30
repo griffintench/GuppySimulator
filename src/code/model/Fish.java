@@ -1,6 +1,7 @@
 package code.model;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * An abstract Fish class to be extended by Guppy.
@@ -42,8 +43,8 @@ public abstract class Fish implements Comparable<Fish> {
     private final int fishID;
 
     /**
-     * Constructor with only genus and species parameters. Typically used by the
-     * zero-parameter constructor of a particular species of fish.
+     * Constructor with only genus, species and maxAge parameters. Typically
+     * used by the zero-parameter constructor of a particular species of fish.
      * 
      * @param newGenus
      *            the genus of the fish
@@ -53,36 +54,8 @@ public abstract class Fish implements Comparable<Fish> {
      *            the maximum age of the fish (species-specific)
      */
     public Fish(String newGenus, String newSpecies, int maxAgeInWeeks) {
-        this(newGenus, newSpecies, 0, maxAgeInWeeks, true, 0,
+        this(new BinomialName(newGenus, newSpecies), 0, maxAgeInWeeks, true, 0,
                 Health.DEFAULT_HEALTH_COEFFICIENT);
-    }
-
-    /**
-     * Constructor. Sets the fish's genus, species, age in weeks, sex,
-     * generation number, and health coefficient; increments the number of fish
-     * that have been created and sets it to fishID.
-     * 
-     * @param newGenus
-     *            the genus of the fish
-     * @param newSpecies
-     *            the species of the fish
-     * @param newAgeInWeeks
-     *            the age of the fish in weeks
-     * @param maxAgeInWeeks
-     *            the maximum age of the fish in weeks (species-specific)
-     * @param newIsFemale
-     *            true if the fish is female; false if male
-     * @param newGenerationNumber
-     *            the generation number of the fish
-     * @param newHealthCoefficient
-     *            the health coefficient of the fish
-     */
-    public Fish(String newGenus, String newSpecies, int newAgeInWeeks,
-            int maxAgeInWeeks, boolean newIsFemale, int newGenerationNumber,
-            double newHealthCoefficient) {
-        this(new BinomialName(newGenus, newSpecies), newAgeInWeeks,
-                maxAgeInWeeks, newIsFemale, newGenerationNumber,
-                newHealthCoefficient);
     }
 
     /**
@@ -106,7 +79,8 @@ public abstract class Fish implements Comparable<Fish> {
     public Fish(BinomialName newBinomialName, int newAgeInWeeks,
             int maxAgeInWeeks, boolean newIsFemale, int newGenerationNumber,
             double newHealthCoefficient) {
-        binomialName = newBinomialName;
+        binomialName = (newBinomialName == null) ? new BinomialName()
+                : newBinomialName;
         generationNumber = (newGenerationNumber < 0) ? 0 : newGenerationNumber;
         isFemale = newIsFemale;
         health = new Health(true, newHealthCoefficient, newAgeInWeeks,
@@ -255,7 +229,22 @@ public abstract class Fish implements Comparable<Fish> {
      * @return the Fish's babies
      */
     public abstract ArrayList<Fish> spawn();
-    // TODO figure out what to do with spawn()
+
+    /**
+     * Generates a random double; if the double is higher than the given
+     * nutrient coefficient, the fish dies.
+     * 
+     * @param nutrientCoefficient
+     *            a coefficient with a value between 0 and 1
+     * @return true if the fish dies
+     */
+    public boolean applyNutrientCoefficient(Coefficient nutrientCoefficient) {
+        if (nutrientCoefficient.roll()) {
+            kill();
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Compares to another fish based on health coefficient.

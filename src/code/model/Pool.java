@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /**
  * A Pool class with some Fish in it.
@@ -18,21 +18,6 @@ public class Pool extends WaterBody {
      * A default name for the pool.
      */
     public static final String DEFAULT_POOL_NAME = "Unnamed";
-
-    /**
-     * A default nutrient coefficient for the pool.
-     */
-    public static final double DEFAULT_NUTRIENT_COEFFICIENT = 0.50;
-
-    /**
-     * A minimum nutrient coefficient for the pool.
-     */
-    public static final double MINIMUM_NUTRIENT_COEFFICIENT = 0.0;
-
-    /**
-     * A maximum nutrient coefficient for the pool.
-     */
-    public static final double MAXIMUM_NUTRIENT_COEFFICIENT = 1.0;
 
     /**
      * The number of Pools in existence.
@@ -54,7 +39,7 @@ public class Pool extends WaterBody {
      * inclusive. The higher the nutrient coefficient, the less likely it is for
      * any given Fish to die.
      */
-    private double nutrientCoefficient;
+    private Coefficient nutrientCoefficient;
 
     /**
      * A unique identifier for the Pool.
@@ -67,8 +52,8 @@ public class Pool extends WaterBody {
     private FishGroup fishInPool;
 
     /**
-     * A random number generator, used to determine which Fish survive and which
-     * die.
+     * A random number generator, used to determine which Stream a Fish gets
+     * sent down.
      */
     private final Random randomNumberGenerator;
 
@@ -87,7 +72,7 @@ public class Pool extends WaterBody {
      */
     public Pool() {
         this(DEFAULT_POOL_NAME, 0.0, DEFAULT_TEMP_CELSIUS, NEUTRAL_PH,
-                DEFAULT_NUTRIENT_COEFFICIENT);
+                Coefficient.DEFAULT_COEFFICIENT);
     }
 
     /**
@@ -113,13 +98,12 @@ public class Pool extends WaterBody {
         streamsTo = new ArrayList<Stream>();
         streamsFrom = new ArrayList<Stream>();
         setVolumeLitres(0.0);
-        setNutrientCoefficient(DEFAULT_NUTRIENT_COEFFICIENT);
 
         setVolumeLitres(newVolumeLitres);
         name = processName(newName);
         setTemperatureCelsius(newTemperatureCelsius);
         setPH(newPH);
-        setNutrientCoefficient(newNutrientCoefficient);
+        nutrientCoefficient = new Coefficient(newNutrientCoefficient);
 
         setFishInPool(new FishGroup());
 
@@ -176,21 +160,20 @@ public class Pool extends WaterBody {
     @Override
     public void setTemperatureCelsius(double newTemperatureCelsius) {
         super.setTemperatureCelsius(newTemperatureCelsius);
-        cascadeDownstream((BiConsumer<Stream, Double>) (Stream s, Double d) -> s
-                .setTemperatureCelsius(d), newTemperatureCelsius);
+        cascadeDownstream((Consumer<Stream>) (Stream s) -> s
+                .setTemperatureCelsius(newTemperatureCelsius));
     }
 
     @Override
     public void setPH(double newPH) {
         super.setPH(newPH);
-        cascadeDownstream((BiConsumer<Stream, Double>) (Stream s, Double d) -> s
-                .setPH(d), newPH);
+        cascadeDownstream((Consumer<Stream>) (Stream s) -> s.setPH(newPH));
     }
-    //TODO eliminate the second parameter in cascadeDownstream - not necessary
-    private void cascadeDownstream(BiConsumer<Stream, Double> op, double d) {
+
+    private void cascadeDownstream(Consumer<Stream> op) {
         if (streamsFrom != null) {
             for (Stream stream : streamsFrom) {
-                op.accept(stream, d);
+                op.accept(stream);
             }
         }
     }
@@ -203,10 +186,7 @@ public class Pool extends WaterBody {
      *            the nutrient coefficient of the Pool
      */
     public void setNutrientCoefficient(double newNutrientCoefficient) {
-        if (newNutrientCoefficient >= MINIMUM_NUTRIENT_COEFFICIENT
-                && newNutrientCoefficient <= MAXIMUM_NUTRIENT_COEFFICIENT) {
-            nutrientCoefficient = newNutrientCoefficient;
-        }
+        nutrientCoefficient.setValue(newNutrientCoefficient);
     }
 
     /**
@@ -458,7 +438,6 @@ public class Pool extends WaterBody {
                 fishInPool.killFish(fishToCrowd);
             }
         }
-        fishInPool.setAsNotSorted();
     }
 
     /**

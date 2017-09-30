@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -163,24 +162,9 @@ public class FishGroup {
      *            the Nutrient Coefficient to apply
      * @return the number of newly dead Fish
      */
-    public int applyNutrientCoefficient(double nutrientCoefficient) {
-
-        Random generator = new Random();
-        double roll;
-        int numberOfDeaths = 0;
-
-        for (Fish curFish : fish) {
-            if (curFish.isAlive()) {
-                roll = generator.nextDouble();
-                if (roll > nutrientCoefficient) {
-                    killFish(curFish);
-                    numberOfDeaths++;
-                }
-            }
-        }
-
-        return numberOfDeaths;
-
+    public int applyNutrientCoefficient(Coefficient nutrientCoefficient) {
+        return countIf((Fish f) -> f.isAlive()
+                && f.applyNutrientCoefficient(nutrientCoefficient));
     }
 
     /**
@@ -324,16 +308,16 @@ public class FishGroup {
         setAsNotSorted();
         return countIf((Fish f) -> f.isAlive() && f.incrementAge());
     }
-    
+
     private int countIf(Predicate<Fish> pred) {
         int count = 0;
-        
+
         for (Fish currentFish : fish) {
             if (currentFish != null && pred.test(currentFish)) {
                 count++;
             }
         }
-        
+
         return count;
     }
 
