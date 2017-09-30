@@ -1,7 +1,6 @@
 package code.model;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * An abstract Fish class to be extended by Guppy.

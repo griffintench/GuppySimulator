@@ -37,8 +37,8 @@ public class BinomialName {
      *            the species of the animal
      */
     public BinomialName(String genus, String species) {
-        this.genus = processGenus(genus, "");
-        this.species = processSpecies(species, "");
+        this.genus = NameProcessor.firstUpperRestLower(genus, "");
+        this.species = NameProcessor.allLower(species, "");
     }
 
     /**
@@ -55,8 +55,8 @@ public class BinomialName {
      */
     public BinomialName(String genus, String species, String defaultGenus,
             String defaultSpecies) {
-        this.genus = processGenus(genus, defaultGenus);
-        this.species = processSpecies(species, defaultSpecies);
+        this.genus = NameProcessor.firstUpperRestLower(genus, defaultGenus);
+        this.species = NameProcessor.allLower(species, defaultSpecies);
     }
 
     /**
@@ -67,14 +67,7 @@ public class BinomialName {
      *            the binomial name in String form
      */
     public BinomialName(String binomialName) {
-        if (!binomialName.contains(" ")) {
-            throw new IllegalArgumentException(
-                    "binomial name must contain space");
-        }
-        Scanner scan = new Scanner(binomialName);
-        genus = processGenus(scan.next(), "");
-        species = processSpecies(scan.next(), "");
-        scan.close();
+        this(binomialName, "", "");
     }
 
     /**
@@ -96,29 +89,9 @@ public class BinomialName {
                     "binomial name must contain space");
         }
         Scanner scan = new Scanner(binomialName);
-        genus = processGenus(scan.next(), defaultGenus);
-        species = processSpecies(scan.next(), "");
+        genus = NameProcessor.firstUpperRestLower(scan.next(), defaultGenus);
+        species = NameProcessor.allLower(scan.next(), defaultSpecies);
         scan.close();
-    }
-
-    private String processGenus(String inputGenus, String defaultGenus) {
-        if (inputGenus == null || inputGenus.trim().equals("")) {
-            return defaultGenus;
-        }
-        String firstLetter = inputGenus.substring(0, 1);
-        String restOfGenus = inputGenus.substring(1, inputGenus.length());
-
-        firstLetter = firstLetter.toUpperCase();
-        restOfGenus = restOfGenus.toLowerCase();
-
-        return firstLetter + restOfGenus;
-    }
-
-    private String processSpecies(String inputSpecies, String defaultSpecies) {
-        if (inputSpecies == null || inputSpecies.trim().equals("")) {
-            return defaultSpecies;
-        }
-        return inputSpecies.toLowerCase();
     }
 
     /**

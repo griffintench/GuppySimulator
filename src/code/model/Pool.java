@@ -15,11 +15,6 @@ import java.util.function.Consumer;
 public class Pool extends WaterBody {
 
     /**
-     * A default name for the pool.
-     */
-    public static final String DEFAULT_POOL_NAME = "Unnamed";
-
-    /**
      * The number of Pools in existence.
      */
     private static int numberOfPools;
@@ -39,7 +34,7 @@ public class Pool extends WaterBody {
      * inclusive. The higher the nutrient coefficient, the less likely it is for
      * any given Fish to die.
      */
-    private Coefficient nutrientCoefficient;
+    private final Coefficient nutrientCoefficient;
 
     /**
      * A unique identifier for the Pool.
@@ -71,7 +66,7 @@ public class Pool extends WaterBody {
      * Instantiates a Pool with default parameters.
      */
     public Pool() {
-        this(DEFAULT_POOL_NAME, 0.0, DEFAULT_TEMP_CELSIUS, NEUTRAL_PH,
+        this(null, 0.0, DEFAULT_TEMP_CELSIUS, NEUTRAL_PH,
                 Coefficient.DEFAULT_COEFFICIENT);
     }
 
@@ -100,7 +95,7 @@ public class Pool extends WaterBody {
         setVolumeLitres(0.0);
 
         setVolumeLitres(newVolumeLitres);
-        name = processName(newName);
+        name = NameProcessor.firstUpperRestLower(newName);
         setTemperatureCelsius(newTemperatureCelsius);
         setPH(newPH);
         nutrientCoefficient = new Coefficient(newNutrientCoefficient);
@@ -111,22 +106,6 @@ public class Pool extends WaterBody {
 
         identificationNumber = ++numberOfPools;
 
-    }
-
-    private static String processName(String inputName) {
-        if (inputName == null) {
-            return DEFAULT_POOL_NAME;
-        }
-        inputName = inputName.replaceAll("\\s", "");
-        if (inputName.equals("")) {
-            return DEFAULT_POOL_NAME;
-        }
-        String firstLetter = inputName.substring(0, 1);
-        String restOfName = inputName.substring(1, inputName.length());
-        firstLetter = firstLetter.toUpperCase();
-        restOfName = restOfName.toLowerCase();
-
-        return firstLetter + restOfName;
     }
 
     /**
