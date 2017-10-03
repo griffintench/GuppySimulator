@@ -7,6 +7,11 @@ package code.model;
  * @version 1.0
  */
 public class Health implements Comparable<Health> {
+    
+    public static final int HEALTHY = 0;
+    public static final int OKAY = 1;
+    public static final int UNHEALTHY = 2;
+    public static final int HEALTH_TYPES = 3;
 
     /**
      * The default health coefficient, used if a health coefficient outside the

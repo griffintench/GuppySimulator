@@ -87,15 +87,12 @@ public class FishGroup {
      * @return true if the Fish was added successfully
      */
     public boolean addFish(Fish fishToAdd) {
-        boolean result = false;
-
         if (fishToAdd != null) {
-            fish.add(fishToAdd);
-            result = true;
             setAsNotSorted();
+            return fish.add(fishToAdd);
         }
 
-        return result;
+        return false;
     }
 
     /**
@@ -106,15 +103,12 @@ public class FishGroup {
      * @return true if the Fish were added successfully
      */
     public boolean addFish(LinkedList<Fish> fishToAdd) {
-        boolean result = false;
-
         if (fishToAdd != null) {
-            fish.addAll(fishToAdd);
             setAsNotSorted();
-            result = true;
+            return fish.addAll(fishToAdd);
         }
 
-        return result;
+        return false;
     }
 
     /**
@@ -347,20 +341,15 @@ public class FishGroup {
      * @return an int array with the number of fish of each health type
      */
     public int[] getFishHealthNumbers() {
-        final int healthy = 0;
-        final int okay = 1;
-        final int unhealthy = 2;
-        final int healthTypes = 3;
-
-        int[] result = new int[healthTypes];
+        int[] result = new int[Health.HEALTH_TYPES];
 
         for (Fish curFish : fish) {
             if (curFish.isHealthy()) {
-                result[healthy]++;
+                result[Health.HEALTHY]++;
             } else if (curFish.isOkay()) {
-                result[okay]++;
+                result[Health.OKAY]++;
             } else {
-                result[unhealthy]++;
+                result[Health.UNHEALTHY]++;
             }
         }
 

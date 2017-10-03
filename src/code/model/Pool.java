@@ -139,14 +139,14 @@ public class Pool extends WaterBody {
     @Override
     public void setTemperatureCelsius(double newTemperatureCelsius) {
         super.setTemperatureCelsius(newTemperatureCelsius);
-        cascadeDownstream((Consumer<Stream>) (Stream s) -> s
-                .setTemperatureCelsius(newTemperatureCelsius));
+        cascadeDownstream(
+                (Stream s) -> s.setTemperatureCelsius(newTemperatureCelsius));
     }
 
     @Override
     public void setPH(double newPH) {
         super.setPH(newPH);
-        cascadeDownstream((Consumer<Stream>) (Stream s) -> s.setPH(newPH));
+        cascadeDownstream((Stream s) -> s.setPH(newPH));
     }
 
     private void cascadeDownstream(Consumer<Stream> op) {
