@@ -8,9 +8,16 @@ package code.model;
  */
 public class Health implements Comparable<Health> {
     
+    /** The index of an array that corresponds to healthy animals.*/
     public static final int HEALTHY = 0;
+    
+    /** The index of an array that corresponds to animals in okay health.*/
     public static final int OKAY = 1;
+    
+    /** The index of an array that corresponds to unhealthy animals.*/
     public static final int UNHEALTHY = 2;
+    
+    /** The total number of health types.*/
     public static final int HEALTH_TYPES = 3;
 
     /**
