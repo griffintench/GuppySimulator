@@ -151,6 +151,14 @@ public class Health implements Comparable<Health> {
     public void setHealthCoefficient(double newHealthCoefficient) {
         healthCoefficient.setValue(newHealthCoefficient);
     }
+    
+    public boolean applyHealthCoefficient() {
+        if (healthCoefficient.roll()) {
+            isAlive = false;
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Returns the age in weeks.
@@ -208,6 +216,21 @@ public class Health implements Comparable<Health> {
         final double okayHealthCoefficient = 0.25;
         return isAlive && healthCoefficient.value() > okayHealthCoefficient;
     }
+    
+    public int getHealthLevel() {
+        final double goodHealthCoefficient = 0.75;
+        final double okayHealthCoefficient = 0.25;
+        if (!isAlive) {
+            return -1;
+        }
+        if (healthCoefficient.value() > goodHealthCoefficient) {
+            return HEALTHY;
+        }
+        if (healthCoefficient.value() > okayHealthCoefficient) {
+            return OKAY;
+        }
+        return UNHEALTHY;
+    }
 
     @Override
     public int compareTo(Health o) {
@@ -223,16 +246,13 @@ public class Health implements Comparable<Health> {
         if (!isAlive && o.isAlive) {
             return -1;
         }
+        if (!isAlive && !o.isAlive) {
+            return 0;
+        }
         int healthCompare = healthCoefficient.compareTo(o.healthCoefficient);
         if (healthCompare != 0) {
             return healthCompare;
         }
-        if ((maxAgeInWeeks - ageInWeeks) > (o.maxAgeInWeeks - o.ageInWeeks)) {
-            return 1;
-        }
-        if ((maxAgeInWeeks - ageInWeeks) < (o.maxAgeInWeeks - o.ageInWeeks)) {
-            return -1;
-        }
-        return 0;
+        return (maxAgeInWeeks - ageInWeeks) - (o.maxAgeInWeeks - o.ageInWeeks);
     }
 }

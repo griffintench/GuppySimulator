@@ -215,6 +215,10 @@ public abstract class Fish implements Comparable<Fish> {
         return health.isOkay();
     }
 
+    public int getHealthLevel() {
+        return health.getHealthLevel();
+    }
+
     /**
      * Returns the volume needed for this fish to survive.
      * 
@@ -231,18 +235,22 @@ public abstract class Fish implements Comparable<Fish> {
 
     /**
      * Generates a random double; if the double is higher than the given
-     * nutrient coefficient, the fish dies.
+     * coefficient, the fish dies.
      * 
-     * @param nutrientCoefficient
+     * @param coefficient
      *            a coefficient with a value between 0 and 1
      * @return true if the fish dies
      */
-    public boolean applyNutrientCoefficient(Coefficient nutrientCoefficient) {
-        if (nutrientCoefficient.roll()) {
+    public boolean applyCoefficient(Coefficient coefficient) {
+        if (coefficient.roll()) {
             kill();
             return true;
         }
         return false;
+    }
+    
+    public boolean applyHealthCoefficient() {
+        return health.applyHealthCoefficient();
     }
 
     /**

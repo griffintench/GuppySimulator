@@ -44,7 +44,7 @@ public class Pool extends WaterBody {
     /**
      * An group of all the Fish currently in the Pool.
      */
-    private FishGroup fishInPool;
+    private final FishGroup fishInPool;
 
     /**
      * A random number generator, used to determine which Stream a Fish gets
@@ -92,15 +92,15 @@ public class Pool extends WaterBody {
 
         streamsTo = new ArrayList<Stream>();
         streamsFrom = new ArrayList<Stream>();
-        setVolumeLitres(0.0);
 
-        setVolumeLitres(newVolumeLitres);
+        volumeLitres = (newVolumeLitres > 0.0) ? newVolumeLitres : volumeLitres;
         name = NameProcessor.firstUpperRestLower(newName);
-        setTemperatureCelsius(newTemperatureCelsius);
-        setPH(newPH);
+        cascadeDownstream(
+                (Stream s) -> s.setTemperatureCelsius(newTemperatureCelsius));
+        cascadeDownstream((Stream s) -> s.setPH(newPH));
         nutrientCoefficient = new Coefficient(newNutrientCoefficient);
 
-        setFishInPool(new FishGroup());
+        fishInPool = new FishGroup();
 
         randomNumberGenerator = new Random();
 
@@ -177,32 +177,10 @@ public class Pool extends WaterBody {
         return identificationNumber;
     }
 
-    /**
-     * Sets the FishGroup object holding the Fish in the Pool.
-     * 
-     * @param newFishInPool
-     *            an FishGroup object holding the Fish in the Pool
-     */
-    public void setFishInPool(FishGroup newFishInPool) {
-        if (newFishInPool != null) {
-            fishInPool = newFishInPool;
-        }
-    }
-
-    /**
-     * Sets the FishGroup object holding the Fish in the Pool; the FishGroup
-     * object is creating using an List object.
-     * 
-     * @param newFishInPool
-     *            an List object holding the Fish in the Pool
-     */
-    public void setFishInPool(List<Fish> newFishInPool) {
-        if (newFishInPool != null) {
-            LinkedList<Fish> fish = new LinkedList<Fish>();
-            for (Fish newFish : newFishInPool) {
-                fish.add(newFish);
-            }
-            fishInPool = new FishGroup(fish);
+    public void addFish(List<Fish> fishToAdd) {
+        if (fishToAdd != null) {
+            LinkedList<Fish> fish = new LinkedList<Fish>(fishToAdd);
+            fishInPool.addFish(fish);
         }
     }
 
@@ -409,12 +387,11 @@ public class Pool extends WaterBody {
         if (streamsFrom.isEmpty()) {
             fishInPool.killFish(fishToCrowd);
         } else {
-            double healthCoefficient = fishToCrowd.getHealthCoefficient();
-            double healthRoll = randomNumberGenerator.nextDouble();
-            if (healthRoll < healthCoefficient) {
+            if (!fishToCrowd.applyHealthCoefficient()) {
                 sendDownstream(fishToCrowd);
             } else {
-                fishInPool.killFish(fishToCrowd);
+                fishInPool.setAsNotSorted(); // TODO ideally this method would
+                                             // be private
             }
         }
     }
@@ -434,8 +411,7 @@ public class Pool extends WaterBody {
             streamsFrom.get(streamNumber).sendDownstream(fishToSend);
         } else {
             throw new IllegalArgumentException(
-                    "Tried to remove fish, but fish is not in this pool ("
-                            + name + ")");
+                    "Tried to remove fish, but fish is not in pool" + name);
         }
 
     }

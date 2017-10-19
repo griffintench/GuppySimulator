@@ -18,11 +18,6 @@ import java.util.function.Predicate;
 public class FishGroup {
 
     /**
-     * The number of millilitres in a litre.
-     */
-    public static final int MILLILITRES_IN_LITRE = 1000;
-
-    /**
      * The Fish in the Group.
      */
     private final List<Fish> fish;
@@ -124,6 +119,8 @@ public class FishGroup {
                 Fish next = iterator.next();
                 if (next.isAlive()) {
                     weakestLivingIndex = fish.indexOf(next);
+                    // System.out.println("weakest living index updated to "
+                    // + weakestLivingIndex);
                 }
             }
         }
@@ -157,8 +154,9 @@ public class FishGroup {
      * @return the number of newly dead Fish
      */
     public int applyNutrientCoefficient(Coefficient nutrientCoefficient) {
+        setAsNotSorted();
         return countIf((Fish f) -> f.isAlive()
-                && f.applyNutrientCoefficient(nutrientCoefficient));
+                && f.applyCoefficient(nutrientCoefficient));
     }
 
     /**
@@ -168,7 +166,10 @@ public class FishGroup {
      */
     public int removeDeadFish() {
         sort();
-
+        // System.out.println("the weakest living index is " +
+        // weakestLivingIndex);
+        // System.out.println(
+        // "number of dead: " + (getPopulation() - getLivingPopulation()));
         for (int i = 0; i < weakestLivingIndex; i++) {
             fish.remove(0);
         }
@@ -187,9 +188,11 @@ public class FishGroup {
      *         currently in the Group, in litres
      */
     public double getFishVolumeRequirementInLitres() {
+        final double millilitresInLitre = 1000;
+
         double result = 0.0;
         for (Fish curFish : fish) {
-            result += curFish.getVolumeNeeded() / MILLILITRES_IN_LITRE;
+            result += curFish.getVolumeNeeded() / millilitresInLitre;
         }
         return result;
     }
@@ -344,12 +347,9 @@ public class FishGroup {
         int[] result = new int[Health.HEALTH_TYPES];
 
         for (Fish curFish : fish) {
-            if (curFish.isHealthy()) {
-                result[Health.HEALTHY]++;
-            } else if (curFish.isOkay()) {
-                result[Health.OKAY]++;
-            } else {
-                result[Health.UNHEALTHY]++;
+            int healthLevel = curFish.getHealthLevel();
+            if (healthLevel >= 0 && healthLevel < Health.HEALTH_TYPES) {
+                result[healthLevel]++;
             }
         }
 

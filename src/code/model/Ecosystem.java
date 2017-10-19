@@ -135,23 +135,20 @@ public class Ecosystem {
         int crowdedOut = 0;
 
         for (Pool pool : pools) {
+            // System.out.println("pool: " + pool.getName());
             diedOfOldAge += pool.incrementAges();
-            // System.out.println(pool.getName() + " aged: " + diedOfOldAge);
+            // System.out.println("total aged: " + diedOfOldAge);
             numberRemoved += pool.removeDeadFish();
-            // System.out.println(pool.getName() + " removed: " +
-            // numberRemoved);
+            // System.out.println("total removed: " + numberRemoved);
             starvedToDeath += pool.applyNutrientCoefficient();
-            // System.out.println(pool.getName() + " starved: " +
-            // starvedToDeath);
+            // System.out.println("total starved: " + starvedToDeath);
             numberRemoved += pool.removeDeadFish();
-            // System.out.println(pool.getName() + " removed: " +
-            // numberRemoved);
+            // System.out.println("total removed: " + numberRemoved);
             newFry += pool.spawn();
             crowdedOut += pool.adjustForCrowding();
-            // System.out.println(pool.getName() + " crowded: " + crowdedOut);
+            // System.out.println("total crowded: " + crowdedOut);
             numberRemoved += pool.removeDeadFish();
-            // System.out.println(pool.getName() + " removed: " +
-            // numberRemoved);
+            // System.out.println("total removed: " + numberRemoved);
         }
 
         if (diedOfOldAge + starvedToDeath + crowdedOut == numberRemoved) {
@@ -187,14 +184,14 @@ public class Ecosystem {
 
         return crowdedOut;
     }
-    
+
     public HashMap<String, int[]> constructPoolList() {
         HashMap<String, int[]> result = new HashMap<String, int[]>();
-        
+
         for (Pool pool : pools) {
             result.put(pool.getName(), pool.getFishHealthNumbers());
         }
-        
+
         return result;
     }
 

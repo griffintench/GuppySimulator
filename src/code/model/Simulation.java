@@ -169,7 +169,7 @@ public class Simulation extends Observable {
             double pH, double nutrientCoefficient, GuppySet startingGuppies) {
         Pool pool = new Pool(name, volume, temp, pH, nutrientCoefficient);
 
-        pool.setFishInPool(startingGuppies.generateGuppies());
+        pool.addFish(startingGuppies.generateGuppies());
 
         return pool;
     }

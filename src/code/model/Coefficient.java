@@ -117,6 +117,9 @@ public class Coefficient implements Comparable<Coefficient> {
         if (this.value > other.value) {
             return 1;
         }
+        if (this.value == other.value) {
+            return 0;
+        }
         return -1;
     }
 }
